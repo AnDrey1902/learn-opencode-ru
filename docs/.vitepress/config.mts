@@ -8,7 +8,7 @@ export default defineConfig({
   ignoreDeadLinks: false,
 
   sitemap: {
-    hostname: 'https://learn-opencode-ru.vercel.app', // TODO: заменить на итоговый домен
+    hostname: 'https://learn-opencode-ru.vercel.app',
   },
 
   head: [
@@ -265,7 +265,7 @@ export default defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/vbgate/learn-opencode' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/AnDrey1902/learn-opencode-ru' }],
     footer: {
       message: `Перевод материалов «OpenCode 中文实战课» (github.com/vbgate/learn-opencode) по лицензии <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> | <a href="/privacy">Политика конфиденциальности</a> | © ${new Date().getFullYear()} LearnOpenCode`,
     },
@@ -290,7 +290,7 @@ export default defineConfig({
     outline: { label: 'На этой странице', level: [2, 3] },
     lastUpdated: { text: 'Последнее обновление' },
     editLink: {
-      pattern: 'https://github.com/vbgate/learn-opencode/edit/main/docs/:path',
+      pattern: 'https://github.com/AnDrey1902/learn-opencode-ru/edit/main/docs/:path',
       text: 'Редактировать страницу на GitHub',
     },
   },

@@ -28,7 +28,7 @@ features:
     linkText: Начать установку
   - icon:
       src: /icons/globe.svg
-    title: Удобно для пользователей из России и СНГ
+    title: Удобно для всех русскоговорящих пользователей
     details: Нативная поддержка GLM, DeepSeek, MiniMax и других моделей с прямым подключением
     link: /1-start/04-connect
     linkText: Настроить модели
@@ -36,7 +36,7 @@ features:
       src: /icons/heart.svg
     title: Бесплатно и с открытым исходным кодом
     details: Курс и инструменты открыты для всех — учитесь без ограничений и помогайте улучшать проект
-    link: https://github.com/vbgate/learn-opencode
+    link: https://github.com/AnDrey1902/learn-opencode-ru
     linkText: Репозиторий на GitHub
   - icon:
       src: /icons/code.svg

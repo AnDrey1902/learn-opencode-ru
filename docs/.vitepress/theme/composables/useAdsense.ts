@@ -1,4 +1,4 @@
-const ALLOWED_HOSTS = new Set(['learnopencode.com', 'www.learnopencode.com'])
+const ALLOWED_HOSTS = new Set(['learn-opencode-ru.vercel.app', 'www.learn-opencode-ru.vercel.app'])
 const MOUNT_DEBOUNCE_MS = 300
 const PUSH_COOLDOWN_MS = 1000
 

@@ -9,7 +9,7 @@ description: "Политика конфиденциальности сайта �
 
 Последнее обновление: 2026
 
-Эта политика конфиденциальности объясняет, как «OpenCode на русском» (learnopencode.com, далее — «сайт») собирает, использует и защищает вашу информацию.
+Эта политика конфиденциальности объясняет, как «OpenCode на русском» (learn-opencode-ru.vercel.app, далее — «сайт») собирает, использует и защищает вашу информацию.
 
 ## Сбор информации
 
@@ -54,7 +54,7 @@ description: "Политика конфиденциальности сайта �
 
 Если у вас есть вопросы о политике конфиденциальности, свяжитесь с нами:
 
-- GitHub Issues: [https://github.com/vbgate/learn-opencode/issues](https://github.com/vbgate/learn-opencode/issues)
+- GitHub Issues: [https://github.com/AnDrey1902/learn-opencode-ru/issues](https://github.com/AnDrey1902/learn-opencode-ru/issues)
 - Сообщество: [присоединиться](/community)
 
 ---

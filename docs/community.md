@@ -18,7 +18,7 @@ description: "Присоединяйтесь к сообществу OpenCode н
     <p class="qrcode-hint">Присоединяйтесь к каналу или чату сообщества</p>
   </div>
   <div class="qrcode-card">
-    <h3><a href="https://github.com/vbgate/learn-opencode/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a></h3>
+    <h3><a href="https://github.com/AnDrey1902/learn-opencode-ru/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a></h3>
     <p class="qrcode-hint">Задавайте вопросы и предлагайте улучшения в Issues</p>
   </div>
 </div>
