@@ -1,0 +1,7 @@
+.git
+node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache
+*.log
+# Полноразмерные скриншоты-шпаргалки (только для zoom, сборке не нужны)
+docs/public/images/*/*-notes.jpeg

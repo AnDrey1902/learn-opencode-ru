@@ -1,0 +1,144 @@
+---
+title: 迁移指南
+description: 从 OpenCode 0.x 迁移到 1.0 的完整指南
+---
+
+# 迁移指南
+
+> 💡 **如果你的 OpenCode 版本是 1.0 以上，这篇内容不用看。**
+
+从 OpenCode 0.x 平滑升级到 1.0
+
+---
+
+## 版本概览
+
+OpenCode 1.0 是 TUI 的完全重写版本。
+
+从基于 Go + Bubbletea 的 TUI 迁移到内部框架 OpenTUI（Zig + SolidJS），解决了性能和功能问题。
+
+新 TUI 工作方式与旧版相同，因为它连接到相同的 OpenCode 服务器。
+
+---
+
+## 升级方法
+
+### 自动升级
+
+```bash
+# 升级到 1.0
+opencode upgrade 1.0.0
+
+# 降级回 0.x
+opencode upgrade 0.15.31
+```
+
+### 手动升级
+
+```bash
+# npm
+npm install -g opencode-ai
+
+# Homebrew
+brew upgrade opencode
+
+# Scoop
+scoop update opencode
+```
+
+> 注意：如果你使用的是旧版本，可能不会自动升级到 1.0。某些更老的版本会自动获取最新版。
+
+---
+
+## UX 变更
+<AdInArticle />
+
+1. **会话历史更紧凑** - 只显示 edit 和 bash 工具的完整详情
+
+2. **新增命令栏** - 按 `Ctrl+P` 在任何上下文中调出，查看所有可用操作
+
+3. **新增会话侧边栏** - 可切换显示，包含有用信息
+
+4. **移除部分功能** - 移除了一些不确定是否有人使用的功能。如果缺少重要功能，请提交 Issue
+
+---
+
+## Breaking Changes
+
+### 键绑定重命名
+
+| 旧名称 | 新名称 |
+|--------|--------|
+| `messages_revert` | `messages_undo` |
+| `switch_agent` | `agent_cycle` |
+| `switch_agent_reverse` | `agent_cycle_reverse` |
+| `switch_mode` | `agent_cycle` |
+| `switch_mode_reverse` | `agent_cycle_reverse` |
+
+### 键绑定移除
+
+以下键绑定已被移除：
+
+- `messages_layout_toggle`
+- `messages_next`
+- `messages_previous`
+- `file_diff_toggle`
+- `file_search`
+- `file_close`
+- `file_list`
+- `app_help`
+- `project_init`
+- `tool_details`
+- `thinking_blocks`
+
+如果你的配置中使用了这些键绑定，需要移除它们。
+
+---
+
+## 迁移检查清单
+
+### 升级前
+
+- [ ] 备份当前配置文件
+- [ ] 记录当前使用的模型和设置
+- [ ] 导出重要会话记录
+
+### 升级中
+
+- [ ] 运行 `opencode upgrade 1.0.0`
+- [ ] 检查键绑定配置，移除已废弃的绑定
+- [ ] 更新重命名的键绑定
+
+### 升级后
+
+- [ ] 验证 `opencode --version` 显示 1.x
+- [ ] 测试模型连接 `/models`
+- [ ] 测试基本对话功能
+- [ ] 验证自定义 Agent 和 Skill
+- [ ] 熟悉新的命令栏（Ctrl+P）
+
+---
+
+## 回滚方案
+
+如果遇到问题需要回滚：
+
+```bash
+# 降级到 0.x
+opencode upgrade 0.15.31
+```
+
+---
+
+## 获取帮助
+
+- [故障排除](./troubleshoot) - 故障排查
+- [GitHub Issues](https://github.com/anomalyco/opencode/issues) - 报告问题
+
+---
+
+## 相关资源
+
+- [CLI 命令参考](./cli) - 1.0 命令详解
+- [键绑定参考](./keybinds) - 快捷键配置
+- [变更日志](https://github.com/anomalyco/opencode/releases) - 版本历史
