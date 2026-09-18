@@ -27,6 +27,20 @@ prerequisite:
      alt="Управляй своим AI-окружением — шпаргалка" 
      data-zoom-src="/images/2-daily/env-management-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+**3 CLI-команды**: `opencode models` (список моделей), `opencode stats` (расходы), `opencode auth` (доступы).
+
+- `opencode models --refresh` — обновить кэш моделей; `opencode --model [ID]` — запуск с конкретной моделью.
+- **Cache Read** — главный показатель экономии: попадание в кэш = бесплатно; вход дешевле выхода.
+- `opencode stats --models 5` — топ-5 самых дорогих моделей.
+- Auth: `auth list` (api vs oauth), `auth logout`; хранение — `~/.local/share/opencode/auth.json`.
+- Соответствия CLI↔TUI: `opencode -m` ↔ `/model`, `opencode stats` ↔ `/stats`, `opencode auth login` ↔ `/connect`.
+- Экономия: Cache Read + помесячные планы для рутины + оплата по факту для сложных задач.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

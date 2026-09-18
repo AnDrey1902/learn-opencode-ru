@@ -29,6 +29,24 @@ prerequisite:
      alt="Картинки в диалоге с AI — шпаргалка" 
      data-zoom-src="/images/2-daily/01d-images-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+Скриншоты по ОС: Windows — Win+Shift+S; Mac — Cmd+Shift+4; Linux — PrtScn / Meta+Shift+S.
+
+**3 способа передать картинку**: вставка скриншота через Ctrl+V (→ `[Image 1]`), `@`-путь к файлу, генерация через AI.
+
+| Модель | Картинки |
+|---|---|
+| GPT-5.2, Claude 4.6, Gemini 3.1 | Не поддерживают |
+| Kimi K2.5 | Да |
+| GLM-5, MiniMax, DeepSeek | Нет |
+
+- Linux: X11 — `xclip`, Wayland — `wl-clipboard`; после установки перезапустить OpenCode.
+- Дебаг по шагам: буфер обмена → Linux-инструменты → поддержка моделью → конфликты клавиш → мультиплексор → WSL.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

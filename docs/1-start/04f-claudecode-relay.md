@@ -28,6 +28,25 @@ prerequisite:
      alt="Сторонний прокси (совместимый с Claude Code) — шпаргалка"
      data-zoom-src="/images/1-start/claudecode-relay-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+Настройка Claude Code-совместимого relay за 3 шага: отдельный provider → API Key → выбор модели.
+
+- Provider: `npm: "@ai-sdk/anthropic"` + `baseURL` + `models` в JSON.
+- `baseURL`: адрес с `/v1` — оставить как есть; без `/v1` — дописать вручную.
+- Ключ: либо `opencode.json`, либо `auth.json` — не в обоих сразу.
+- `limit.context` / `limit.output` обязательны, иначе не работает сжатие контекста (opus 4.5: 200K / 64K).
+
+| Ошибка | Проверка |
+|---|---|
+| 404 | baseURL и хвост `/v1` |
+| 401 | пересоздать ключ |
+
+Проверка: запрос к `.../v1/messages`. Несколько relay-провайдеров можно держать одновременно.
+
+</details>
+
 Эта страница решает одну задачу: подключает к OpenCode сторонний шлюз, заявляющий о совместимости с Claude Code.
 
 ## Что вы сможете после урока

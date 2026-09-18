@@ -27,6 +27,25 @@ prerequisite:
      alt="Git с нуля: первый коммит и синхронизация с GitHub — шпаргалка"
      data-zoom-src="/images/2-daily/git-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+Ментальная модель Git: рабочая область → `git add` → индекс → `git commit` → история. Коммит = контрольная точка.
+
+- Минимальный цикл: `git init` → `git add .` → `git commit -m 'init'` → `git remote add origin ...` → `git push -u origin main`.
+- Два маршрута: соло (main → push без веток и PR) и команда (ветка + PR; защищённый main — только через PR).
+- Git — локальный инструмент, GitHub — облачный хостинг. Не путать.
+- Промпт для OpenCode одной фразой: «проверь status + diff, сгенерируй commit message, выполни add -A && commit && push; стой, если увидишь .env/ключи».
+
+| Ошибка | Решение |
+|---|---|
+| «Please tell me who you are» | Настроить user.name / user.email |
+| Push требует пароль | PAT или SSH |
+| origin уже существует | `git remote set-url` |
+| Путаница main/master | `git branch -M main` |
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

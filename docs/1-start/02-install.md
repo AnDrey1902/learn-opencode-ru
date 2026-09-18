@@ -27,6 +27,21 @@ prerequisite:
      alt="Установка за 5 минут — шпаргалка" 
      data-zoom-src="/images/1-start/install-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+**Установка за 3 шага**: команда → перезапуск терминала → проверка.
+
+| ОС | Команда |
+|---|---|
+| macOS / Linux | `curl -fsSL https://opencode.ai/install \\| bash` |
+| Windows | `scoop install extras/opencode` |
+
+- Перезапуск терминала нужен, потому что скрипт меняет **PATH**, а текущий терминал хранит старую конфигурацию.
+- Проверка: `opencode --version` — видна версия, нет «command not found» → можно идти дальше.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока
