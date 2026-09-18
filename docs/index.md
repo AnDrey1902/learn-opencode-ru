@@ -38,56 +38,58 @@ features:
     details: Курс и инструменты открыты для всех — учитесь без ограничений и помогайте улучшать проект
     link: https://github.com/AnDrey1902/learn-opencode-ru
     linkText: Репозиторий на GitHub
-  - icon:
-      src: /icons/code.svg
-    title: Разбор на основе исходного кода
-    details: "Это не случайный набор советов: каждая функция разобрана по официальному исходному коду OpenCode"
-  - icon:
-      src: /icons/files.svg
-    title: Контекст нескольких файлов
-    details: Читайте проект целиком и понимайте связи между файлами — больше не нужно загружать их по одному
-    link: /3-workflow/03-init
-    linkText: Инициализация проекта
-  - icon:
-      src: /icons/wrench.svg
-    title: Глубокая настройка
-    details: Настраивайте Agent, Skill, команды и темы, создавая свой собственный AI-инструмент
-    link: /5-advanced/
-    linkText: Руководство для продвинутых
 ---
+
+<section class="home-section home-paths">
 
 ## Выберите свой путь обучения
 
 <div class="learning-paths">
   <a href="/1-start/" class="path-card">
-    <span class="path-icon">🚀</span>
+    <span class="path-top">
+      <img class="path-icon" src="/icons/rocket.svg" alt="" width="28" height="28" loading="lazy" />
+      <span class="path-num" aria-hidden="true">01</span>
+    </span>
     <h3>Полный новичок</h3>
     <p class="path-duration">Около 3 часов</p>
     <p class="path-desc">Пройдите обязательные этапы 1–3 и освоите основные возможности OpenCode</p>
     <span class="path-cta">Начать обучение →</span>
   </a>
   <a href="/4-scenarios/writer-workflow" class="path-card">
-    <span class="path-icon">✍️</span>
+    <span class="path-top">
+      <img class="path-icon" src="/icons/feather.svg" alt="" width="28" height="28" loading="lazy" />
+      <span class="path-num" aria-hidden="true">02</span>
+    </span>
     <h3>Автор контента</h3>
     <p class="path-duration">Около 6–7 часов</p>
     <p class="path-desc">Обязательная часть + трек создания контента (A1–A9) для эффективного рабочего процесса</p>
     <span class="path-cta">Начать обучение →</span>
   </a>
   <a href="/4-scenarios/coder-daily" class="path-card">
-    <span class="path-icon">💻</span>
+    <span class="path-top">
+      <img class="path-icon" src="/icons/terminal.svg" alt="" width="28" height="28" loading="lazy" />
+      <span class="path-num" aria-hidden="true">03</span>
+    </span>
     <h3>Разработчик</h3>
     <p class="path-duration">Около 5–6 часов</p>
     <p class="path-desc">Обязательная часть + трек разработки (B1–B5), чтобы повысить эффективность с помощью AI</p>
     <span class="path-cta">Начать обучение →</span>
   </a>
   <a href="/4-scenarios/office-files" class="path-card">
-    <span class="path-icon">📊</span>
+    <span class="path-top">
+      <img class="path-icon" src="/icons/bar-chart.svg" alt="" width="28" height="28" loading="lazy" />
+      <span class="path-num" aria-hidden="true">04</span>
+    </span>
     <h3>Энтузиаст продуктивности</h3>
     <p class="path-duration">Около 4–5 часов</p>
     <p class="path-desc">Обязательная часть + трек продуктивности (C1–C4), чтобы поручить AI рутинные задачи</p>
     <span class="path-cta">Начать обучение →</span>
   </a>
 </div>
+
+</section>
+
+<section class="home-section home-stats">
 
 ## Что вы получите
 
@@ -119,9 +121,9 @@ features:
   </div>
 </div>
 
-<script setup>
-import stats from './data/stats.json'
-</script>
+</section>
+
+<section class="home-section home-finale">
 
 ## Готовы начать?
 
@@ -130,5 +132,11 @@ import stats from './data/stats.json'
   <p class="cta-subtitle">Вам понадобятся только компьютер и 30 минут</p>
   <a href="/1-start/" class="cta-button">Начать обучение сейчас</a>
 </div>
+
+</section>
+
+<script setup>
+import stats from './data/stats.json'
+</script>
 
 
