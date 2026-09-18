@@ -24,7 +24,7 @@ prerequisite:
 Краткий конспект основных идей урока:
 
 <img src="/images/1-start/connect-notes.mini.jpeg" 
-     alt="连接模型：第一次对话学霸笔记" 
+     alt="Подключение модели: первый диалог — шпаргалка" 
      data-zoom-src="/images/1-start/connect-notes.jpeg" />
 
 ---
@@ -162,7 +162,7 @@ opencode auth login
 
 ```bash
 opencode auth list
-# 或简写
+# или коротко
 opencode auth ls
 ```
 
@@ -199,14 +199,14 @@ OpenCode ищет данные аутентификации в следующе�
 **Пример настройки** (для Anthropic):
 
 ```bash
-# macOS / Linux（临时，当前终端有效）
+# macOS / Linux (временно, действует в текущем терминале)
 export ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
 
-# macOS / Linux（永久，写入 ~/.zshrc 或 ~/.bashrc）
+# macOS / Linux (навсегда, записать в ~/.zshrc или ~/.bashrc)
 echo 'export ANTHROPIC_API_KEY=sk-ant-api03-xxxxx' >> ~/.zshrc
 source ~/.zshrc
 
-# Windows PowerShell（永久）
+# Windows PowerShell (навсегда)
 [System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-api03-xxxxx", "User")
 ```
 
@@ -233,13 +233,13 @@ source ~/.zshrc
 Чтобы задать модель по умолчанию, настройте поле `model` в `opencode.json`. ID модели должен **полностью совпадать** с ID в списке `/models`; при ручном вводе легко ошибиться, поэтому лучше скопировать всю строку.
 
 ```bash
-# 先在终端查看可用的模型 ID
+# Сначала смотрим доступные ID моделей в терминале
 opencode models
 ```
 
 ```json
 {
-  "model": "deepseek/deepseek-chat"  // ← 从 opencode models 列表里整行复制，别手打
+  "model": "deepseek/deepseek-chat"  // ← скопируй строку целиком из списка opencode models, не вбивай руками
 }
 ```
 :::

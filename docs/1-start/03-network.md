@@ -27,7 +27,7 @@ prerequisite:
 Краткий конспект основных идей урока:
 
 <img src="/images/1-start/network-notes.mini.jpeg" 
-     alt="网络配置：代理与环境变量学霸笔记" 
+     alt="Настройка сети: прокси и переменные окружения — шпаргалка" 
      data-zoom-src="/images/1-start/network-notes.jpeg" />
 
 ---
@@ -97,7 +97,7 @@ OpenCode получает настройки прокси через **пере�
 - `HTTP_PROXY`: адрес прокси для HTTP-запросов
 - `HTTPS_PROXY`: адрес прокси для HTTPS-запросов
 
-Формат: `http://代理地址:端口号`
+Формат: `http://адрес-прокси:порт`
 
 После настройки OpenCode и большинство инструментов командной строки будут автоматически использовать прокси.
 
@@ -212,35 +212,35 @@ curl -I https://httpbin.org/ip
 ::: code-group
 
 ```bash [macOS / Linux (zsh)]
-# 编辑配置文件
+# Открываем конфиг для правки
 nano ~/.zshrc
 
-# 在文件末尾添加：
+# В конец файла добавляем:
 export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=http://127.0.0.1:7890
 
-# 保存退出（Ctrl+X → Y → Enter）
-# 重新加载配置
+# Сохраняем и выходим (Ctrl+X → Y → Enter)
+# Перезагружаем конфигурацию
 source ~/.zshrc
 ```
 
 ```bash [macOS / Linux (bash)]
 nano ~/.bashrc
 
-# 在文件末尾添加：
+# В конец файла добавляем:
 export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=http://127.0.0.1:7890
 
-# 保存退出，重新加载
+# Сохраняем, выходим, перезагружаем
 source ~/.bashrc
 ```
 
-```powershell [Windows (永久设置)]
-# 设置用户级环境变量
+```powershell [Windows (навсегда)]
+# Выставляем переменные окружения пользователя
 [Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://127.0.0.1:7890", "User")
 [Environment]::SetEnvironmentVariable("HTTPS_PROXY", "http://127.0.0.1:7890", "User")
 
-# 重启 PowerShell 生效
+# Перезапускаем PowerShell, чтобы применить
 ```
 
 :::

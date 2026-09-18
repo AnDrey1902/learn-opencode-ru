@@ -1,75 +1,75 @@
 ---
-title: "SDK V2：下一代 API 完整指南 | OpenCode 教程"
-subtitle: SDK V2 下一代 API 完整指南
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: "SDK V2: полное руководство по API нового поколения"
+subtitle: Полное руководство по API нового поколения SDK V2
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.10c"
-duration: 30 分钟
-practice: 40 分钟
-level: 进阶
-description: 学习 OpenCode SDK V2（@opencode-ai/sdk/v2）。本教程覆盖两层客户端结构、Permission/Question、Session3、Sync/Worktree 等能力，并说明 V1 与 V2 的并存边界。
+duration: 30 минут
+practice: 40 минут
+level: Продвинутый
+description: Изучите OpenCode SDK V2 (@opencode-ai/sdk/v2). Урок охватывает двухуровневую структуру клиентов, модули Permission и Question, расширенный Session3, Sync, Worktree и другие возможности, а также границы сосуществования V1 и V2.
 tags:
   - SDK
   - V2
   - API
-  - 实验性
+  - Экспериментальное
 prerequisite:
-  - 5.10a SDK 基础
-  - 5.10b API 参考
+  - 5.10a Основы SDK
+  - 5.10b Справочник API
 ---
 
-# 5.10c SDK V2：下一代 API
+# 5.10c SDK V2: API нового поколения
 
-> **一句话总结**：V2 是 OpenCode SDK 的下一代入口，在保留 V1 的同时扩展了会话、问题、当前位置、事件流、历史分页、运行时操作和权限请求等 API。
+> **Коротко**: V2 — вход нового поколения в OpenCode SDK: сохраняя V1, расширяет сессии, вопросы, текущую позицию, потоки событий, пагинацию истории, рантайм-операции, запросы прав и другие API.
 
-::: warning ⚠️ 版本边界
-`v1.18.22` 同时导出 `@opencode-ai/sdk` 和 `@opencode-ai/sdk/v2`。V2 接口仍在演进，使用时应固定 SDK 版本；V1 在目标版本中**没有移除**，现有集成不必因为 V2 扩展而立即迁移。本章固定以 `v1.18.22` tag 的 `packages/sdk/js/src/v2/` 为准。
+::: warning ⚠️ Границы версий
+`v1.18.22` экспортирует и `@opencode-ai/sdk`, и `@opencode-ai/sdk/v2`. Интерфейсы V2 ещё развиваются — при использовании фиксируйте версию SDK; V1 в целевой версии **не удалён**, существующие интеграции не обязаны срочно мигрировать из-за расширений V2. Глава фиксируется на `v1.18.22` с тегом `packages/sdk/js/src/v2/`.
 :::
 
 ---
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 区分 V1 和 V2，知道什么时候用哪个
-- 用 `@opencode-ai/sdk/v2` 创建客户端
-- 理解 `client.*` 和 `client.v2.*` 两层访问路径
-- 使用 Permission、Question 独立模块
-- 调用 Session3 的增强方法（interrupt、wait、compact 等）
-- 从 V1 迁移到 V2
+- Различать V1 и V2 и знать, когда какой использовать
+- Создавать клиентов через `@opencode-ai/sdk/v2`
+- Понимать двухуровневые пути доступа `client.*` и `client.v2.*`
+- Пользоваться независимыми модулями Permission и Question
+- Вызывать расширенные методы Session3 (interrupt, wait, compact и др.)
+- Мигрировать с V1 на V2
 
 ---
 
-## V2 是什么
+## Что такое V2
 
-### V1 和 V2 的定位
+### Позиционирование V1 и V2
 
-OpenCode SDK 包（`@opencode-ai/sdk`）通过 `package.json` 的 `exports` 暴露两个入口：
+Пакет OpenCode SDK (`@opencode-ai/sdk`) через `exports` в `package.json` открывает два входа:
 
-| 入口路径 | 版本 | 状态 | 适合谁 |
+| Путь входа | Версия | Статус | Кому подходит |
 |---------|------|------|--------|
-| `@opencode-ai/sdk` | V1 | 保留 | 现有集成、使用旧路由的代码 |
-| `@opencode-ai/sdk/v2` | V2 | 与 V1 并存、持续演进 | 需要新能力、愿意固定版本验证的进阶用户 |
+| `@opencode-ai/sdk` | V1 | Сохранён | Существующие интеграции, код на старых роутах |
+| `@opencode-ai/sdk/v2` | V2 | Сосуществует с V1, развивается | Нужны новые способности, готовы фиксировать версию и проверять, — продвинутым |
 
-> 来源：[`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20)
+> Источник: [`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20)
 
-V2 重新设计了 API 结构，和 V1 不完全兼容。`package.json` 同时导出 `.` 和 `./v2`，因此两个入口在 `v1.18.22` 中并存。
+V2 перепроектировала структуру API и не полностью совместима с V1. `package.json` экспортирует и `.`, и `./v2` — в `v1.18.22` входы сосуществуют.
 
-### V2 的两层客户端结构（重要）
+### Двухуровневая структура клиентов V2 (важно)
 
-V2 客户端最大的特点是**两层访问路径**，理解这个就理解了 V2 的核心：
+Главная особенность клиента V2 — **двухуровневые пути доступа**, поймёте их — поймёте ядро V2:
 
 ```
-client                         OpencodeClient（27 个模块）
-├── session  → Session2        旧路由 /session/*（基础方法）
-├── permission → Permission    /permission/*（跨 session 权限）
-├── question → Question        /question/*（跨 session 提问）
-├── part     → Part            消息部件 CRUD
-├── sync     → Sync            workspace 同步
-├── worktree → Worktree        git worktree
-├── experimental → Experimental 实验功能集合
+client                         OpencodeClient (27 модулей)
+├── session  → Session2        Старые роуты /session/* (базовые методы)
+├── permission → Permission    /permission/* (кросс-сессионные права)
+├── question → Question        /question/* (кросс-сессионные вопросы)
+├── part     → Part            CRUD частей сообщений
+├── sync     → Sync            Синхронизация workspace
+├── worktree → Worktree        Управление git worktree
+├── experimental → Experimental Набор экспериментальных функций
 ├── ...
-└── v2       → V2              新路由 /api/* 命名空间（17 个子模块）
-    ├── session    → Session3  /api/session/*（增强方法）
+└── v2       → V2              Новое пространство имён роутов /api/* (17 подмодулей)
+    ├── session    → Session3  /api/session/* (расширенные методы)
     ├── permission → Permission3 /api/session/{}/permission
     ├── question   → Question3 /api/session/{}/question
     ├── health     → Health    /api/health
@@ -79,262 +79,262 @@ client                         OpencodeClient（27 个模块）
     └── ...
 ```
 
-**关键区分**：
+**Главные различия**:
 
-| 访问路径 | 类 | 路由 | 用途 |
+| Путь доступа | Класс | Роуты | Назначение |
 |---------|-----|------|------|
-| `client.session` | Session2 | `/session/*` | 基础方法（list/create/prompt） |
-| `client.v2.session` | Session3 | `/api/session/*` | **增强方法**（interrupt/wait/compact/switchModel） |
-| `client.permission` | Permission | `/permission/*` | 跨 session 权限管理 |
-| `client.v2.permission` | Permission3 | `/api/session/{}/permission` | session 级权限 |
+| `client.session` | Session2 | `/session/*` | Базовые методы (list/create/prompt) |
+| `client.v2.session` | Session3 | `/api/session/*` | **Расширенные методы** (interrupt/wait/compact/switchModel) |
+| `client.permission` | Permission | `/permission/*` | Кросс-сессионное управление правами |
+| `client.v2.permission` | Permission3 | `/api/session/{}/permission` | Права уровня сессии |
 
-> 来源：[`sdk.gen.ts:6990-7075`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L6990-L7075)（V2 类定义）、[`sdk.gen.ts:7077-7219`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219)（OpencodeClient 定义）
+> Источники: [`sdk.gen.ts:6990-7075`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L6990-L7075) (определения классов V2),[`sdk.gen.ts:7077-7219`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219) (определение OpencodeClient)
 
-::: tip 一句话记忆
-**增强的 session 方法在 `client.v2.session`**，不是 `client.session`。`client.session` 是兼容旧路由的基础方法。
+::: tip Запоминалка одной фразой
+**Расширенные методы сессий — в `client.v2.session`**, а не в `client.session`. `client.session` — базовые методы совместимых старых роутов.
 :::
 
-### 参数风格：以生成签名为准
+### Стиль параметров: сверяйтесь с generated-сигнатурой
 
-V2 多数方法不再使用 V1 通用的 `{ path: {...}, body: {...} }` 结构，而是由 `buildClientParams` 把字段分发到 path、query 和 body。不过并非所有参数都平铺：部分端点仍使用 `body` 或 `worktreeCreateInput` 等请求体包装。调用时应以生成的 TypeScript 签名为准。
+Большинство методов V2 больше не используют общую V1-структуру `{ path: {...}, body: {...} }` — `buildClientParams` раскладывает поля в path, query и body. Но плоскими стали не все параметры: часть эндпоинтов сохраняет обёртки тел запросов вроде `body` и `worktreeCreateInput`. При вызовах сверяйтесь с generated TypeScript-сигнатурами.
 
 ```typescript
-// ❌ V1 风格（V2 中不适用）
+// ❌ Стиль V1 (в V2 неприменим)
 client.permission.reply({
   path: { requestID: "req-1" },
   body: { response: "always" },
 })
 
-// ✅ V2 风格（平铺）
+// ✅ Стиль V2 (плоский)
 client.permission.reply({
   requestID: "req-1",
   reply: "always",
 })
 ```
 
-> 来源：[`sdk.gen.ts:3121-3144`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3121-L3144)（`buildClientParams` 自动分发）
+> Источник: [`sdk.gen.ts:3121-3144`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3121-L3144) (автораздача `buildClientParams`)
 
 ---
 
-## 开始使用 V2
+## Начало работы с V2
 
-### 安装
+### Установка
 
-V2 和 V1 在同一个 npm 包里，不需要额外安装：
+V2 и V1 живут в одном npm-пакете, ставить отдельно не нужно:
 
 ```bash
 npm install @opencode-ai/sdk
 ```
 
-### 创建客户端
+### Создание клиента
 
 ```typescript
 import { createOpencodeClient } from "@opencode-ai/sdk/v2"
 
 const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
-  directory: "/path/to/my-project",        // 项目目录
-  experimental_workspaceID: "ws-123",      // 可选：workspace 标识
+  directory: "/path/to/my-project",        // Каталог проекта
+  experimental_workspaceID: "ws-123",      // Необязательно: идентификатор workspace
 })
 ```
 
-**客户端配置参数**：
+**Параметры конфигурации клиента**:
 
-| 参数 | 类型 | 说明 |
+| Параметр | Тип | Описание |
 |------|------|------|
-| `baseUrl` | `string` | 服务器 URL，默认 `http://localhost:4096` |
-| `directory` | `string` | 项目目录，通过 `X-Opencode-Directory` header 传递 |
-| `experimental_workspaceID` | `string` | workspace 标识，通过 `X-Opencode-Workspace` header 传递 |
-| `fetch` | `function` | 自定义 fetch 实现 |
-| `headers` | `object` | 自定义请求头 |
+| `baseUrl` | `string` | URL сервера, по умолчанию `http://localhost:4096` |
+| `directory` | `string` | Каталог проекта, передаётся заголовком `X-Opencode-Directory` |
+| `experimental_workspaceID` | `string` | Идентификатор workspace, передаётся заголовком `X-Opencode-Workspace` |
+| `fetch` | `function` | Своя реализация fetch |
+| `headers` | `object` | Свои заголовки запросов |
 
-> 来源：[`v2/client.ts:50-92`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/client.ts#L50-L92)
+> Источник: [`v2/client.ts:50-92`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/client.ts#L50-L92)
 
-::: details directory 和 workspaceID 怎么传递的？
-`directory` 被编码后放入 `X-Opencode-Directory` header，`experimental_workspaceID` 放入 `X-Opencode-Workspace` header。对 `GET` / `HEAD` 请求，客户端拦截器还会把它们写入 query string；`/api/*` 会同时补普通键和 `location[directory]` / `location[workspace]`，其他方法仍保留 header。
+::: details Как передаются directory и workspaceID?
+`directory` кодируется в заголовок `X-Opencode-Directory`, `experimental_workspaceID` — в заголовок `X-Opencode-Workspace`. Для запросов `GET` и `HEAD` перехватчик клиента дописывает их и в query string; `/api/*` дополняет как обычными ключами, так и `location[directory]` / `location[workspace]`, остальные методы оставляют только заголовки.
 :::
 
 ---
 
-## OpencodeClient 27 个模块总览
+## Обзор 27 модулей OpencodeClient
 
-V2 的 `OpencodeClient` 暴露 27 个模块属性。
+Клиент V2 открывает 27 свойств-модулей.
 
-> 来源：[`sdk.gen.ts:7077-7219`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219)
+> Источник: [`sdk.gen.ts:7077-7219`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219)
 
-### 兼容 V1 的模块（19 个）
+### Совместимые с V1 модули (19 штук)
 
 `global` `project` `pty` `config` `tool` `instance` `path` `vcs` `command` `provider` `find` `file` `app` `mcp` `lsp` `formatter` `tui` `auth` `event`
 
-这些模块和 V1 基本一致，用法参考 [5.10b API 参考](./10b-sdk-reference)。
+Эти модули в основном совпадают с V1, использование — в разделе [5.10b Справочник API](./10b-sdk-reference).
 
-### V2 新增/增强的模块（8 个）
+### Новые и усиленные модули V2 (8 штук)
 
-| 模块 | 访问路径 | 说明 |
+| Модуль | Путь доступа | Описание |
 |------|---------|------|
-| **session** | `client.session` / `client.v2.session` | 两层：Session2 基础 + Session3 增强 |
-| **permission** | `client.permission` | 跨 session 权限管理 |
-| **question** | `client.question` | 跨 session 提问管理 |
-| **part** | `client.part` | 消息部件 CRUD |
-| **sync** | `client.sync` | workspace 同步 |
-| **worktree** | `client.worktree` | git worktree 管理 |
-| **experimental** | `client.experimental` | 实验功能集合 |
-| **v2** | `client.v2` | /api/* 新路由命名空间（17 个子模块） |
+| **session** | `client.session` / `client.v2.session` | Два слоя: базовый Session2 + усиленный Session3 |
+| **permission** | `client.permission` | Кросс-сессионное управление правами |
+| **question** | `client.question` | Кросс-сессионное управление вопросами |
+| **part** | `client.part` | CRUD частей сообщений |
+| **sync** | `client.sync` | Синхронизация workspace |
+| **worktree** | `client.worktree` | Управление git worktree |
+| **experimental** | `client.experimental` | Набор экспериментальных функций |
+| **v2** | `client.v2` | Пространство имён новых роутов /api/* (17 подмодулей) |
 
-下面逐一详解。
+Ниже — подробно по каждому.
 
 ---
 
-## V2 核心新能力详解
+## Подробно о главных новых возможностях V2
 
-### 1. Permission 独立模块
+### 1. Независимый модуль Permission
 
-V1 响应权限请求要用超长的 `postSessionIdPermissionsPermissionId()`，且只能响应特定 session 的请求。V2 把权限管理提升为独立模块，支持跨 session 查询和响应。
+В V1 ответ на запросы прав требовал сверхдлинного `postSessionIdPermissionsPermissionId()` и только для запросов конкретной сессии. V2 подняла управление правами в независимый модуль с кросс-сессионными запросами и ответами.
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `permission.list()` | `GET /permission` | 列出所有 session 的待处理权限请求 |
-| `permission.reply()` | `POST /permission/{requestID}/reply` | 响应权限请求 |
-| `permission.respond()` | `POST /session/{sessionID}/permissions/{permissionID}` | ⚠️ 已废弃，用 `reply` 代替 |
+| `permission.list()` | `GET /permission` | Список ожидающих запросов прав всех сессий |
+| `permission.reply()` | `POST /permission/{requestID}/reply` | Ответить на запрос права |
+| `permission.respond()` | `POST /session/{sessionID}/permissions/{permissionID}` | ⚠️ Deprecated, вместо него `reply` |
 
-> 来源：[`sdk.gen.ts:3085-3193`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3085-L3193)
+> Источник: [`sdk.gen.ts:3085-3193`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3085-L3193)
 
 ```typescript
-// 列出所有待处理的权限请求（跨 session）
+// Список всех ожидающих запросов прав (кросс-сессионно)
 const pending = await client.permission.list()
 for (const request of pending.data ?? []) {
   console.log(`[${request.sessionID}] ${request.permission}: ${request.patterns.join(", ")}`)
 }
 
-// 响应某个权限请求（注意：字段名是 reply，不是 response）
+// Ответить на запрос права (обратите внимание: поле reply, а не response)
 await client.permission.reply({
   requestID: "req-123",
   reply: "always",     // "once" | "always" | "reject"
 })
 ```
 
-::: warning 字段名注意
-`reply()` 方法的 body 字段名是 **`reply`**（不是 `response`）。`response` 是已废弃的 `respond()` 方法的字段名。
+::: warning Внимание на имя поля
+У метода `reply()` поле тела называется **`reply`** (а не `response`). `response` — имя поля deprecated-метода `respond()`.
 :::
 
-**和 V1 的对比**：
+**Сравнение с V1**:
 
-| 操作 | V1 | V2 |
+| Операция | V1 | V2 |
 |------|----|----|
-| 列出权限请求 | ❌ 不支持 | ✅ `permission.list()` |
-| 响应权限 | `postSessionIdPermissionsPermissionId({path:{id,permissionID},body:{response}})` | `permission.reply({requestID, reply})` |
-| 跨 session 查询 | ❌ | ✅ |
+| Список запросов прав | ❌ Не поддерживается | ✅ `permission.list()` |
+| Ответить на право | `postSessionIdPermissionsPermissionId({path:{id,permissionID},body:{response}})` | `permission.reply({requestID, reply})` |
+| Кросс-сессионные запросы | ❌ | ✅ |
 
-### 2. Question 独立模块
+### 2. Независимый модуль Question
 
-Agent 可以通过 `question` 工具向你提问。V1 没有统一管理接口，V2 新增独立模块。
+Через инструмент `question` Agent задаёт вам вопросы. В V1 единого интерфейса управления не было, V2 добавила независимый модуль.
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `question.list()` | `GET /question` | 列出所有待回答的提问 |
-| `question.reply()` | `POST /question/{requestID}/reply` | 回答提问 |
-| `question.reject()` | `POST /question/{requestID}/reject` | 拒绝提问 |
+| `question.list()` | `GET /question` | Список всех неотвеченных вопросов |
+| `question.reply()` | `POST /question/{requestID}/reply` | Ответить на вопрос |
+| `question.reject()` | `POST /question/{requestID}/reject` | Отклонить вопрос |
 
-> 来源：[`sdk.gen.ts:2982-3084`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L2982-L3084)
+> Источник: [`sdk.gen.ts:2982-3084`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L2982-L3084)
 
 ```typescript
-// 查看所有待回答的提问
+// Все неотвеченные вопросы
 const questions = await client.question.list()
 for (const q of questions.data ?? []) {
   console.log(`[${q.sessionID}] ${q.questions[0]?.header ?? "(no question)"}`)
 }
 
-// 回答某个提问
+// Ответить на вопрос
 await client.question.reply({
   requestID: "q-456",
-  answers: [["选项 A"]],
+  answers: [["Вариант A"]],
 })
 
-// 拒绝提问
+// Отклонить вопрос
 await client.question.reject({ requestID: "q-456" })
 ```
 
-::: tip 权限和提问的区别
-- **Permission**：Agent 要执行某个**操作**（如运行命令、编辑文件），请求你授权。
-- **Question**：Agent 需要**信息**（如选择方案、确认偏好），向你提问。
+::: tip Разница прав и вопросов
+- **Permission**: Agent просит **действие** (выполнить команду, отредактировать файл) — просит у вас разрешения.
+- **Question**: Agent нужна **информация** (выбрать вариант, подтвердить предпочтение) — задаёт вам вопрос.
 :::
 
-### 3. Session 增强（client.v2.session）
+### 3. Усиление Session (client.v2.session)
 
-这是 V2 最容易踩坑的地方。增强的 session 方法在 **`client.v2.session`**（Session3 类），不是 `client.session`（Session2 类）。
+Здесь в V2 легче всего споткнуться. Усиленные методы сессий лежат в **`client.v2.session`** (класс Session3), а не в `client.session` (класс Session2).
 
-**Session2（client.session）**：兼容旧路由 `/session/*`，有 list/create/prompt/messages 等基础方法。
+**Session2 (client.session)**: совместимые старые роуты `/session/*` с базовыми методами list, create, prompt, messages и др.
 
-**Session3（client.v2.session）**：新路由 `/api/session/*`。除控制方法外，目标版本还支持创建/获取会话、带游标的会话与消息列表、session 级问题和权限请求、历史分页及事件流。当前位置属于同一 V2 命名空间下的 `client.v2.location`，不是 Session3 方法。
+**Session3 (client.v2.session)**: новые роуты `/api/session/*`. Кроме управляющих методов целевая версия поддерживает создание и получение сессий, списки сессий и сообщений с курсорами, вопросы и права уровня сессии, пагинацию истории и потоки событий. Текущая позиция — тот же V2-неймспейс `client.v2.location`, а не метод Session3.
 
-> 来源：[`sdk.gen.ts:5038-5058`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5038-L5058)（当前位置）、[`sdk.gen.ts:5171-5424`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5171-L5424)（权限与问题）、[`sdk.gen.ts:5426-5873`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873)（Session3）
+> Источники: [`sdk.gen.ts:5038-5058`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5038-L5058) (текущая позиция),[`sdk.gen.ts:5171-5424`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5171-L5424) (права и вопросы),[`sdk.gen.ts:5426-5873`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873) (Session3)
 
-**Session3 新增方法**：
+**Новые методы Session3**:
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `interrupt()` | `POST /api/session/{sessionID}/interrupt` | 中断当前执行 |
-| `wait()` | `POST /api/session/{sessionID}/wait` | 等待 session 空闲 |
-| `compact()` | `POST /api/session/{sessionID}/compact` | 触发上下文压缩 |
-| `context()` | `GET /api/session/{sessionID}/context` | 获取当前上下文 |
-| `history()` | `GET /api/session/{sessionID}/history` | 获取历史记录 |
-| `switchModel()` | `POST /api/session/{sessionID}/model` | 切换模型 |
-| `switchAgent()` | `POST /api/session/{sessionID}/agent` | 切换 agent |
-| `events()` | `GET /api/session/{sessionID}/event` | session 级事件流 |
+| `interrupt()` | `POST /api/session/{sessionID}/interrupt` | Прервать текущее выполнение |
+| `wait()` | `POST /api/session/{sessionID}/wait` | Дождаться простоя сессии |
+| `compact()` | `POST /api/session/{sessionID}/compact` | Запустить сжатие контекста |
+| `context()` | `GET /api/session/{sessionID}/context` | Получить текущий контекст |
+| `history()` | `GET /api/session/{sessionID}/history` | Получить историю |
+| `switchModel()` | `POST /api/session/{sessionID}/model` | Сменить модель |
+| `switchAgent()` | `POST /api/session/{sessionID}/agent` | Сменить agent |
+| `events()` | `GET /api/session/{sessionID}/event` | Поток событий уровня сессии |
 
-其中 `list()` 和 `messages()` 支持游标分页，`history({ sessionID, limit, after })` 返回指定聚合序号之后的有限事件页；`events({ sessionID, after })` 会先回放再持续推送事件。
+Причём `list()` и `messages()` поддерживают курсорную пагинацию, `history({ sessionID, limit, after })` возвращает ограниченные страницы событий после указанного aggregate-номера; `events({ sessionID, after })` сначала доигрывает, затем непрерывно пушит события.
 
-> 来源：[`sdk.gen.ts:5426-5517`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5517)、[`sdk.gen.ts:5715-5793`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5715-L5793)
+> Источники: [`sdk.gen.ts:5426-5517`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5517),[`sdk.gen.ts:5715-5793`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5715-L5793)
 
 ```typescript
 const sessionID = "sess-abc"
 
-// 注意：这些方法都在 client.v2.session（Session3）
+// Обратите внимание: эти методы — в client.v2.session (Session3)
 await client.v2.session.interrupt({ sessionID })
 await client.v2.session.wait({ sessionID })
 await client.v2.session.compact({ sessionID })
 
-// 切换模型
+// Смена модели
 await client.v2.session.switchModel({
   sessionID,
   model: { providerID: "anthropic", id: "claude-sonnet-4-20250514" },
 })
 
-// 切换 agent
+// Смена agent
 await client.v2.session.switchAgent({ sessionID, agent: "plan" })
 
-// 获取上下文
+// Получение контекста
 const ctx = await client.v2.session.context({ sessionID })
 ```
 
-::: danger 最常见的坑
-把增强方法写在 `client.session` 上会报错。记住：
-- `client.session.prompt()` ✅（基础方法在 Session2）
-- `client.v2.session.interrupt()` ✅（增强方法在 Session3）
-- `client.session.interrupt()` ❌（Session2 没有这个方法）
+::: danger Самая частая ловушка
+Писать усиленные методы на `client.session` — ошибка. Запомните:
+- `client.session.prompt()` ✅ (базовый метод в Session2)
+- `client.v2.session.interrupt()` ✅ (усиленный метод в Session3)
+- `client.session.interrupt()` ❌ (в Session2 такого метода нет)
 :::
 
-### 4. Part 模块（消息部件 CRUD）
+### 4. Модуль Part (CRUD частей сообщений)
 
-V2 新增了对消息**部件**（Part）的细粒度操作。一条消息由多个 Part 组成，V2 支持删除和更新单个 Part。
+V2 добавила точечные операции над **частями** сообщений. Сообщение состоит из нескольких Part, V2 умеет удалять и обновлять отдельные Part.
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `part.delete()` | `DELETE /session/{sessionID}/message/{messageID}/part/{partID}` | 删除部件 |
-| `part.update()` | `PATCH /session/{sessionID}/message/{messageID}/part/{partID}` | 更新部件 |
+| `part.delete()` | `DELETE /session/{sessionID}/message/{messageID}/part/{partID}` | Удалить часть |
+| `part.update()` | `PATCH /session/{sessionID}/message/{messageID}/part/{partID}` | Обновить часть |
 
-> 来源：[`sdk.gen.ts:4330-4406`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4330-L4406)
+> Источник: [`sdk.gen.ts:4330-4406`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4330-L4406)
 
 ```typescript
-// 更新某个文本部件
+// Обновить текстовую часть
 await client.part.update({
   sessionID: "sess-abc",
   messageID: "msg-1",
   partID: "part-3",
-  part: { type: "text", text: "修改后的内容" },
+  part: { type: "text", text: "Изменённое содержимое" },
 })
 
-// 删除某个部件
+// Удалить часть
 await client.part.delete({
   sessionID: "sess-abc",
   messageID: "msg-1",
@@ -342,102 +342,102 @@ await client.part.delete({
 })
 ```
 
-### 5. Sync 模块（workspace 同步）
+### 5. Модуль Sync (синхронизация workspace)
 
-Sync 是 V2 的多 workspace 事件同步机制。
+Sync — механизм синхронизации событий нескольких workspace в V2.
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `sync.start()` | `POST /sync/start` | 启动同步循环 |
-| `sync.replay()` | `POST /sync/replay` | 回放同步事件 |
-| `sync.steal()` | `POST /sync/steal` | 将 session 转移到当前 workspace |
-| `sync.history.list()` | `POST /sync/history` | 列出同步事件历史 |
+| `sync.start()` | `POST /sync/start` | Запустить цикл синхронизации |
+| `sync.replay()` | `POST /sync/replay` | Проиграть события синхронизации |
+| `sync.steal()` | `POST /sync/steal` | Перенести сессию в текущий workspace |
+| `sync.history.list()` | `POST /sync/history` | Список истории событий синхронизации |
 
-> 来源：[`sdk.gen.ts:4448-4576`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4448-L4576)（Sync 类）、[`sdk.gen.ts:4407-4446`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4407-L4446)（History 类）
+> Источники: [`sdk.gen.ts:4448-4576`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4448-L4576) (класс Sync),[`sdk.gen.ts:4407-4446`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4407-L4446) (класс History)
 
-::: tip 注意
-`sync.history` 是一个 **getter 属性**（返回 History 类实例），不是方法。要调用 `sync.history.list()`。
+::: tip Обратите внимание
+`sync.history` — **свойство-геттер** (возвращает экземпляр класса History), а не метод. Вызывайте `sync.history.list()`.
 :::
 
 ```typescript
-// 启动同步
+// Запуск синхронизации
 await client.sync.start()
 
-// 查看同步事件历史（history 是 getter，再调 list）
+// История событий синхронизации (history — геттер, затем list)
 const history = await client.sync.history.list({
-  body: { "sess-abc": 10 },  // 返回 seq > 10 的事件
+  body: { "sess-abc": 10 },  // Вернуть события с seq > 10
 })
 ```
 
-::: details Sync 是什么场景用的？
-当你同时在多个 workspace 运行 OpenCode，session 可能需要在不同 workspace 间迁移。Sync 提供事件日志机制，确保迁移可追溯、可回放。这是为未来的分布式/集群场景设计的，单机用户一般用不到。
+::: details Зачем нужен Sync?
+Когда OpenCode одновременно работает в нескольких workspace, сессии может понадобиться мигрировать между workspace. Sync даёт журнал событий для отслеживаемой и replay-миграции. Проектировался под будущие распределённые и кластерные сценарии — пользователям одной машины обычно не нужен.
 
-目标版本的 workspace 由 adapter 负责创建与发现，内置 adapter 是 `worktree`；会话 warp 可用 `copyChanges` 复制当前补丁。v1.16.0 Release 曾加入保留脏文件和未跟踪文件的 managed clone，但该实现已被后续 adapter/worktree 路径取代，不能当作 `v1.18.22` 的当前行为。
+Workspace целевой версии создаются и обнаруживаются через adapter, встроенный adapter — `worktree`; warp сессий умеет через `copyChanges` копировать текущий патч. Релиз v1.16.0 добавлял managed clone с сохранением грязных файлов и неотслеживаемых, но этот путь уже заменён путём adapter и worktree — считать его текущим поведением `v1.18.22` нельзя.
 
-> 当前实现：[`adapters/index.ts:5-18`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/adapters/index.ts#L5-L18)、[`workspace.ts:492-538`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L492-L538)、[`workspace.ts:559-620`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L559-L620)、[`workspace.ts:728-739`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L728-L739)。历史边界：[`v1.16.0 Release`](https://github.com/anomalyco/opencode/releases/tag/v1.16.0)、commit `5661af203487b90cf9ee0844b198b03cce26c412`。
+> Текущая реализация: [`adapters/index.ts:5-18`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/adapters/index.ts#L5-L18),[`workspace.ts:492-538`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L492-L538),[`workspace.ts:559-620`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L559-L620),[`workspace.ts:728-739`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/control-plane/workspace.ts#L728-L739). Исторические границы: [релиз `v1.16.0`](https://github.com/anomalyco/opencode/releases/tag/v1.16.0),коммит `5661af203487b90cf9ee0844b198b03cce26c412`.
 :::
 
-### 6. Worktree 模块（git worktree 管理）
+### 6. Модуль Worktree (управление git worktree)
 
-V2 新增了 git worktree 的完整管理接口。
+V2 добавила полный интерфейс управления git worktree.
 
-| 方法 | 路由 | 说明 |
+| Метод | Роут | Описание |
 |------|------|------|
-| `worktree.list()` | `GET /experimental/worktree` | 列出所有 worktree |
-| `worktree.create()` | `POST /experimental/worktree` | 创建 worktree |
-| `worktree.remove()` | `DELETE /experimental/worktree` | 删除 worktree 及分支 |
-| `worktree.reset()` | `POST /experimental/worktree/reset` | 重置到默认分支 |
+| `worktree.list()` | `GET /experimental/worktree` | Список всех worktree |
+| `worktree.create()` | `POST /experimental/worktree` | Создать worktree |
+| `worktree.remove()` | `DELETE /experimental/worktree` | Удалить worktree с веткой |
+| `worktree.reset()` | `POST /experimental/worktree/reset` | Сбросить на дефолтную ветку |
 
-> 来源：[`sdk.gen.ts:1582-1723`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1582-L1723)、[`types.gen.ts:2167-2187`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/types.gen.ts#L2167-L2187)
+> Источники: [`sdk.gen.ts:1582-1723`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1582-L1723),[`types.gen.ts:2167-2187`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/types.gen.ts#L2167-L2187)
 
 ```typescript
-// 列出所有 worktree
+// Список всех worktree
 const worktrees = await client.worktree.list()
 
-// 创建新 worktree
+// Создать новый worktree
 await client.worktree.create({
   worktreeCreateInput: { name: "feature-experiment" },
 })
 
-// 删除
+// Удалить
 await client.worktree.remove({
   worktreeRemoveInput: { directory: "/path/to/worktree" },
 })
 ```
 
-::: tip 和 5.25 Git Worktree 课程的关系
-本节是 SDK 编程接口。手动使用 worktree 请参考 [5.25 Git Worktree 工作流](./25-git-worktree)。
+::: tip Связь с уроком 5.25 Git Worktree
+Здесь — программный интерфейс SDK. Ручная работа с worktree — в уроке [5.25 Процессы Git Worktree](./25-git-worktree).
 :::
 
-### 7. Experimental 模块集合
+### 7. Набор модулей Experimental
 
-`client.experimental` 是聚合模块，包含 workspace、resource、capabilities、console、control-plane 等前沿功能。
+`client.experimental` — агрегирующий модуль: workspace, resource, capabilities, console, control-plane и другие передовые функции.
 
-| 子功能 | 路由前缀 | 说明 |
+| Подфункция | Префикс роутов | Описание |
 |--------|---------|------|
-| workspace | `/experimental/workspace` | 多工作空间管理 |
-| resource | `/experimental/resource` | MCP 资源查询 |
-| capabilities | `/experimental/capabilities` | 能力声明 |
-| console | `/experimental/console` | 控制台（组织切换） |
-| controlPlane | `/experimental/control-plane` | 控制平面（session 迁移） |
-| session | `/experimental/session` | 实验性会话（background 子代理） |
+| workspace | `/experimental/workspace` | Управление несколькими рабочими пространствами |
+| resource | `/experimental/resource` | Запросы MCP-ресурсов |
+| capabilities | `/experimental/capabilities` | Декларации возможностей |
+| console | `/experimental/console` | Консоль (переключение организаций) |
+| controlPlane | `/experimental/control-plane` | Control plane (миграция сессий) |
+| session | `/experimental/session` | Экспериментальные сессии (фоновые под-агенты) |
 
-> 来源：[`sdk.gen.ts:1243-1278`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1243-L1278)
+> Источник: [`sdk.gen.ts:1243-1278`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1243-L1278)
 
-实验性 session 的 `background` 方法可以把阻塞的子代理转为后台执行：
+Экспериментальная сессия методом `background` уводит блокирующего под-агента в фон:
 
 ```typescript
-// 把阻塞的子代理转到后台继续运行
+// Увести блокирующего под-агента в фон
 await client.experimental.session.background({ sessionID: "sess-abc" })
 ```
 
-该接口只会分离当前阻塞 session 的同步子代理。后台子代理能力仍受 `OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true`（或总开关 `OPENCODE_EXPERIMENTAL=true`）控制；未启用时接口返回 `false`。此外，`subagent_depth` 默认是 `1`，会阻止子代理继续启动子代理；只有明确调高后才允许更深嵌套。
+Интерфейс лишь отсоединяет текущий блокирующий синхронный под-агент сессии. Способность фоновых под-агентов по-прежнему под флагом `OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true` (или общим флагом `OPENCODE_EXPERIMENTAL=true`); без флага интерфейс возвращает `false`. Кроме того, `subagent_depth` по умолчанию `1` и запрещает под-агентам запускать под-агентов; глубже — только явным повышением.
 
-> 来源：[`runtime-flags.ts:10-14,43`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/effect/runtime-flags.ts#L10-L14)、[`experimental handler:159-170`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/server/routes/instance/httpapi/handlers/experimental.ts#L159-L170)、[`task.ts:96-115`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L96-L115)、[`config.ts:84-86`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L84-L86)、[`sdk.gen.ts:805-886`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L805-L886)
+> Источники: [`runtime-flags.ts:10-14,43`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/effect/runtime-flags.ts#L10-L14),[experimental handler:159-170](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/server/routes/instance/httpapi/handlers/experimental.ts#L159-L170),[`task.ts:96-115`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L96-L115),[`config.ts:84-86`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L84-L86),[`sdk.gen.ts:805-886`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L805-L886)
 
 ---
 
-## 完整示例：用 V2 构建自动化助手
+## Полный пример: авто-помощник на V2
 
 ```typescript
 import { createOpencodeClient } from "@opencode-ai/sdk/v2"
@@ -448,62 +448,62 @@ const client = createOpencodeClient({
 })
 
 async function runTask(task: string) {
-  // 1. 创建 session（client.session 是 Session2，基础方法）
+  // 1. Создать сессию (client.session — Session2, базовые методы)
   const session = await client.session.create({
     title: task.slice(0, 50),
     agent: "build",
   })
   const sessionID = session.data!.id
 
-  // 2. 异步发送任务（平铺参数）
+  // 2. Асинхронно отправить задачу (плоские параметры)
   await client.session.promptAsync({
     sessionID,
     parts: [{ type: "text", text: task }],
     model: { providerID: "anthropic", modelID: "claude-sonnet-4-20250514" },
   })
 
-  // 3. 轮询权限请求，自动允许只读操作
+  // 3. Опрашивать запросы прав, автоматически разрешать чтение
   const poll = setInterval(async () => {
     const pending = await client.permission.list()
     for (const req of pending.data ?? []) {
-      // permission 是操作类型（如 "read"、"grep"），patterns 是匹配模式
+      // permission — тип операции (вроде "read", "grep"), patterns — шаблоны совпадения
       if (req.permission === "read" || req.permission === "grep") {
         await client.permission.reply({
           requestID: req.id,
-          reply: "always",   // 注意字段名是 reply
+          reply: "always",   // Обратите внимание: поле называется reply
         })
       }
     }
   }, 1000)
 
-  // 4. 等待 session 完成（增强方法在 client.v2.session）
+  // 4. Дождаться завершения сессии (усиленный метод в client.v2.session)
   await client.v2.session.wait({ sessionID })
   clearInterval(poll)
 
-  // 5. 获取结果（基础方法回到 client.session）
+  // 5. Забрать результат (базовые методы — снова в client.session)
   const messages = await client.session.messages({ sessionID })
   const last = messages.data?.at(-1)
 
-  // 6. 读取 Token 消耗和费用（V1/V2 都支持）
+  // 6. Прочитать расход токенов и стоимость (поддерживают и V1, и V2)
   if (last?.info.role === "assistant") {
-    console.log(`费用: $${last.info.cost}`)
-    console.log(`Token: 输入 ${last.info.tokens.input} / 输出 ${last.info.tokens.output}`)
+    console.log(`Стоимость: $${last.info.cost}`)
+    console.log(`Токены: вход ${last.info.tokens.input} / выход ${last.info.tokens.output}`)
   }
 
   return last
 }
 
-const result = await runTask("分析项目结构并生成 README")
+const result = await runTask("Разбери структуру проекта и создай README")
 console.log(result)
 ```
 
-> **核心要点**：基础方法（create/promptAsync/messages）在 `client.session`，增强方法（wait/interrupt/compact）在 `client.v2.session`。混用时注意切换路径。
+> **Главное**: базовые методы (create, promptAsync, messages) — в `client.session`, усиленные (wait, interrupt, compact) — в `client.v2.session`. При смешивании следите за путями.
 
 ---
 
-## V1 → V2 迁移指南
+## Гид миграции V1 → V2
 
-### 导入路径
+### Пути импорта
 
 ```typescript
 // V1
@@ -513,43 +513,43 @@ import { createOpencodeClient } from "@opencode-ai/sdk"
 import { createOpencodeClient } from "@opencode-ai/sdk/v2"
 ```
 
-### 参数结构
+### Структура параметров
 
 ```typescript
-// V1：嵌套结构
+// V1: вложенная структура
 await client.session.create({ body: { title: "xxx" } })
 await client.session.prompt({ path: { id: "sess-1" }, body: { parts: [...] } })
 
-// V2：平铺结构
+// V2: плоская структура
 await client.session.create({ title: "xxx" })
 await client.session.prompt({ sessionID: "sess-1", parts: [...] })
 ```
 
-### 权限响应
+### Ответы на права
 
 ```typescript
-// V1：超长方法名 + 嵌套参数
+// V1: сверхдлинное имя метода + вложенные параметры
 await client.postSessionIdPermissionsPermissionId({
   path: { id: sessionID, permissionID: "perm-1" },
   body: { response: "always" },
 })
 
-// V2：独立模块 + 平铺参数
+// V2: независимый модуль + плоские параметры
 await client.permission.reply({
   requestID: "req-1",
-  reply: "always",   // 字段名变了：response → reply
+  reply: "always",   // Имя поля изменилось: response → reply
 })
 ```
 
-### 会话控制
+### Управление сессиями
 
 ```typescript
-// V1：已有中断和压缩能力，但方法名不同
+// V1: прерывание и сжатие уже были, но имена методов другие
 await client.session.abort({ path: { id: sessionID } })
 await client.session.summarize({ path: { id: sessionID } })
-// V1 没有 wait，需要自行轮询
+// В V1 нет wait — опрашивайте сами
 
-// V2：增强方法在 client.v2.session
+// V2: усиленные методы в client.v2.session
 await client.v2.session.interrupt({ sessionID })
 await client.v2.session.wait({ sessionID })
 await client.v2.session.compact({ sessionID })
@@ -557,93 +557,93 @@ await client.v2.session.switchModel({ sessionID, model: { ... } })
 await client.v2.session.switchAgent({ sessionID, agent: "plan" })
 ```
 
-### 能力对照表
+### Таблица соответствия возможностей
 
-| 功能 | V1 | V2 |
+| Возможность | V1 | V2 |
 |------|----|----|
-| 权限响应 | `postSessionIdPermissionsPermissionId` | `permission.reply` |
-| 权限列表 | ❌ | `permission.list` |
-| 提问管理 | ❌ | `question.list/reply/reject` |
-| 中断会话 | `session.abort` | `v2.session.interrupt` |
-| 等待完成 | ❌（自己轮询） | `v2.session.wait` |
-| 触发压缩 | `session.summarize` | `v2.session.compact` |
-| 切换模型 | ❌ | `v2.session.switchModel` |
-| 切换 agent | ❌ | `v2.session.switchAgent` |
-| 消息部件 CRUD | ❌ | `part.update/delete` |
+| Ответить на права | `postSessionIdPermissionsPermissionId` | `permission.reply` |
+| Список прав | ❌ | `permission.list` |
+| Управление вопросами | ❌ | `question.list/reply/reject` |
+| Прервать сессию | `session.abort` | `v2.session.interrupt` |
+| Ждать завершения | ❌ (опрос вручную) | `v2.session.wait` |
+| Запустить сжатие | `session.summarize` | `v2.session.compact` |
+| Сменить модель | ❌ | `v2.session.switchModel` |
+| Сменить agent | ❌ | `v2.session.switchAgent` |
+| CRUD частей сообщений | ❌ | `part.update/delete` |
 | worktree | ❌ | `worktree.list/create/remove/reset` |
-| workspace 同步 | ❌ | `sync.start/replay/steal/history.list` |
+| Синхронизация workspace | ❌ | `sync.start/replay/steal/history.list` |
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| `createOpencodeClient is not exported` | 导入路径错了 | V2 用 `@opencode-ai/sdk/v2` |
-| `client.session.interrupt is not a function` | 用错了访问路径 | 增强方法在 `client.v2.session` |
-| 参数报类型错误 | 套用了另一端点的参数结构 | 查看该方法的生成签名；多数参数平铺，部分仍有请求体包装 |
-| `permission.reply` 报字段错误 | 字段名写成了 `response` | V2 字段名是 `reply` |
-| `sync.history is not a function` | `history` 是 getter 不是方法 | 调用 `sync.history.list()` |
-| 请求返回 HTML | 连的是 V1 服务器，不支持 `/api/*` | 确认服务器版本支持 V2 |
-| V2 方法签名和文档不一致 | V2 是实验性，API 会变 | 以源码 `sdk.gen.ts` 为准 |
-| `v2.session.wait` 一直阻塞 | session 一直在运行 | 先 `v2.session.interrupt` 或设超时 |
+| `createOpencodeClient is not exported` | Неверный путь импорта | V2 импортируется из `@opencode-ai/sdk/v2` |
+| `client.session.interrupt is not a function` | Неверный путь доступа | Усиленные методы — в `client.v2.session` |
+| Ошибка типов параметров | Применена структура параметров другого эндпоинта | Смотрите generated-сигнатуру метода; параметры в основном плоские, часть — с обёртками тел |
+| `permission.reply` ругается на поля | Поле названо `response` | В V2 поле называется `reply` |
+| `sync.history is not a function` | `history` — геттер, а не метод | Вызывайте `sync.history.list()` |
+| Запрос вернул HTML | Подключились к серверу V1 без поддержки `/api/*` | Убедитесь, что версия сервера поддерживает V2 |
+| Сигнатуры методов V2 расходятся с документацией | V2 экспериментален, API меняется | Сверяйтесь с исходниками `sdk.gen.ts` |
+| `v2.session.wait` висит бесконечно | Сессия всё выполняется | Сначала `v2.session.interrupt` или задайте тайм-аут |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. **V2 定位**：持续演进的下一代 API，和 V1 并存于同一个 npm 包
-2. **两层结构**：`client.*`（基础 + 新概念）和 `client.v2.*`（/api/* 新路由）
-3. **参数风格**：多数方法改为端点字段参数，少数仍保留请求体包装，以生成签名为准
-4. **核心新能力**：Permission/Question 独立模块、Session3 增强方法（在 `client.v2.session`）、Part CRUD、Sync、Worktree
-5. **迁移要点**：导入路径、参数结构、权限字段名、session 访问路径的差异
-
----
-
-## 相关资源
-
-- [5.10a SDK 基础](./10a-sdk-basics) - V1 SDK 入门
-- [5.10b API 参考](./10b-sdk-reference) - V1 完整 API 文档
-- [V2 类型定义源码（v1.18.22）](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/types.gen.ts)
-- [V2 SDK 生成源码（v1.18.22）](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts)
+1. **Позиционированию V2**: развивающийся API нового поколения, сосуществует с V1 в одном npm-пакете
+2. **Двухуровневой структуре**: `client.*` (база + новые понятия) и `client.v2.*` (новые роуты /api/*)
+3. **Стилю параметров**: в основном поля методов-эндпоинтов, редко с обёртками тел — сверяйтесь с generated-сигнатурой
+4. **Главным новым способностям**: независимым модулям Permission и Question, усиленным методам Session3 (в `client.v2.session`), CRUD Part, Sync и Worktree
+5. **Главному в миграции**: различиям путей импорта, структур параметров, имён полей прав и путей доступа сессий
 
 ---
 
-## 附录：源码参考
+## Связанные материалы
+
+- [5.10a Основы SDK](./10a-sdk-basics) — введение в SDK V1
+- [5.10b Справочник API](./10b-sdk-reference) — полная документация API V1
+- [Исходники типов V2 (v1.18.22)](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/types.gen.ts)
+- [Исходники generated SDK V2 (v1.18.22)](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts)
+
+---
+
+## Приложение: ссылки на исходники
 
 <details>
-<summary><strong>点击展开查看源码位置</strong></summary>
+<summary><strong>Нажмите, чтобы раскрыть расположение исходников</strong></summary>
 
-> 目标版本：v1.18.22（2026-08-24）
+> Целевая версия: v1.18.22 (2026-08-24)
 
-| 功能 | 文件路径 | 行号 |
+| Функция | Путь к файлу | Строки |
 |-----|---------|------|
-| V1/V2 exports 配置 | [`packages/sdk/js/package.json`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20) | 12-20 |
-| V2 index（createOpencode） | [`packages/sdk/js/src/v2/index.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/index.ts#L1-L23) | 1-23 |
-| V2 客户端（createOpencodeClient） | [`packages/sdk/js/src/v2/client.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/client.ts#L50-L92) | 50-92 |
-| V2 服务器（ServerOptions） | [`packages/sdk/js/src/v2/server.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/server.ts#L5-L30) | 5-30 |
-| OpencodeClient 27 模块 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219) | 7077-7219 |
-| V2 命名空间（17 子模块） | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L6990-L7075) | 6990-7075 |
-| Permission 模块 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3085-L3193) | 3085-3193 |
-| Question 模块 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L2982-L3084) | 2982-3084 |
-| Session3 模块 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873) | 5426-5873 |
-| Session2 模块（基础方法） | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3362-L4329) | 3362-4329 |
-| Part 模块（update/delete） | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4330-L4406) | 4330-4406 |
-| Sync 模块 + History 类 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4407-L4576) | 4407-4576 |
-| Worktree 模块 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1582-L1723) | 1582-1723 |
-| Workspace 模块（experimental） | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1006-L1242) | 1006-1242 |
-| Experimental 模块（聚合） | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1243-L1278) | 1243-1278 |
+| Конфиг exports V1/V2 | [`packages/sdk/js/package.json`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20) | 12-20 |
+| Индекс V2 (createOpencode) | [`packages/sdk/js/src/v2/index.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/index.ts#L1-L23) | 1-23 |
+| Клиент V2 (createOpencodeClient) | [`packages/sdk/js/src/v2/client.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/client.ts#L50-L92) | 50-92 |
+| Сервер V2 (ServerOptions) | [`packages/sdk/js/src/v2/server.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/server.ts#L5-L30) | 5-30 |
+| OpencodeClient из 27 модулей | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L7077-L7219) | 7077-7219 |
+| Пространство имён V2 (17 подмодулей) | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L6990-L7075) | 6990-7075 |
+| Модуль Permission | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3085-L3193) | 3085-3193 |
+| Модуль Question | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L2982-L3084) | 2982-3084 |
+| Модуль Session3 | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873) | 5426-5873 |
+| Модуль Session2 (базовые методы) | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L3362-L4329) | 3362-4329 |
+| Модуль Part (update/delete) | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4330-L4406) | 4330-4406 |
+| Модуль Sync + класс History | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L4407-L4576) | 4407-4576 |
+| Модуль Worktree | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1582-L1723) | 1582-1723 |
+| Модуль Workspace (experimental) | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1006-L1242) | 1006-1242 |
+| Модуль Experimental (агрегатор) | [`sdk.gen.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L1243-L1278) | 1243-1278 |
 
-**关键类**：
-- `OpencodeClient`：V2 客户端主类，27 个模块属性
-- `V2`：`client.v2` 命名空间，17 个 /api/* 子模块
-- `Session2`（`client.session`）：旧路由基础方法
-- `Session3`（`client.v2.session`）：新路由增强方法（interrupt/wait/compact/switchModel/switchAgent）
-- `Permission`（`client.permission`）：跨 session 权限管理
-- `Question`（`client.question`）：跨 session 提问管理
+**Главные классы**:
+- `OpencodeClient`: главный класс клиента V2 из 27 свойств-модулей
+- `V2`: пространство имён `client.v2` из 17 подмодулей /api/*
+- `Session2` (`client.session`): базовые методы старых роутов
+- `Session3` (`client.v2.session`): усиленные методы новых роутов (interrupt/wait/compact/switchModel/switchAgent)
+- `Permission` (`client.permission`): кросс-сессионное управление правами
+- `Question` (`client.question`): кросс-сессионное управление вопросами
 
-**注意**：`packages/client/`（`@opencode-ai/client`）是私有包，基于 Effect HttpApi 生成，非公开 SDK，不在本章范围。
+**Обратите внимание**: пакеты `packages/client/` (`@opencode-ai/client`) — приватные, generated на Effect HttpApi, а не публичный SDK, — вне рамок главы.
 
 </details>

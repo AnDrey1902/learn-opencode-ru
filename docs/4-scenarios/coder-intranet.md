@@ -1,161 +1,161 @@
 ---
-title: B6 内网/离线部署
-subtitle: 让 OpenCode 在无外网环境正常运行
-course: OpenCode 中文实战课
-stage: 第四阶段
+title: B6 Интранет и офлайн
+subtitle: OpenCode без внешнего интернета
+course: Практический курс OpenCode на русском языке
+stage: Этап 4
 lesson: "4.B6"
-duration: 25 分钟
-practice: 15 分钟
-level: 进阶
-description: 配置 OpenCode 在企业内网或离线环境运行，禁用所有外网请求，使用本地模型列表和内部 AI 网关。
+duration: 25 минут
+practice: 15 минут
+level: Продвинутый
+description: "Настройте OpenCode для корпоративного интранета или офлайн-окружения: отключите все внешние запросы, используйте локальный список моделей и внутренний AI-шлюз."
 tags:
-  - 内网
-  - 离线
-  - 企业
-  - 部署
+  - Интранет
+  - Офлайн
+  - Корпорация
+  - Деплой
 prerequisite:
-  - 1.4 连接模型
-  - 5.1 配置全解
+  - 1.4 Подключение моделей
+  - 5.1 Всё о конфигурации
 ---
 
-# 内网/离线部署
+# Интранет и офлайн
 
-> 💡 **一句话总结**：用 7 个开关把外网请求关掉，让 OpenCode 在内网环境能跑起来。
+> 💡 **Коротко**: закройте 7 выключателями все внешние запросы — и OpenCode заработает в интранете.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/4-scenarios/coder-intranet-notes.mini.jpeg"
-     alt="B6 内网/离线部署学霸笔记"
+     alt="Шпаргалка урока: B6 Интранет и офлайн"
      data-zoom-src="/images/4-scenarios/coder-intranet-notes.jpeg" />
 
 ---
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 在完全无外网的环境运行 OpenCode
-- 使用本地缓存的模型列表，不依赖 models.dev
-- 连接公司内部 AI 网关，不触发任何外网请求
-- 排查"启动卡住"、"网络超时"等内网常见问题
-- 解决内网最常见的“依赖安装卡住”问题（`@opencode-ai/plugin`）
-
----
-
-## 你现在的困境
-
-- 公司内网不能访问外网，OpenCode 启动就卡住
-- 设置了 `OPENCODE_DISABLE_MODELS_FETCH=true`，但还是卡
-- 不知道 OpenCode 到底会请求哪些外网地址
-- 想用公司内部的 AI 网关，但不知道怎么配置
-- **核心问题**：启动后没有任何错误提示，但就是不动，日志中也没有"loading plugin"相关输出（这是 `@opencode-ai/plugin` SDK 安装卡住的典型现象）
+- Запускать OpenCode в полностью изолированном окружении
+- Использовать локально закэшированный список моделей без models.dev
+- Подключаться к внутреннему AI-шлюзу компании без единого внешнего запроса
+- Разбирать типовые интранет-проблемы «зависание на старте» и «сетевые тайм-ауты»
+- Решить самую частую интранет-проблему — «виснущую установку зависимостей» (`@opencode-ai/plugin`)
 
 ---
 
-## 什么时候用这一招
+## С какими трудностями вы столкнулись
 
-- 企业内网环境，机器不能访问外网
-- 安全合规要求，不允许任何数据出内网
-- 离线开发环境（飞机上、无网络的机房）
-- CI/CD 环境，想加速启动、避免网络抖动
+- Корпоративный интранет без внешнего интернета — OpenCode виснет на старте
+- Выставили `OPENCODE_DISABLE_MODELS_FETCH=true`, но всё равно висит
+- Непонятно, какие вообще внешние адреса запрашивает OpenCode
+- Хотите использовать внутренний AI-шлюз компании, но непонятно как настроить
+- **Главная проблема**: после старта нет никаких ошибок, но ничего не движется, и в логах нет строк про "loading plugin" (типичный симптом висящей установки SDK `@opencode-ai/plugin`)
 
 ---
 
-## 🎒 开始前的准备
+## Когда это пригодится
 
-- [ ] 有一个可用的内部 AI 网关（或本地 Ollama）
-- [ ] 能从外网机器下载 `https://models.dev/api.json`
-- [ ] 了解 [1.4 连接模型](../1-start/04-connect) 的基本配置方式
-- [ ] **（可选）验证系统是否已安装 ripgrep**：`rg --version`
+- Корпоративный интранет: машины без доступа наружу
+- Требования безопасности и комплаенс: данным запрещено покидать интранет
+- Офлайн-разработка (самолёт, серверная без сети)
+- CI/CD-окружение: ускорить старт и избежать сетевых флуктуаций
 
-::: tip 💡 检查 ripgrep
-在内网环境中，推荐提前检查 `rg` 是否已安装，避免使用 AI 的 grep 功能时失败。
+---
+
+## 🎒 Перед началом
+
+- [ ] Рабочий внутренний AI-шлюз (или локальная Ollama)
+- [ ] Возможность скачать `https://models.dev/api.json` с машины с интернетом
+- [ ] Знакомы с базовой настройкой из [1.4 Подключение моделей](../1-start/04-connect)
+- [ ] **(Необязательно) Проверьте, установлен ли ripgrep**: `rg --version`
+
+::: tip 💡 Проверка ripgrep
+В интранете рекомендуем заранее проверить, установлен ли `rg`, — иначе функция grep у AI будет падать.
 :::
 
 ---
 
-## 核心思路
+## Основная идея
 
-OpenCode 启动时会尝试以下外网请求：
+При старте OpenCode пытается выполнить следующие внешние запросы:
 
-| 请求 | 用途 | 禁用方式 |
+| Запрос | Назначение | Как отключить |
 |-----|------|---------|
-| `models.dev/api.json` | 获取模型列表 | 方案 A（完全离线）：`OPENCODE_DISABLE_MODELS_FETCH=true` + `OPENCODE_MODELS_PATH=...`；方案 B（内网镜像）：只设置 `OPENCODE_MODELS_URL=https://...`（不要设置 `OPENCODE_DISABLE_MODELS_FETCH=true`） |
-| npm registry | 安装内置插件 | `OPENCODE_DISABLE_DEFAULT_PLUGINS=true` |
-| GitHub releases | 检查更新 | `OPENCODE_DISABLE_AUTOUPDATE=true` 或 `autoupdate: false` |
-| LSP 服务器下载 | 语言服务器 | `OPENCODE_DISABLE_LSP_DOWNLOAD=true` |
-| 远程 skill 加载 | 加载外部 skill | `OPENCODE_DISABLE_EXTERNAL_SKILLS=true` |
-| 项目配置加载 | 扫描 .opencode/ | `OPENCODE_DISABLE_PROJECT_CONFIG=true` |
-| 共享功能 | 分享会话 | `OPENCODE_DISABLE_SHARE=true` |
+| `models.dev/api.json` | Получение списка моделей | Вариант A (полный офлайн): `OPENCODE_DISABLE_MODELS_FETCH=true` + `OPENCODE_MODELS_PATH=...`; вариант B (интранет-зеркало): только `OPENCODE_MODELS_URL=https://...` (без `OPENCODE_DISABLE_MODELS_FETCH=true`) |
+| npm registry | Установка встроенных плагинов | `OPENCODE_DISABLE_DEFAULT_PLUGINS=true` |
+| GitHub releases | Проверка обновлений | `OPENCODE_DISABLE_AUTOUPDATE=true` или `autoupdate: false` |
+| Скачивание LSP-серверов | Языковые серверы | `OPENCODE_DISABLE_LSP_DOWNLOAD=true` |
+| Загрузка удалённых skill | Внешние skill | `OPENCODE_DISABLE_EXTERNAL_SKILLS=true` |
+| Загрузка конфигурации проекта | Сканирование .opencode/ | `OPENCODE_DISABLE_PROJECT_CONFIG=true` |
+| Функция шаринга | Делиться сессиями | `OPENCODE_DISABLE_SHARE=true` |
 
-::: info 📖 两种模型列表方案
-- 完全离线：下载 `models.json`，设置 `OPENCODE_MODELS_PATH`，并打开 `OPENCODE_DISABLE_MODELS_FETCH=true`
-- 内网镜像：公司内网提供一个 `https://<host>/api.json`，设置 `OPENCODE_MODELS_URL=https://<host>`，不要设置 `OPENCODE_DISABLE_MODELS_FETCH=true`
+::: info 📖 Два варианта списка моделей
+- Полный офлайн: скачайте `models.json`, задайте `OPENCODE_MODELS_PATH` и включите `OPENCODE_DISABLE_MODELS_FETCH=true`
+- Интранет-зеркало: интранет отдаёт `https://<host>/api.json`, задайте `OPENCODE_MODELS_URL=https://<host>` и НЕ задавайте `OPENCODE_DISABLE_MODELS_FETCH=true`
 
-如果同时设置 `OPENCODE_MODELS_PATH` 和 `OPENCODE_MODELS_URL`，会优先读取 `PATH` 指向的本地文件。
+Если заданы одновременно `OPENCODE_MODELS_PATH` и `OPENCODE_MODELS_URL`, приоритет — у локального файла из `PATH`.
 :::
 
-**只要把这 7 类请求全部禁用，OpenCode 就能在纯内网环境运行。**
+**Закройте все 7 типов запросов — и OpenCode будет работать в чистом интранете.**
 
-::: info 📋 配置文件也要检查
-除了设置环境变量，还要确保 `opencode.json` 中**没有**以下配置（否则仍会触发外网请求）：
+::: info 📋 Проверьте и файл конфигурации
+Помимо переменных окружения убедитесь, что в `opencode.json` **нет** следующего (иначе внешние запросы всё равно пойдут):
 
 ```jsonc
 {
   "skills": {
-    "urls": ["https://..."]  // 删除远程 skill URL
+    "urls": ["https://..."]  // Удалить URL удалённых skill
   },
   "instructions": [
-    "https://..."  // 删除远程 instruction
+    "https://..."  // Удалить удалённые instruction
   ],
   "auth": {
     "example.com": {
-      "type": "wellknown"  // 删除 wellknown 认证
+      "type": "wellknown"  // Удалить wellknown-аутентификацию
     }
   }
 }
 ```
 
-**`.well-known/opencode`** 是远程配置加载机制，即使设置了环境变量，如果配置中使用了 `wellknown` 认证，仍会发起外网请求。
+**`.well-known/opencode`** — механизм загрузки удалённой конфигурации: даже с выставленными переменными окружения `wellknown`-аутентификация в конфиге всё равно вызовет внешние запросы.
 :::
 
 ---
 
-## 跟我做
+## Повторите за мной
 
-### 第 1 步：下载模型列表文件
+### Шаг 1: скачайте файл списка моделей
 
-**为什么**  
-OpenCode 需要知道有哪些模型可用。在外网环境先下载这个文件，然后拷贝到内网机器。
+**Зачем**
+OpenCode должен знать, какие модели доступны. Скачайте файл на машине с интернетом и перенесите на интранет-машину.
 
-在**能访问外网的机器**上执行：
+На машине **с доступом наружу** выполните:
 
 ```bash
 curl -o models.json https://models.dev/api.json
 ```
 
-**你应该看到**：当前目录生成 `models.json` 文件（约 500KB）。
+**Вы должны увидеть**: в текущем каталоге появится `models.json` (около 500KB).
 
-### 第 2 步：把模型列表放到内网机器
+### Шаг 2: положите список моделей на интранет-машину
 
-**为什么**  
-内网机器需要这个文件来知道模型的能力（context 限制、是否支持 tool_call 等）。
+**Зачем**
+Интранет-машине нужен этот файл, чтобы знать возможности моделей (лимиты контекста, поддержка tool_call и т. д.).
 
-把 `models.json` 拷贝到内网机器的固定位置：
+Скопируйте `models.json` в фиксированное место интранет-машины:
 
 ```bash
-# 推荐放到 ~/.cache/opencode/ 目录
+# Рекомендуем каталог ~/.cache/opencode/
 mkdir -p ~/.cache/opencode
 cp models.json ~/.cache/opencode/models.json
 ```
 
-### 第 3 步：配置环境变量
+### Шаг 3: задайте переменные окружения
 
-**为什么**  
-这是核心步骤。设置这些环境变量后，OpenCode 不会尝试任何外网请求。
+**Зачем**
+Главный шаг. После этих переменных OpenCode не сделает ни одного внешнего запроса.
 
 ::: code-group
-```bash [macOS/Linux - 临时生效]
+```bash [macOS/Linux — до конца сессии]
 export OPENCODE_DISABLE_MODELS_FETCH=true
 export OPENCODE_MODELS_PATH=~/.cache/opencode/models.json
 export OPENCODE_DISABLE_DEFAULT_PLUGINS=true
@@ -166,10 +166,10 @@ export OPENCODE_DISABLE_PROJECT_CONFIG=true
 export OPENCODE_DISABLE_SHARE=true
 ```
 
-```bash [macOS/Linux - 永久生效]
-# 添加到 ~/.bashrc 或 ~/.zshrc
+```bash [macOS/Linux — навсегда]
+# Добавьте в ~/.bashrc или ~/.zshrc
 cat >> ~/.zshrc << 'EOF'
-# OpenCode 内网配置
+# Конфигурация OpenCode для интранета
 export OPENCODE_DISABLE_MODELS_FETCH=true
 export OPENCODE_MODELS_PATH=~/.cache/opencode/models.json
 export OPENCODE_DISABLE_DEFAULT_PLUGINS=true
@@ -183,7 +183,7 @@ EOF
 source ~/.zshrc
 ```
 
-```powershell [Windows PowerShell - 临时生效]
+```powershell [Windows PowerShell — до конца сессии]
 $env:OPENCODE_DISABLE_MODELS_FETCH = "true"
 $env:OPENCODE_MODELS_PATH = "$env:USERPROFILE\.cache\opencode\models.json"
 $env:OPENCODE_DISABLE_DEFAULT_PLUGINS = "true"
@@ -195,53 +195,53 @@ $env:OPENCODE_DISABLE_SHARE = "true"
 ```
 :::
 
-### 第 4 步：解决依赖安装卡住问题（内网关键⚠️）
+### Шаг 4: решите проблему висящей установки зависимостей (критично для интранета ⚠️)
 
-::: warning ⚠️ 重要性
-这是**最常见**的内网启动卡住问题！即使设置了 `OPENCODE_DISABLE_DEFAULT_PLUGINS=true`，OpenCode 仍会尝试安装 `@opencode-ai/plugin` SDK，这个安装**不受任何环境变量控制**。
+::: warning ⚠️ Важность
+Это **самая частая** причина виснущего старта в интранете! Даже с `OPENCODE_DISABLE_DEFAULT_PLUGINS=true` OpenCode пытается установить SDK `@opencode-ai/plugin`, и эта установка **не управляется никакими переменными окружения**.
 
-**原因**：安装逻辑在 `src/config/config.ts:237-257`，会执行 `bun add` 和 `bun install`，内网环境会卡住。
+**Причина**: логика установки в `src/config/config.ts:237-257` выполняет `bun add` и `bun install` — в интранете виснет.
 
-**解决方案（推荐方案 1）**：
+**Решение (рекомендуем вариант 1)**:
 ```bash
-# 创建空的 node_modules 目录，跳过安装检查
+# Создайте пустой каталог node_modules — проверка установки пропустится
 mkdir -p ~/.config/opencode/node_modules
 
-# 验证目录已创建
+# Проверьте, что каталог создан
 ls -la ~/.config/opencode/
-# 你应该看到 node_modules 目录
+# Вы должны увидеть каталог node_modules
 ```
 
-::: tip 💡 其他解决方案
-如果方案 1 不适用，可以选择：
-- **方案 2**：配置内网 npm 镜像（`~/.bunfig.toml` 或 `.npmrc`）
-- **方案 3**：在有网络的机器预装依赖，然后把 `~/.config/opencode/`（以及项目的 `.opencode/`）拷贝到内网机器
-- **方案 4**：临时禁用项目配置扫描：`OPENCODE_DISABLE_PROJECT_CONFIG=true`
+::: tip 💡 Другие решения
+Если вариант 1 не подходит, выбирайте:
+- **Вариант 2**: настройте интранет-зеркало npm (`~/.bunfig.toml` или `.npmrc`)
+- **Вариант 3**: предустановите зависимости на машине с сетью, затем скопируйте `~/.config/opencode/` (и проектный `.opencode/`) на интранет-машину
+- **Вариант 4**: временно отключите сканирование конфигурации проекта: `OPENCODE_DISABLE_PROJECT_CONFIG=true`
 
-详见下方"踩坑提醒 → 依赖安装卡住（@opencode-ai/plugin）"。
+Подробности ниже, в «Типичных проблемах → Виснущая установка зависимостей (@opencode-ai/plugin)».
 :::
 
-### 第 5 步：配置内部 AI 网关
+### Шаг 5: настройте внутренний AI-шлюз
 
-**为什么**  
-禁用外网后，你需要告诉 OpenCode 用哪个内部模型。
+**Зачем**
+Отключив внешнюю сеть, нужно сказать OpenCode, какую внутреннюю модель использовать.
 
-创建或编辑 `~/.config/opencode/opencode.json`：
+Создайте или отредактируйте `~/.config/opencode/opencode.json`:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  
-  // 禁用自动更新（双保险，环境变量已设置）
+
+  // Отключить автообновление (двойная страховка, переменная уже задана)
   "autoupdate": false,
-  
-  // 只启用你的内部 provider
+
+  // Включить только внутренний провайдер
   "enabled_providers": ["corp-gateway"],
-  
-  // 配置内部 AI 网关
+
+  // Настройка внутреннего AI-шлюза
   "provider": {
     "corp-gateway": {
-      "name": "公司 AI 网关",
+      "name": "Корпоративный AI-шлюз",
       "env": ["CORP_AI_TOKEN"],
       "api": "https://ai-gateway.company.internal/v1",
       "npm": "@ai-sdk/openai-compatible",
@@ -262,39 +262,39 @@ ls -la ~/.config/opencode/
       }
     }
   },
-  
-  // 默认使用内部模型
+
+  // Модель по умолчанию — внутренняя
   "model": "corp-gateway/qwen2.5-72b"
 }
 ```
 
-::: tip 💡 如果用本地 Ollama
-把 `api` 改成 `http://localhost:11434/v1`，参考 [1.4g Ollama 配置](../1-start/04g-ollama)。
+::: tip 💡 Если используете локальную Ollama
+Поменяйте `api` на `http://localhost:11434/v1`, подробности — [1.4g Настройка Ollama](../1-start/04g-ollama).
 :::
 
-### 第 6 步：设置 API Token
+### Шаг 6: задайте API-токен
 
-**为什么**  
-内部网关通常需要认证。
+**Зачем**
+Внутренний шлюз обычно требует аутентификации.
 
 ```bash
 export CORP_AI_TOKEN="your-internal-token"
 ```
 
-### 第 7 步：验证配置
+### Шаг 7: проверьте конфигурацию
 
-**为什么**  
-确保所有配置生效，OpenCode 能正常启动。
+**Зачем**
+Убедиться, что всё применяется и OpenCode нормально стартует.
 
 ```bash
 opencode run -m corp-gateway/qwen2.5-72b "1+1=?" --print-logs
 ```
 
-**你应该看到**：
-- 没有任何网络超时错误
-- 模型正常返回结果（比如 `2`）
+**Вы должны увидеть**:
+- Никаких ошибок сетевых тайм-аутов
+- Модель нормально возвращает результат (например, `2`)
 
-如果还是卡住，加 `--log-level DEBUG` 看详细日志：
+Если всё равно виснет — добавьте `--log-level DEBUG` для подробных логов:
 
 ```bash
 opencode run -m corp-gateway/qwen2.5-72b "1+1=?" --print-logs --log-level DEBUG
@@ -302,103 +302,103 @@ opencode run -m corp-gateway/qwen2.5-72b "1+1=?" --print-logs --log-level DEBUG
 
 ---
 
-## 检查点 ✅
+## Контрольные пункты ✅
 
-> 全部通过才能继续；任一项失败，回到对应步骤重来
+> Продолжайте, только когда всё выполнено; любой провал — вернитесь к нужному шагу
 
-- [ ] 有一个可用的内部 AI 网关（或本地 Ollama）
-- [ ] 能从外网机器下载 `https://models.dev/api.json`
-- [ ] 了解 [1.4 连接模型](../1-start/04-connect) 的基本配置方式
-- [ ] 模型列表已就绪：`~/.cache/opencode/models.json` 存在，且 `OPENCODE_MODELS_PATH` 指向它（或你使用内网镜像 `OPENCODE_MODELS_URL`）
-- [ ] 环境变量已设置（用 `env | grep OPENCODE` 检查）
-- [ ] 已创建 `~/.config/opencode/node_modules`（如果当前项目有 `.opencode/`，也创建 `./.opencode/node_modules`）
-- [ ] `opencode.json` 配置了内部 provider
-- [ ] `opencode run` 能正常返回结果，没有网络错误
-- [ ] （可选）已安装 ripgrep（`rg --version` 能输出版本号）
+- [ ] Есть рабочий внутренний AI-шлюз (или локальная Ollama)
+- [ ] Умеете скачать `https://models.dev/api.json` с машины с интернетом
+- [ ] Знакомы с базовой настройкой из [1.4 Подключение моделей](../1-start/04-connect)
+- [ ] Список моделей готов: `~/.cache/opencode/models.json` существует, и `OPENCODE_MODELS_PATH` указывает на него (или используете интранет-зеркало `OPENCODE_MODELS_URL`)
+- [ ] Переменные окружения заданы (проверка: `env | grep OPENCODE`)
+- [ ] Создан `~/.config/opencode/node_modules` (а если в текущем проекте есть `.opencode/` — и `./.opencode/node_modules`)
+- [ ] В `opencode.json` настроен внутренний provider
+- [ ] `opencode run` нормально возвращает результат без сетевых ошибок
+- [ ] (Необязательно) Установлен ripgrep (`rg --version` выводит версию)
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 可能原因 | 解决 |
+| Симптом | Возможная причина | Решение |
 |---|---|---|
-| 启动卡住，没有更多日志 | 依赖安装在内网环境挂起（`@opencode-ai/plugin`） | 先看“依赖安装卡住（@opencode-ai/plugin）” |
-| 提示 "model not found" | `models.json` 路径或内容不对 | 检查 `OPENCODE_MODELS_PATH` 是否指向正确文件 |
-| 提示 "provider not found" | `enabled_providers` 和 provider id 不一致 | 检查 `enabled_providers`、`provider` 的 key、以及 `model` 前缀 |
-| 调用模型返回 401/403 | Token 未注入或过期 | 检查 `CORP_AI_TOKEN` 是否正确、是否已导出 |
-| grep 工具失败 | ripgrep 未安装且无法下载 | 手动安装 `rg`（见下方“grep 工具特殊情况”） |
+| Старт виснет, логов больше нет | Виснущая установка зависимостей в интранете (`@opencode-ai/plugin`) | Сначала читайте «Виснущая установка зависимостей (@opencode-ai/plugin)» |
+| Ругается "model not found" | Неверный путь или содержимое `models.json` | Проверьте, что `OPENCODE_MODELS_PATH` указывает на правильный файл |
+| Ругается "provider not found" | Несогласованность `enabled_providers` и id провайдера | Проверьте `enabled_providers`, ключ `provider` и префикс `model` |
+| Вызов модели отвечает 401/403 | Токен не подставлен или просрочен | Проверьте правильность и экспорт `CORP_AI_TOKEN` |
+| Инструмент grep падает | ripgrep не установлен и не скачивается | Установите `rg` вручную (ниже «Особый случай инструмента grep») |
 
-### 依赖安装卡住（@opencode-ai/plugin）
+### Виснущая установка зависимостей (@opencode-ai/plugin)
 
-**为什么会卡**
+**Почему виснет**
 
-OpenCode 扫描配置目录时，会触发依赖安装（源码：`src/config/config.ts:157-159` 和 `src/config/config.ts:237-257`）。它会在目录里执行：
+При сканировании каталога конфигурации OpenCode запускает установку зависимостей (исходники: `src/config/config.ts:157-159` и `src/config/config.ts:237-257`). В каталоге выполняется:
 
 ```bash
 bun add @opencode-ai/plugin@<version> --exact
 bun install
 ```
 
-如果某个目录里 **`node_modules/` 不存在**，OpenCode 会等待这次安装完成再继续；内网无法访问 npm registry 时，就会表现为“卡住”。
+Если в каком-то каталоге **нет `node_modules/`**, OpenCode дождётся конца этой установки и только потом продолжит; в интранете без доступа к npm registry это выглядит как «вис».
 
-**先定位是不是卡在这里**
+**Сначала определите, виснет ли именно здесь**
 
-用 DEBUG 日志跑一次：
+Прогоните раз с DEBUG-логом:
 
 ```bash
 opencode run "test" --print-logs --log-level DEBUG
 ```
 
-如果你看到类似 `service=bun` 的日志里出现 `cmd=[..., "add", "@opencode-ai/plugin@..."]`，基本可以确定是依赖安装挂起。
+Если видите в логах что-то вроде `service=bun` с `cmd=[..., "add", "@opencode-ai/plugin@..."]` — почти наверняка висит установка зависимостей.
 
-**快速止血（不再等待安装）**
+**Быстрая остановка (больше не ждём установку)**
 
-把 OpenCode 可能扫描到的目录都补上 `node_modules/`：
+Добавьте `node_modules/` во все каталоги, которые может сканировать OpenCode:
 
 ```bash
-# 全局配置目录
+# Глобальный каталог конфигурации
 mkdir -p ~/.config/opencode/node_modules
 
-# 如果你在某个项目目录里运行，并且项目有 .opencode/，也补一个
+# Если запускаетесь в каталоге проекта с .opencode/ — добавьте и туда
 mkdir -p ./.opencode/node_modules
 ```
 
-这招的作用是：避免 OpenCode 在启动时 `await installDependencies(...)`。
+Смысл приёма: избавиться от ожидания `await installDependencies(...)` при старте.
 
-::: warning ⚠️ 但这不是“彻底解决”
-`installDependencies(dir)` 依然会被触发（只是不会在启动时等待它完成）。如果你希望它能真正完成安装，还是需要内网 npm 镜像或预装依赖。
+::: warning ⚠️ Но это не «лечение»
+`installDependencies(dir)` всё равно будет вызываться (просто не будет блокировать старт). Чтобы установка реально завершалась, всё равно нужны интранет-зеркало npm или предустановленные зависимости.
 :::
 
-**长期方案（推荐）**
+**Долгосрочное решение (рекомендуется)**
 
-1) 配置内网 npm 镜像（Bun 会使用你的配置）
+1) Настройте интранет-зеркало npm (Bun подхватит вашу конфигурацию)
 
-`~/.bunfig.toml`：
+`~/.bunfig.toml`:
 
 ```toml
 [install]
 registry = "http://your-internal-npm-registry/"
 ```
 
-2) 预装依赖并拷贝
+2) Предустановите зависимости и скопируйте
 
-在有网络的机器上，让 `~/.config/opencode/` 和项目 `.opencode/` 目录完成一次依赖安装，然后把这两个目录拷贝到内网机器。
+На машине с сетью доведите `~/.config/opencode/` и проектный `.opencode/` до завершённой установки зависимостей, затем скопируйте оба каталога на интранет-машину.
 
-3) 临时禁用项目配置扫描
+3) Временно отключите сканирование конфигурации проекта
 
-如果你不需要项目级 `.opencode/`（只用全局配置），可以：
+Если проектный `.opencode/` не нужен (достаточно глобальной конфигурации), можно:
 
 ```bash
 export OPENCODE_DISABLE_PROJECT_CONFIG=true
 ```
 
-### grep 工具特殊情况
+### Особый случай инструмента grep
 
-**现象**：AI 使用 grep 工具时失败，提示找不到 `rg` 二进制文件。
+**Симптом**: AI падает при использовании инструмента grep — жалуется, что не находит бинарник `rg`.
 
-**原因**：grep 工具依赖 ripgrep（`rg`）。如果系统中没有 `rg`，OpenCode 会尝试从 GitHub 下载（内网通常会失败）。
+**Причина**: инструмент grep зависит от ripgrep (`rg`). Если `rg` нет в системе, OpenCode пытается скачать его с GitHub (в интранете обычно безуспешно).
 
-**解决方案**：
+**Решение**:
 
 ```bash
 # macOS
@@ -410,83 +410,83 @@ yum install ripgrep  # CentOS/RHEL
 
 # Windows
 scoop install ripgrep
-# 或
+# или
 choco install ripgrep
 
 rg --version
 ```
 
-### 如何确认环境变量生效？
+### Как проверить, применяются ли переменные окружения?
 
 ```bash
 env | grep OPENCODE
 ```
 
-### 如何定位还在请求外网？
+### Как найти, что ещё ходит наружу?
 
 ```bash
 opencode run "test" --print-logs --log-level DEBUG
 ```
 
-常见关键字：
-- `service=models.dev`：在拉模型列表
-- `service=bun`：在执行 bun add/install（安装依赖或插件）
+Частые ключевые слова:
+- `service=models.dev`: тянет список моделей
+- `service=bun`: выполняет bun add/install (установка зависимостей или плагинов)
 
 ---
 
-## 完整配置速查
+## Полная шпаргалка по конфигурации
 
-### 环境变量清单
+### Список переменных окружения
 
-| 环境变量 | 作用 | 值 |
+| Переменная | Назначение | Значение |
 |---------|------|-----|
-| `OPENCODE_DISABLE_MODELS_FETCH` | （完全离线模式）禁止拉取模型列表 | `true` |
-| `OPENCODE_MODELS_PATH` | （完全离线模式）本地模型列表文件路径 | 文件绝对路径 |
-| `OPENCODE_MODELS_URL` | （内网镜像模式）把 models.dev 指到内网地址（需要提供 `/api.json`） | `https://models-mirror.company.internal` |
-| `OPENCODE_DISABLE_DEFAULT_PLUGINS` | 禁止安装内置插件 | `true` |
-| `OPENCODE_DISABLE_AUTOUPDATE` | 禁止自动更新检查 | `true` |
-| `OPENCODE_DISABLE_LSP_DOWNLOAD` | 禁止下载 LSP 服务器 | `true` |
-| `OPENCODE_DISABLE_EXTERNAL_SKILLS` | 禁止加载远程 skill | `true` |
-| `OPENCODE_DISABLE_PROJECT_CONFIG` | 禁止扫描项目级 `.opencode/` 配置 | `true` |
-| `OPENCODE_DISABLE_SHARE` | 禁止共享功能 | `true` |
-| `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS` | 禁止 Claude Code 兼容技能 | `true` |
+| `OPENCODE_DISABLE_MODELS_FETCH` | (Полный офлайн) запретить получение списка моделей | `true` |
+| `OPENCODE_MODELS_PATH` | (Полный офлайн) путь к локальному файлу списка моделей | Абсолютный путь к файлу |
+| `OPENCODE_MODELS_URL` | (Режим интранет-зеркала) направить models.dev на внутренний адрес (нужен `/api.json`) | `https://models-mirror.company.internal` |
+| `OPENCODE_DISABLE_DEFAULT_PLUGINS` | Запретить установку встроенных плагинов | `true` |
+| `OPENCODE_DISABLE_AUTOUPDATE` | Запретить проверку автообновлений | `true` |
+| `OPENCODE_DISABLE_LSP_DOWNLOAD` | Запретить скачивание LSP-серверов | `true` |
+| `OPENCODE_DISABLE_EXTERNAL_SKILLS` | Запретить загрузку удалённых skill | `true` |
+| `OPENCODE_DISABLE_PROJECT_CONFIG` | Запретить сканирование проектного `.opencode/` | `true` |
+| `OPENCODE_DISABLE_SHARE` | Запретить функцию шаринга | `true` |
+| `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS` | Запретить Claude Code-совместимые навыки | `true` |
 
-::: tip 💡 优先级说明
-- 如果同时设置 `OPENCODE_MODELS_PATH` 和 `OPENCODE_MODELS_URL`，会优先读取 `OPENCODE_MODELS_PATH` 指向的本地文件
-- 如果你走“内网镜像模式”，不要设置 `OPENCODE_DISABLE_MODELS_FETCH=true`，否则不会发起拉取
+::: tip 💡 О приоритетах
+- Если заданы одновременно `OPENCODE_MODELS_PATH` и `OPENCODE_MODELS_URL`, читается локальный файл из `OPENCODE_MODELS_PATH`
+- В режиме «интранет-зеркало» НЕ задавайте `OPENCODE_DISABLE_MODELS_FETCH=true`, иначе получение не запустится
 :::
 
-### 一键配置脚本
+### Скрипт настройки в один шаг
 
-**基础脚本（完全离线：手动下载 models.json）**：
+**Базовый скрипт (полный офлайн: models.json скачиваем вручную)**:
 ```bash
 #!/bin/bash
 # save as: setup-intranet.sh
 
-# 创建目录
+# Создать каталоги
 mkdir -p ~/.cache/opencode
 
-# 检查模型列表文件
+# Проверить файл списка моделей
 if [ ! -f ~/.cache/opencode/models.json ]; then
-    echo "❌ 请先下载 models.json 到 ~/.cache/opencode/models.json"
+    echo "❌ Сначала скачайте models.json в ~/.cache/opencode/models.json"
     exit 1
 fi
 
-# 解决 SDK 安装卡住问题（关键步骤！）
+# Решить проблему виснущей установки SDK (критичный шаг!)
 mkdir -p ~/.config/opencode/node_modules
-echo "✅ 已创建 ~/.config/opencode/node_modules 目录"
+echo "✅ Каталог ~/.config/opencode/node_modules создан"
 
-# 如果当前目录有 .opencode/，也补一个（避免项目级等待安装）
+# Если в текущем каталоге есть .opencode/ — добавить и туда (чтобы не ждать установку на уровне проекта)
 if [ -d ./.opencode ]; then
   mkdir -p ./.opencode/node_modules
-  echo "✅ 已创建 ./.opencode/node_modules 目录"
+  echo "✅ Каталог ./.opencode/node_modules создан"
 fi
 
-# 添加环境变量到 shell 配置
+# Добавить переменные окружения в конфиг shell
 SHELL_RC="$HOME/.$(basename $SHELL)rc"
 cat >> "$SHELL_RC" << 'EOF'
 
-# OpenCode 内网配置
+# Конфигурация OpenCode для интранета
 export OPENCODE_DISABLE_MODELS_FETCH=true
 export OPENCODE_MODELS_PATH=~/.cache/opencode/models.json
 export OPENCODE_DISABLE_DEFAULT_PLUGINS=true
@@ -497,23 +497,23 @@ export OPENCODE_DISABLE_PROJECT_CONFIG=true
 export OPENCODE_DISABLE_SHARE=true
 EOF
 
-echo "✅ 环境变量已添加到 $SHELL_RC"
-echo "请运行: source $SHELL_RC"
+echo "✅ Переменные окружения добавлены в $SHELL_RC"
+echo "Выполните: source $SHELL_RC"
 ```
 
-**高级脚本（内网镜像：自动拉取模型列表）**：
+**Продвинутый скрипт (интранет-зеркало: список моделей подтягивается сам)**:
 ```bash
 #!/bin/bash
 # save as: setup-intranet-advanced.sh
 
-# 公司内部 models.dev 服务器
+# Внутренний сервер models.dev компании
 MODELS_MIRROR="https://models-mirror.company.internal"
 
-# 添加环境变量到 shell 配置
+# Добавить переменные окружения в конфиг shell
 SHELL_RC="$HOME/.$(basename $SHELL)rc"
 cat >> "$SHELL_RC" << EOF
 
-# OpenCode 内网配置（使用内部镜像）
+# Конфигурация OpenCode для интранета (через внутреннее зеркало)
 unset OPENCODE_DISABLE_MODELS_FETCH
 export OPENCODE_MODELS_URL="$MODELS_MIRROR"
 export OPENCODE_DISABLE_DEFAULT_PLUGINS=true
@@ -524,82 +524,80 @@ export OPENCODE_DISABLE_PROJECT_CONFIG=true
 export OPENCODE_DISABLE_SHARE=true
 EOF
 
-# 解决 SDK 安装卡住问题
+# Решить проблему виснущей установки SDK
 mkdir -p ~/.config/opencode/node_modules
-echo "✅ 已创建 ~/.config/opencode/node_modules 目录"
+echo "✅ Каталог ~/.config/opencode/node_modules создан"
 
-echo "✅ 环境变量已添加到 $SHELL_RC"
-echo "已配置内部 models.dev 镜像: $MODELS_MIRROR"
-echo "请运行: source $SHELL_RC"
+echo "✅ Переменные окружения добавлены в $SHELL_RC"
+echo "Настроено внутреннее зеркало models.dev: $MODELS_MIRROR"
+echo "Выполните: source $SHELL_RC"
 ```
 
-::: tip 💡 两种模型列表方案对比
-| 方案 | 优点 | 缺点 |
+::: tip 💡 Сравнение двух вариантов списка моделей
+| Вариант | Плюсы | Минусы |
 |-----|------|------|
-| `OPENCODE_MODELS_PATH` | 完全离线、控制版本 | 需要手动更新 `models.json` |
-| `OPENCODE_MODELS_URL` | 自动更新、多机同步 | 依赖内部镜像服务器 |
+| `OPENCODE_MODELS_PATH` | Полный офлайн, контроль версий | Нужно вручную обновлять `models.json` |
+| `OPENCODE_MODELS_URL` | Автообновление, синхронизация fleet | Зависимость от внутреннего сервера-зеркала |
 :::
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. **7 个关键开关**：完全离线（`OPENCODE_DISABLE_MODELS_FETCH` + `OPENCODE_MODELS_PATH`）或内网镜像（`OPENCODE_MODELS_URL`），再加上禁用内置插件/自动更新/LSP 下载/远程 skill/项目配置/共享功能
-2. **本地模型列表**：从外网下载 `models.json`，放到内网机器（或用 `OPENCODE_MODELS_URL` 指向内部 mirrors）
-3. **内部 Provider 配置**：用 `enabled_providers` 只启用内部网关
-4. **核心 SDK 安装问题**：通过创建空 `node_modules` 目录或其他方案解决
-5. **配置文件检查**：确保 `opencode.json` 中没有 `skills.urls`、`instructions` 中的 URL、以及 `auth` 中的 `wellknown` 认证
-6. **排查技巧**：用 `--print-logs --log-level DEBUG` 定位卡住位置
+1. **7 главным выключателям**: полный офлайн (`OPENCODE_DISABLE_MODELS_FETCH` + `OPENCODE_MODELS_PATH`) или интранет-зеркало (`OPENCODE_MODELS_URL`), плюс отключение встроенных плагинов, автообновлений, скачивания LSP, удалённых skill, конфигурации проекта и шаринга
+2. **Локальному списку моделей**: скачать `models.json` снаружи и положить на интранет-машину (или указывать `OPENCODE_MODELS_URL` на внутреннее зеркало)
+3. **Конфигурации внутреннего провайдера**: через `enabled_providers` включать только внутренний шлюз
+4. **Проблеме установки главного SDK**: обход созданием пустого каталога `node_modules` и другие решения
+5. **Проверке конфигов**: убедиться, что в `opencode.json` нет `skills.urls`, URL в `instructions` и `wellknown`-аутентификации в `auth`
+6. **Приёмам диагностики**: локализация места зависания через `--print-logs --log-level DEBUG`
 
-::: tip 💡 额外提示
-如果你的公司有内部 mirrors.dev 服务器，可以用 `OPENCODE_MODELS_URL` 替代 `OPENCODE_MODELS_PATH`：
+::: tip 💡 Дополнительная подсказка
+Если в компании есть внутренний сервер mirrors.dev, используйте `OPENCODE_MODELS_URL` вместо `OPENCODE_MODELS_PATH`:
 ```bash
 export OPENCODE_MODELS_URL=https://models-mirror.company.internal
 ```
-这样 OpenCode 会从你的内部服务器获取模型列表，无需手动下载 `models.json`。
+Так OpenCode будет забирать список моделей с вашего внутреннего сервера — вручную скачивать `models.json` не нужно.
 :::
 
 ---
 
-## 下一课预告
+## Анонс следующего урока
 
-> 如果你想更进一步，把认证也集中管理（让团队不用每人配置 Token），可以学习 **[5.11a 企业认证集成](../5-advanced/11a-enterprise-auth)**。
+> Для централизованного управления аутентификацией (чтобы команде не настраивать токены вручную) изучите **[5.11a Интеграция корпоративной аутентификации](../5-advanced/11a-enterprise-auth)**.
 >
-> 那里介绍了 `/.well-known/opencode` 机制，可以实现"一条命令登录 + 自动下发组织配置"。
+> Там описан механизм `/.well-known/opencode`: «одна команда на вход + автоматическая выдача конфигурации организации».
 
 ---
 
-## 附录：源码参考
+## Приложение: ссылки на исходники
 
 <details>
-<summary><strong>点击展开查看源码位置</strong></summary>
+<summary><strong>Нажмите, чтобы раскрыть расположение исходников</strong></summary>
 
-> 更新时间：2026-02-05
+> Дата обновления: 2026-02-05
 
-| 功能 | 文件路径 | 行号 |
+| Функция | Путь к файлу | Строки |
 |-----|---------|------|
-| 环境变量定义（包含所有 `OPENCODE_*` 标志） | [`src/flag/flag.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/flag/flag.ts#L12-L50) | 12-50 |
-| 模型列表加载逻辑（`OPENCODE_DISABLE_MODELS_FETCH`、`OPENCODE_MODELS_PATH`、`OPENCODE_MODELS_URL`） | [`src/provider/models.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/models.ts#L83-L99) | 83-99 |
-| 配置目录扫描与依赖安装等待（`node_modules` 检查） | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L157-L160) | 157-160 |
-| 依赖安装命令（`bun add` + `bun install`） | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L236-L257) | 236-257 |
-| 插件加载（内置插件列表、`OPENCODE_DISABLE_DEFAULT_PLUGINS` 检查） | [`src/plugin/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/plugin/index.ts#L18-L49) | 18-49 |
-| Bun 包安装逻辑（可能导致启动卡住） | [`src/bun/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/bun/index.ts#L64-L133) | 64-133 |
-| ripgrep 下载逻辑（内网常失败） | [`src/file/ripgrep.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/file/ripgrep.ts#L125-L199) | 125-199 |
-| 自动更新检查（`OPENCODE_DISABLE_AUTOUPDATE`） | [`src/cli/upgrade.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/upgrade.ts#L6-L25) | 6-25 |
-| LSP 服务器下载检查（`OPENCODE_DISABLE_LSP_DOWNLOAD`） | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts) | 135, 177, 372... |
+| Определения переменных окружения (все флаги `OPENCODE_*`) | [`src/flag/flag.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/flag/flag.ts#L12-L50) | 12-50 |
+| Логика загрузки списка моделей (`OPENCODE_DISABLE_MODELS_FETCH`, `OPENCODE_MODELS_PATH`, `OPENCODE_MODELS_URL`) | [`src/provider/models.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/models.ts#L83-L99) | 83-99 |
+| Сканирование каталога конфигурации и ожидание установки зависимостей (проверка `node_modules`) | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L157-L160) | 157-160 |
+| Команды установки зависимостей (`bun add` + `bun install`) | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L236-L257) | 236-257 |
+| Загрузка плагинов (список встроенных, проверка `OPENCODE_DISABLE_DEFAULT_PLUGINS`) | [`src/plugin/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/plugin/index.ts#L18-L49) | 18-49 |
+| Логика установки Bun-пакетов (возможная причина виснущего старта) | [`src/bun/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/bun/index.ts#L64-L133) | 64-133 |
+| Логика скачивания ripgrep (в интранете часто падает) | [`src/file/ripgrep.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/file/ripgrep.ts#L125-L199) | 125-199 |
+| Проверка автообновлений (`OPENCODE_DISABLE_AUTOUPDATE`) | [`src/cli/upgrade.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/upgrade.ts#L6-L25) | 6-25 |
+| Проверка скачивания LSP-серверов (`OPENCODE_DISABLE_LSP_DOWNLOAD`) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts) | 135, 177, 372... |
+**Ключевые константы**:
+- `BUILTIN = ["opencode-anthropic-auth@0.0.13", "@gitlab/opencode-gitlab-auth@1.3.2"]`: список встроенных плагинов
+- `Flag.OPENCODE_DISABLE_MODELS_FETCH`: запретить получение списка моделей
+- `Flag.OPENCODE_MODELS_PATH`: путь к локальному файлу списка моделей
+- `Flag.OPENCODE_MODELS_URL`: URL внутреннего сервера models.dev
+- `Flag.OPENCODE_DISABLE_DEFAULT_PLUGINS`: запретить установку встроенных плагинов
 
-**关键常量**：
-- `BUILTIN = ["opencode-anthropic-auth@0.0.13", "@gitlab/opencode-gitlab-auth@1.3.2"]`：内置插件列表
-- `Flag.OPENCODE_DISABLE_MODELS_FETCH`：禁用模型列表拉取
-- `Flag.OPENCODE_MODELS_PATH`：本地模型列表文件路径
-- `Flag.OPENCODE_MODELS_URL`：内部 models.dev 服务器 URL
-- `Flag.OPENCODE_DISABLE_DEFAULT_PLUGINS`：禁用内置插件安装
-
-**网络请求优先级**：
-1. `OPENCODE_MODELS_PATH`：如果设置，优先级高于 `OPENCODE_MODELS_URL`
-2. `OPENCODE_MODELS_URL`：指向内部 models.dev 服务器
-3. `https://models.dev`：默认地址（当上述两者都未设置且 `OPENCODE_DISABLE_MODELS_FETCH=false` 时）
-
+**Приоритеты сетевых запросов**:
+1. `OPENCODE_MODELS_PATH`: если задан — приоритет выше, чем у `OPENCODE_MODELS_URL`
+2. `OPENCODE_MODELS_URL`: указывает на внутренний сервер models.dev
+3. `https://models.dev`: адрес по умолчанию (когда оба выше не заданы и `OPENCODE_DISABLE_MODELS_FETCH=false`)
 </details>

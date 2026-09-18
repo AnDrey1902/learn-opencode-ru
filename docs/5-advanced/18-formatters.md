@@ -1,76 +1,76 @@
 ---
-title: 5.18 代码格式化器
-subtitle: 自动代码格式化配置
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.18 Форматтеры кода
+subtitle: Автонастройка форматирования кода
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.18"
-duration: 10 分钟
-level: 进阶
-description: 配置 OpenCode 使用 Prettier、Biome、gofmt 等格式化器，自动格式化代码。
+duration: 10 минут
+level: Продвинутый
+description: Настройте OpenCode на использование форматтеров Prettier, Biome, gofmt и других для автоматического форматирования кода.
 tags:
-  - 格式化
-  - 代码风格
+  - Форматирование
+  - Стиль кода
   - Prettier
 prerequisite:
-  - 5.1 配置全解
+  - 5.1 Всё о конфигурации
 ---
 
-# 代码格式化器
+# Форматтеры кода
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/formatters-notes.mini.jpeg" 
-     alt="5.18 代码格式化器学霸笔记" 
+<img src="/images/5-advanced/formatters-notes.mini.jpeg"
+     alt="Шпаргалка урока: 5.18 Форматтеры кода"
      data-zoom-src="/images/5-advanced/formatters-notes.jpeg" />
 
-OpenCode 在文件写入或编辑后自动使用语言特定的格式化器进行格式化。这确保生成的代码遵循项目的代码风格。
+После записи или правки файлов OpenCode автоматически форматирует их форматтерами под каждый язык. Так созданный код следует стилю проекта.
 
-## 内置格式化器
+## Встроенные форматтеры
 
-OpenCode 内置了多种流行语言和框架的格式化器：
+В OpenCode встроены форматтеры популярных языков и фреймворков:
 
-| 格式化器 | 扩展名 | 要求 |
+| Форматтер | Расширения | Требование |
 |----------|--------|------|
-| gofmt | .go | `gofmt` 命令可用 |
-| mix | .ex, .exs, .eex, .heex, .leex, .neex, .sface | `mix` 命令可用 |
-| prettier | .js, .jsx, .ts, .tsx, .html, .css, .md, .json, .yaml 等 | `package.json` 中有 `prettier` 依赖 |
-| biome | .js, .jsx, .ts, .tsx, .html, .css, .md, .json, .yaml 等 | 存在 `biome.json(c)` 配置文件 |
-| zig | .zig, .zon | `zig` 命令可用 |
-| clang-format | .c, .cpp, .h, .hpp, .ino 等 | 存在 `.clang-format` 配置文件 |
-| ktlint | .kt, .kts | `ktlint` 命令可用 |
-| ruff | .py, .pyi | `ruff` 命令可用且有配置 |
-| rustfmt | .rs | `rustfmt` 命令可用 |
-| uv | .py, .pyi | `uv` 命令可用 |
-| rubocop | .rb, .rake, .gemspec, .ru | `rubocop` 命令可用 |
-| standardrb | .rb, .rake, .gemspec, .ru | `standardrb` 命令可用 |
-| htmlbeautifier | .erb, .html.erb | `htmlbeautifier` 命令可用 |
-| air | .R | `air` 命令可用 |
-| dart | .dart | `dart` 命令可用 |
-| ocamlformat | .ml, .mli | `ocamlformat` 命令可用且有 `.ocamlformat` 配置 |
-| terraform | .tf, .tfvars | `terraform` 命令可用 |
-| gleam | .gleam | `gleam` 命令可用 |
-| nixfmt | .nix | `nixfmt` 命令可用 |
-| shfmt | .sh, .bash | `shfmt` 命令可用 |
-| oxfmt（实验性） | .js, .jsx, .ts, .tsx | `package.json` 中有 `oxfmt` 依赖且启用实验性环境变量 |
+| gofmt | .go | Доступна команда `gofmt` |
+| mix | .ex, .exs, .eex, .heex, .leex, .neex, .sface | Доступна команда `mix` |
+| prettier | .js, .jsx, .ts, .tsx, .html, .css, .md, .json, .yaml и др. | В `package.json` есть зависимость `prettier` |
+| biome | .js, .jsx, .ts, .tsx, .html, .css, .md, .json, .yaml и др. | Существует конфиг `biome.json(c)` |
+| zig | .zig, .zon | Доступна команда `zig` |
+| clang-format | .c, .cpp, .h, .hpp, .ino и др. | Существует конфиг `.clang-format` |
+| ktlint | .kt, .kts | Доступна команда `ktlint` |
+| ruff | .py, .pyi | Доступна команда `ruff` и есть конфиг |
+| rustfmt | .rs | Доступна команда `rustfmt` |
+| uv | .py, .pyi | Доступна команда `uv` |
+| rubocop | .rb, .rake, .gemspec, .ru | Доступна команда `rubocop` |
+| standardrb | .rb, .rake, .gemspec, .ru | Доступна команда `standardrb` |
+| htmlbeautifier | .erb, .html.erb | Доступна команда `htmlbeautifier` |
+| air | .R | Доступна команда `air` |
+| dart | .dart | Доступна команда `dart` |
+| ocamlformat | .ml, .mli | Доступна команда `ocamlformat` и есть `.ocamlformat` |
+| terraform | .tf, .tfvars | Доступна команда `terraform` |
+| gleam | .gleam | Доступна команда `gleam` |
+| nixfmt | .nix | Доступна команда `nixfmt` |
+| shfmt | .sh, .bash | Доступна команда `shfmt` |
+| oxfmt (экспериментальный) | .js, .jsx, .ts, .tsx | В `package.json` есть зависимость `oxfmt` и включена экспериментальная переменная окружения |
 
-如果项目的 `package.json` 中有 `prettier`，OpenCode 会自动使用它。
+Если в `package.json` проекта есть `prettier`, OpenCode использует его автоматически.
 
-## 工作原理
+## Как это работает
 <AdInArticle />
 
-当 OpenCode 写入或编辑文件时：
+Когда OpenCode пишет или правит файл:
 
-1. 根据文件扩展名检查所有已启用的格式化器
-2. 运行相应的格式化命令
-3. 自动应用格式化更改
+1. По расширению файла проверяет все включённые форматтеры
+2. Запускает подходящую команду форматирования
+3. Автоматически применяет изменения форматирования
 
-这个过程在后台进行，确保代码风格得以维护而无需手动操作。
+Процесс идёт в фоне — стиль кода поддерживается без ручной работы.
 
-## 配置
+## Настройка
 
-通过配置文件的 `formatter` 部分自定义格式化器：
+Свои форматтеры задаются разделом `formatter` в конфиге:
 
 ```json
 {
@@ -79,18 +79,18 @@ OpenCode 内置了多种流行语言和框架的格式化器：
 }
 ```
 
-每个格式化器配置支持以下选项：
+Каждая настройка форматтера поддерживает опции:
 
-| 属性 | 类型 | 说明 |
+| Свойство | Тип | Описание |
 |------|------|------|
-| `disabled` | boolean | 设为 `true` 禁用该格式化器 |
-| `command` | string[] | 格式化命令 |
-| `environment` | object | 运行格式化器时的环境变量 |
-| `extensions` | string[] | 该格式化器处理的文件扩展名 |
+| `disabled` | boolean | `true` отключает форматтер |
+| `command` | string[] | Команда форматирования |
+| `environment` | object | Переменные окружения при запуске форматтера |
+| `extensions` | string[] | Расширения файлов, обрабатываемые форматтером |
 
-### 禁用格式化器
+### Отключение форматтеров
 
-全局禁用**所有**格式化器：
+Глобально отключить **все** форматтеры:
 
 ```json
 {
@@ -99,7 +99,7 @@ OpenCode 内置了多种流行语言和框架的格式化器：
 }
 ```
 
-禁用**特定**格式化器：
+Отключить **конкретный** форматтер:
 
 ```json
 {
@@ -112,9 +112,9 @@ OpenCode 内置了多种流行语言和框架的格式化器：
 }
 ```
 
-### 自定义格式化器
+### Свои форматтеры
 
-可以覆盖内置格式化器或添加新的：
+Можно переопределить встроенные или добавить новые:
 
 ```json
 {
@@ -135,9 +135,9 @@ OpenCode 内置了多种流行语言和框架的格式化器：
 }
 ```
 
-命令中的 **`$FILE` 占位符**会被替换为正在格式化的文件路径。
+Плейсхолдер **`$FILE`** в команде заменяется путём форматируемого файла.
 
-## 相关资源
+## Связанные материалы
 
-- [LSP 服务器](19-lsp.md) - 代码智能支持
-- [配置参考](../appendix/config-ref.md) - 完整配置选项
+- [LSP-серверы](19-lsp.md) — поддержка интеллекта кода
+- [Справочник конфигурации](../appendix/config-ref.md) — все опции конфигурации

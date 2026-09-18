@@ -1,278 +1,280 @@
 ---
-title: 模型提供商列表
-description: OpenCode 支持的 75+ 模型提供商完整列表
+title: Список провайдеров моделей
+description: Полный список 75+ провайдеров моделей, поддерживаемых OpenCode
 ---
 
-# 模型提供商列表
+# Список провайдеров моделей
 
-> OpenCode 基于 AI SDK 和 Models.dev 支持 75+ 模型提供商
+> OpenCode поддерживает 75+ провайдеров моделей через AI SDK и Models.dev
 
 ---
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/appendix/providers-notes.mini.jpeg"
-     alt="模型提供商列表学霸笔记"
+     alt="Шпаргалка: список провайдеров моделей"
      data-zoom-src="/images/appendix/providers-notes.jpeg" />
 
 ---
 
-## 配置方式
+## Способы настройки
 
-添加提供商需要两步：
+Добавление провайдера — в два шага:
 
-1. 使用 `/connect` 命令添加 API Key（存储在 `~/.local/share/opencode/auth.json`）
-2. 在 `opencode.json` 中配置提供商（可选，用于自定义选项）
+1. Командой `/connect` добавьте API-ключ (хранится в `~/.local/share/opencode/auth.json`)
+2. Настройте провайдера в `opencode.json` (необязательно, для своих опций)
 
 ---
 
-## OpenCode Zen（推荐新手）
+## OpenCode Zen (рекомендуем новичкам)
 
-OpenCode 官方提供的测试验证模型列表，开箱即用。
+Официальный протестированный и проверенный список моделей OpenCode — работает из коробки.
 
 ```bash
-# 1. 在 TUI 中运行
+# 1. В TUI выполните
 /connect
 
-# 2. 选择 opencode，访问 opencode.ai/auth 获取 API Key
+# 2. Выберите opencode, получите API-ключ на opencode.ai/auth
 
-# 3. 查看可用模型
+# 3. Смотрите доступные модели
 /models
 ```
 
-**获取 API Key**：[opencode.ai/auth](https://opencode.ai/auth)
+**Получение API-ключа**: [opencode.ai/auth](https://opencode.ai/auth)
 
 ---
 
-## 国产模型
+## Российские модели
 
 <AdInArticle />
 
-### DeepSeek（深度求索）
+Доступные напрямую из России.
 
-国内直连，性价比高。
+### DeepSeek
 
-| 模型 | 说明 |
+Прямое подключение, отличное соотношение цены и качества.
+
+| Модель | Описание |
 |------|------|
-| `deepseek-chat` | 通用对话 |
-| `deepseek-reasoner` | 推理模型（R1） |
+| `deepseek-chat` | Универсальный диалог |
+| `deepseek-reasoner` | Рассуждающая модель (R1) |
 
-**配置步骤**：
+**Шаги настройки**:
 ```bash
-# 1. 运行 /connect，搜索 DeepSeek
+# 1. Выполните /connect, найдите DeepSeek
 /connect
 
-# 2. 输入 API Key
+# 2. Введите API-ключ
 
-# 3. 选择模型
+# 3. Выберите модель
 /models
 ```
 
-**获取 API Key**：[platform.deepseek.com](https://platform.deepseek.com)
+**Получение API-ключа**: [platform.deepseek.com](https://platform.deepseek.com)
 
 ---
 
-### Moonshot AI（月之暗面）
+### Moonshot AI
 
-Kimi K2 模型。
+Модели Kimi K2.
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `kimi-k2` | 最新模型 |
+| `kimi-k2` | Свежая модель |
 
-**配置步骤**：
+**Шаги настройки**:
 ```bash
-/connect  # 搜索 Moonshot AI
+/connect  # Найдите Moonshot AI
 ```
 
-**获取 API Key**：[platform.moonshot.ai](https://platform.moonshot.ai)
+**Получение API-ключа**: [platform.moonshot.ai](https://platform.moonshot.ai)
 
 ---
 
 ### MiniMax
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `M2.7` | 最新模型 |
+| `M2.7` | Свежая модель |
 
-**配置步骤**：
+**Шаги настройки**:
 ```bash
-/connect  # 搜索 MiniMax
+/connect  # Найдите MiniMax
 ```
 
-**获取 API Key**：[platform.minimax.io](https://platform.minimax.io)
+**Получение API-ключа**: [platform.minimax.io](https://platform.minimax.io)
 
 ---
 
-### Z.AI（智谱）
+### Z.AI
 
-提供 GLM 系列模型。
+Модели серии GLM.
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `GLM-5` | 最新模型 |
+| `GLM-5` | Свежая модель |
 
-**配置步骤**：
+**Шаги настройки**:
 ```bash
-/connect  # 搜索 Z.AI
-# 如果订阅了 GLM Coding Plan，选择 Z.AI Coding Plan
+/connect  # Найдите Z.AI
+# При подписке на GLM Coding Plan выберите Z.AI Coding Plan
 ```
 
-**获取 API Key**：[z.ai](https://z.ai/manage-apikey/apikey-list)
+**Получение API-ключа**: [z.ai](https://z.ai/manage-apikey/apikey-list)
 
 ---
 
-## 国际模型
+## Международные модели
 
 ### Anthropic Claude
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `claude-sonnet-4-20250514` | 最新平衡版（推荐） |
-| `claude-opus-4-20250514` | 最强模型 |
-| `claude-3-5-haiku-20241022` | 快速模型 |
+| `claude-sonnet-4-20250514` | Свежая сбалансированная (рекомендуется) |
+| `claude-opus-4-20250514` | Самая сильная модель |
+| `claude-3-5-haiku-20241022` | Быстрая модель |
 
-**配置方式**：
+**Способ настройки**:
 ```bash
-/connect  # 选择 Anthropic
+/connect  # Выберите Anthropic
 
-# 可选：
-# - Claude Pro/Max（浏览器授权）
-# - Create an API Key（创建新 Key）
-# - Manually enter API Key（手动输入）
+# Необязательно:
+# - Claude Pro/Max (авторизация в браузере)
+# - Create an API Key (создать новый ключ)
+# - Manually enter API Key (ввести вручную)
 ```
 
-**获取 API Key**：[console.anthropic.com](https://console.anthropic.com)
+**Получение API-ключа**: [console.anthropic.com](https://console.anthropic.com)
 
 ---
 
 ### OpenAI
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `gpt-4o` | 旗舰多模态 |
-| `gpt-4o-mini` | 经济版 |
-| `o1` | 推理模型 |
-| `o3-mini` | 最新推理 |
+| `gpt-4o` | Флагманская мультимодальная |
+| `gpt-4o-mini` | Экономная версия |
+| `o1` | Рассуждающая модель |
+| `o3-mini` | Свежие рассуждения |
 
-**配置方式**：
+**Способ настройки**:
 ```bash
-/connect  # 搜索 OpenAI
+/connect  # Найдите OpenAI
 ```
 
-**获取 API Key**：[platform.openai.com](https://platform.openai.com)
+**Получение API-ключа**: [platform.openai.com](https://platform.openai.com)
 
 ---
 
 ### Google Gemini
 
-通过 Vertex AI 使用。
+Использование через Vertex AI.
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `gemini-2.0-flash` | 最新快速版 |
-| `gemini-2.0-pro` | 专业版 |
-| `gemini-1.5-pro` | 长上下文 |
+| `gemini-2.0-flash` | Свежая быстрая версия |
+| `gemini-2.0-pro` | Профессиональная версия |
+| `gemini-1.5-pro` | Длинный контекст |
 
-**配置方式**：
+**Способ настройки**:
 ```bash
-# 设置 Google Cloud 项目 ID（必需）
+# Задайте ID проекта Google Cloud (обязательно)
 export GOOGLE_CLOUD_PROJECT=your-project-id
-# 或使用 GCP_PROJECT / GCLOUD_PROJECT 也可
+# Или GCP_PROJECT / GCLOUD_PROJECT тоже подойдут
 
-# 设置区域（可选，默认 us-east5）
+# Задайте регион (необязательно, по умолчанию us-east5)
 export VERTEX_LOCATION=us-east5
-# 或使用 GOOGLE_CLOUD_LOCATION 也可
+# Или GOOGLE_CLOUD_LOCATION тоже подойдёт
 ```
 
-> Google Vertex AI 需要通过 `gcloud auth application-default login` 或服务账号配置认证，OpenCode 会自动使用 Application Default Credentials。
+> Google Vertex AI требует аутентификации через `gcloud auth application-default login` или сервисный аккаунт, OpenCode сам использует Application Default Credentials.
 
 ---
 
 ### xAI Grok
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `grok-2` | 最新版本 |
-| `grok-2-mini` | 经济版 |
+| `grok-2` | Свежая версия |
+| `grok-2-mini` | Экономная версия |
 
-**配置方式**：
+**Способ настройки**:
 ```bash
-/connect  # 搜索 xAI
+/connect  # Найдите xAI
 ```
 
-**获取 API Key**：[console.x.ai](https://console.x.ai)
+**Получение API-ключа**: [console.x.ai](https://console.x.ai)
 
 ---
 
 ### Mistral
 
-开源模型领导者，支持 Mistral Large、Codestral 等。
+Лидер опенсорсных моделей: Mistral Large, Codestral и др.
 
-| 模型 | 说明 |
+| Модель | Описание |
 |------|------|
-| `mistral-large-latest` | 最强能力 |
-| `mistral-small-latest` | 快速响应 |
-| `codestral-latest` | 代码优化 |
+| `mistral-large-latest` | Максимальные способности |
+| `mistral-small-latest` | Быстрые ответы |
+| `codestral-latest` | Оптимизация под код |
 
 ```bash
-/connect  # 搜索 Mistral
+/connect  # Найдите Mistral
 ```
 
-**获取 API Key**：[console.mistral.ai](https://console.mistral.ai)
+**Получение API-ключа**: [console.mistral.ai](https://console.mistral.ai)
 
 ---
 
 ### Cohere
 
-企业级 NLP 能力，支持 Rerank、Embed。
+Корпоративный NLP: Rerank, Embed и др.
 
 ```bash
-/connect  # 搜索 Cohere
+/connect  # Найдите Cohere
 ```
 
-**获取 API Key**：[dashboard.cohere.com](https://dashboard.cohere.com)
+**Получение API-ключа**: [dashboard.cohere.com](https://dashboard.cohere.com)
 
 ---
 
 ### Perplexity
 
-集成搜索能力，实时信息获取。
+Со встроенным поиском для свежих данных.
 
 ```bash
-/connect  # 搜索 Perplexity
+/connect  # Найдите Perplexity
 ```
 
-**获取 API Key**：[perplexity.ai/settings/api](https://www.perplexity.ai/settings/api)
+**Получение API-ключа**: [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api)
 
-> API Key 格式：`pplx-...`
+> Формат API-ключа: `pplx-...`
 
 ---
 
 ### GitHub Copilot
 
-使用 Copilot 订阅。
+По подписке Copilot.
 
 ```bash
-/connect  # 搜索 GitHub Copilot
-# 访问 github.com/login/device 输入代码授权
+/connect  # Найдите GitHub Copilot
+# Откройте github.com/login/device и введите код для авторизации
 ```
 
-> 部分模型需要 Pro+ 订阅，某些模型需在 GitHub Copilot 设置中手动启用。
+> Отдельным моделям нужна подписка Pro+, некоторые модели включаются вручную в настройках GitHub Copilot.
 
 ---
 
-## 云平台
+## Облачные платформы
 
 ### Amazon Bedrock
 
 ```bash
-# 环境变量方式
+# Способ через переменные окружения
 AWS_PROFILE=my-profile opencode
 
-# 或配置文件
+# Или файлом конфигурации
 ```
 
 ```json title="opencode.json"
@@ -294,20 +296,20 @@ AWS_PROFILE=my-profile opencode
 ### Azure OpenAI
 
 ```bash
-/connect  # 搜索 Azure OpenAI
+/connect  # Найдите Azure OpenAI
 ```
 
-> - 如遇 "I'm sorry, but I cannot assist" 错误，将内容过滤器从 DefaultV2 改为 Default。
-> - Azure OpenAI 通过 `/connect` 配置，认证信息会自动存储。
+> - При ошибке "I'm sorry, but I cannot assist" смените фильтр контента с DefaultV2 на Default.
+> - Azure OpenAI настраивается через `/connect`, credentials сохраняются автоматически.
 
 ---
 
 ### Azure Cognitive Services
 
 ```bash
-/connect  # 搜索 Azure Cognitive Services
+/connect  # Найдите Azure Cognitive Services
 
-# 设置资源名
+# Задайте имя ресурса
 export AZURE_COGNITIVE_SERVICES_RESOURCE_NAME=your-resource-name
 ```
 
@@ -315,48 +317,48 @@ export AZURE_COGNITIVE_SERVICES_RESOURCE_NAME=your-resource-name
 
 ### Cloudflare Workers AI
 
-Cloudflare 边缘网络，全球低延迟。
+Периферийная сеть Cloudflare, низкие задержки по миру.
 
 ```bash
-/connect  # 搜索 Cloudflare Workers AI
+/connect  # Найдите Cloudflare Workers AI
 
-# 或设置环境变量
+# Или задайте переменные окружения
 export CLOUDFLARE_API_KEY=your-api-token
 export CLOUDFLARE_ACCOUNT_ID=your-account-id
 ```
 
-**获取 API Token**：[dash.cloudflare.com](https://dash.cloudflare.com) → My Profile → API Tokens
+**Получение API-токена**: [dash.cloudflare.com](https://dash.cloudflare.com) → My Profile → API Tokens
 
 ---
 
 ### GitLab
 
-GitLab Duo Chat，与 GitLab 深度集成。
+GitLab Duo Chat с глубокой интеграцией GitLab.
 
 ```bash
-/connect  # 搜索 GitLab
+/connect  # Найдите GitLab
 
-# 企业版实例需设置
+# Для корпоративного инстанса задайте
 export GITLAB_INSTANCE_URL=https://gitlab.company.com
 ```
 
-**获取 Token**：[gitlab.com](https://gitlab.com) → Settings → Access Tokens
+**Получение токена**: [gitlab.com](https://gitlab.com) → Settings → Access Tokens
 
-> Token 格式：`glpat-...`
+> Формат токена: `glpat-...`
 
 ---
 
-## 聚合平台
+## Платформы-агрегаторы
 
 ### OpenRouter
 
-一个 API Key 访问 100+ 模型。
+Один API-ключ для 100+ моделей.
 
 ```bash
-/connect  # 搜索 OpenRouter
+/connect  # Найдите OpenRouter
 ```
 
-**自定义模型**：
+**Свои модели**:
 ```json title="opencode.json"
 {
   "$schema": "https://opencode.ai/config.json",
@@ -377,175 +379,175 @@ export GITLAB_INSTANCE_URL=https://gitlab.company.com
 }
 ```
 
-**获取 API Key**：[openrouter.ai](https://openrouter.ai)
+**Получение API-ключа**: [openrouter.ai](https://openrouter.ai)
 
 ---
 
 ### Groq
 
-超快推理速度。
+Сверхбыстрый инференс.
 
 ```bash
-/connect  # 搜索 Groq
+/connect  # Найдите Groq
 ```
 
-**获取 API Key**：[console.groq.com](https://console.groq.com)
+**Получение API-ключа**: [console.groq.com](https://console.groq.com)
 
 ---
 
 ### Cerebras
 
-超快推理，支持 Qwen3 Coder 480B。
+Сверхбыстрый инференс с поддержкой Qwen3 Coder 480B.
 
 ```bash
-/connect  # 搜索 Cerebras
+/connect  # Найдите Cerebras
 ```
 
-**获取 API Key**：[inference.cerebras.ai](https://inference.cerebras.ai)
+**Получение API-ключа**: [inference.cerebras.ai](https://inference.cerebras.ai)
 
 ---
 
 ### Fireworks AI
 
 ```bash
-/connect  # 搜索 Fireworks AI
+/connect  # Найдите Fireworks AI
 ```
 
-**获取 API Key**：[app.fireworks.ai](https://app.fireworks.ai)
+**Получение API-ключа**: [app.fireworks.ai](https://app.fireworks.ai)
 
 ---
 
 ### Deep Infra
 
 ```bash
-/connect  # 搜索 Deep Infra
+/connect  # Найдите Deep Infra
 ```
 
-**获取 API Key**：[deepinfra.com/dash](https://deepinfra.com/dash)
+**Получение API-ключа**: [deepinfra.com/dash](https://deepinfra.com/dash)
 
 ---
 
 ### Together AI
 
 ```bash
-/connect  # 搜索 Together AI
+/connect  # Найдите Together AI
 ```
 
-**获取 API Key**：[api.together.ai](https://api.together.ai)
+**Получение API-ключа**: [api.together.ai](https://api.together.ai)
 
 ---
 
 ### Hugging Face
 
-访问 17+ 提供商的开源模型。
+Опенсорсные модели 17+ провайдеров.
 
 ```bash
-/connect  # 搜索 Hugging Face
+/connect  # Найдите Hugging Face
 ```
 
-**获取 Token**：[huggingface.co/settings/tokens](https://huggingface.co/settings/tokens/new?ownUserPermissions=inference.serverless.write&tokenType=fineGrained)
+**Получение токена**: [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens/new?ownUserPermissions=inference.serverless.write&tokenType=fineGrained)
 
 ---
 
 ### Baseten
 
 ```bash
-/connect  # 搜索 Baseten
+/connect  # Найдите Baseten
 ```
 
-**获取 API Key**：[app.baseten.co](https://app.baseten.co)
+**Получение API-ключа**: [app.baseten.co](https://app.baseten.co)
 
 ---
 
 ### Cortecs
 
-支持 Kimi K2 Instruct。
+С поддержкой Kimi K2 Instruct.
 
 ```bash
-/connect  # 搜索 Cortecs
+/connect  # Найдите Cortecs
 ```
 
-**获取 API Key**：[cortecs.ai](https://cortecs.ai)
+**Получение API-ключа**: [cortecs.ai](https://cortecs.ai)
 
 ---
 
 ### Nebius Token Factory
 
 ```bash
-/connect  # 搜索 Nebius Token Factory
+/connect  # Найдите Nebius Token Factory
 ```
 
-**获取 API Key**：[tokenfactory.nebius.com](https://tokenfactory.nebius.com)
+**Получение API-ключа**: [tokenfactory.nebius.com](https://tokenfactory.nebius.com)
 
 ---
 
 ### IO.NET
 
-提供 17+ 模型。
+17+ моделей.
 
 ```bash
-/connect  # 搜索 IO.NET
+/connect  # Найдите IO.NET
 ```
 
-**获取 API Key**：[ai.io.net](https://ai.io.net)
+**Получение API-ключа**: [ai.io.net](https://ai.io.net)
 
 ---
 
 ### Venice AI
 
 ```bash
-/connect  # 搜索 Venice AI
+/connect  # Найдите Venice AI
 ```
 
-**获取 API Key**：[venice.ai](https://venice.ai)
+**Получение API-ключа**: [venice.ai](https://venice.ai)
 
 ---
 
 ### OVHcloud AI Endpoints
 
 ```bash
-/connect  # 搜索 OVHcloud AI Endpoints
+/connect  # Найдите OVHcloud AI Endpoints
 ```
 
-**获取 API Key**：[ovh.com/manager](https://ovh.com/manager) → Public Cloud → AI & Machine Learning → AI Endpoints
+**Получение API-ключа**: [ovh.com/manager](https://ovh.com/manager) → Public Cloud → AI & Machine Learning → AI Endpoints
 
 ---
 
 ### SAP AI Core
 
-访问 40+ 模型（OpenAI、Anthropic、Google、Amazon、Meta 等）。
+Доступ к 40+ моделям (OpenAI, Anthropic, Google, Amazon, Meta и др.).
 
 ```bash
-/connect  # 搜索 SAP AI Core
+/connect  # Найдите SAP AI Core
 ```
 
-需要输入 Service Key JSON（包含 `clientid`、`clientsecret`、`url`、`serviceurls.AI_API_URL`）。
+Нужен Service Key JSON (с `clientid`, `clientsecret`, `url`, `serviceurls.AI_API_URL`).
 
 ---
 
 ### Cloudflare AI Gateway
 
-通过 Cloudflare 统一访问多个提供商，支持统一计费。
+Единый доступ к нескольким провайдерам через Cloudflare с единым биллингом.
 
 ```bash
-# 设置环境变量
+# Задайте переменные окружения
 export CLOUDFLARE_ACCOUNT_ID=your-account-id
 export CLOUDFLARE_GATEWAY_ID=your-gateway-id
 
-/connect  # 搜索 Cloudflare AI Gateway
+/connect  # Найдите Cloudflare AI Gateway
 ```
 
 ---
 
 ### Vercel AI Gateway
 
-通过 Vercel 统一访问多个提供商，按成本定价无加价。
+Единый доступ к нескольким провайдерам через Vercel, цены по себестоимости без наценок.
 
 ```bash
-/connect  # 搜索 Vercel AI Gateway
+/connect  # Найдите Vercel AI Gateway
 ```
 
-**配置路由顺序**：
+**Настройка порядка роутинга**:
 ```json title="opencode.json"
 {
   "$schema": "https://opencode.ai/config.json",
@@ -567,15 +569,15 @@ export CLOUDFLARE_GATEWAY_ID=your-gateway-id
 
 ### Helicone
 
-LLM 可观测平台，提供日志、监控和分析。
+LLM-платформа наблюдаемости: логи, мониторинг и разбор.
 
 ```bash
-/connect  # 搜索 Helicone
+/connect  # Найдите Helicone
 ```
 
-**获取 API Key**：[helicone.ai](https://helicone.ai)
+**Получение API-ключа**: [helicone.ai](https://helicone.ai)
 
-**自定义请求头**：
+**Свои заголовки запросов**:
 ```json title="opencode.json"
 {
   "$schema": "https://opencode.ai/config.json",
@@ -600,28 +602,28 @@ LLM 可观测平台，提供日志、监控和分析。
 ### ZenMux
 
 ```bash
-/connect  # 搜索 ZenMux
+/connect  # Найдите ZenMux
 ```
 
-**获取 API Key**：[zenmux.ai/settings/keys](https://zenmux.ai/settings/keys)
+**Получение API-ключа**: [zenmux.ai/settings/keys](https://zenmux.ai/settings/keys)
 
 ---
 
 ### Ollama Cloud
 
-云端 Ollama 服务。
+Облачный сервис Ollama.
 
 ```bash
-/connect  # 搜索 Ollama Cloud
+/connect  # Найдите Ollama Cloud
 ```
 
-> 使用前需先本地拉取模型信息：`ollama pull gpt-oss:20b-cloud`
+> Перед использованием подтяните локально информацию о моделях: `ollama pull gpt-oss:20b-cloud`
 
-**获取 API Key**：[ollama.com](https://ollama.com) → Settings → Keys
+**Получение API-ключа**: [ollama.com](https://ollama.com) → Settings → Keys
 
 ---
 
-## 本地模型
+## Локальные модели
 
 ### Ollama
 
@@ -645,9 +647,9 @@ LLM 可观测平台，提供日志、监控和分析。
 }
 ```
 
-> 如果工具调用不工作，尝试增加 Ollama 的 `num_ctx`，建议 16k-32k。
+> Если не работают вызовы инструментов — увеличьте `num_ctx` у Ollama, рекомендуем 16k–32k.
 
-**安装**：[ollama.ai](https://ollama.ai)
+**Установка**: [ollama.ai](https://ollama.ai)
 
 ---
 
@@ -673,7 +675,7 @@ LLM 可观测平台，提供日志、监控和分析。
 }
 ```
 
-**安装**：[lmstudio.ai](https://lmstudio.ai)
+**Установка**: [lmstudio.ai](https://lmstudio.ai)
 
 ---
 
@@ -705,17 +707,17 @@ LLM 可观测平台，提供日志、监控和分析。
 
 ---
 
-## 自定义提供商
+## Свои провайдеры
 
-添加任何 OpenAI 兼容的提供商：
+Добавьте любого OpenAI-совместимого провайдера:
 
 ```bash
-# 1. 运行 /connect，选择 Other
+# 1. Выполните /connect, выберите Other
 /connect
 
-# 2. 输入提供商 ID（如 myprovider）
+# 2. Введите ID провайдера (например, myprovider)
 
-# 3. 输入 API Key
+# 3. Введите API-ключ
 ```
 
 ```json title="opencode.json"
@@ -742,21 +744,21 @@ LLM 可观测平台，提供日志、监控和分析。
 }
 ```
 
-**配置选项**：
-- `npm` - AI SDK 包名，OpenAI 兼容用 `@ai-sdk/openai-compatible`
-- `name` - UI 显示名称
-- `options.baseURL` - API 端点
-- `options.apiKey` - API Key（可选，不用 auth 时设置）
-- `options.headers` - 自定义请求头
-- `models` - 可用模型列表
-- `limit.context` - 最大输入 token
-- `limit.output` - 最大输出 token
+**Опции конфигурации**:
+- `npm` — имя npm-пакета AI SDK, для OpenAI-совместимых — `@ai-sdk/openai-compatible`
+- `name` — отображаемое имя в интерфейсе
+- `options.baseURL` — эндпоинт API
+- `options.apiKey` — API-ключ (необязательно, без auth задавать не нужно)
+- `options.headers` — свои заголовки запросов
+- `models` — список доступных моделей
+- `limit.context` — максимум входных токенов
+- `limit.output` — максимум выходных токенов
 
 ---
 
-## 自定义 Base URL
+## Свой Base URL
 
-为任何提供商设置自定义端点（如代理服务）：
+Свой эндпоинт любому провайдеру (например, прокси-сервису):
 
 ```json title="opencode.json"
 {
@@ -773,32 +775,32 @@ LLM 可观测平台，提供日志、监控和分析。
 
 ---
 
-## 模型选择指南
+## Гид по выбору моделей
 
-| 需求 | 推荐 | 理由 |
+| Задача | Рекомендация | Почему |
 |------|------|------|
-| 国内使用最简单 | DeepSeek | 国内直连，中文好 |
-| 最强推理能力 | Claude Opus 4 | 业界最强 |
-| 性价比最高 | DeepSeek | 便宜好用 |
-| 代码能力最强 | Claude Sonnet 4 | 专业编程 |
-| 长文档处理 | Gemini 1.5 Pro | 超长上下文 |
-| 完全离线 | Ollama + Llama3.1 | 本地运行 |
-| 多模型切换 | OpenRouter | 一个 Key 用所有 |
+| Проще всего использовать из России | DeepSeek | Прямое подключение, отличный русский |
+| Сильнейшие рассуждения | Claude Opus 4 | Сильнейший в отрасли |
+| Лучшее соотношение цены и качества | DeepSeek | Дёшево и сердито |
+| Сильнейший в коде | Claude Sonnet 4 | Профессиональное программирование |
+| Обработка длинных документов | Gemini 1.5 Pro | Сверхдлинный контекст |
+| Полный офлайн | Ollama + Llama3.1 | Локальный запуск |
+| Переключение моделей | OpenRouter | Один ключ на всё |
 
 ---
 
-## 故障排查
+## Диагностика неполадок
 
-1. **检查认证**：运行 `opencode auth list` 查看已配置的凭证
+1. **Проверка аутентификации**: выполните `opencode auth list` для просмотра настроенных credentials
 
-2. **自定义提供商问题**：
-   - 确保 `/connect` 中的提供商 ID 与配置文件一致
-   - 使用正确的 npm 包（如 `@ai-sdk/openai-compatible`）
-   - 检查 `options.baseURL` 是否正确
+2. **Проблемы своих провайдеров**:
+   - Убедитесь, что ID провайдера в `/connect` совпадает с конфигом
+   - Используйте верный npm-пакет (вроде `@ai-sdk/openai-compatible`)
+   - Проверьте корректность `options.baseURL`
 
 ---
 
-## 相关资源
+## Связанные материалы
 
-- [连接模型](../1-start/04-connect) - 配置教程
-- [配置选项参考](./config-ref) - 配置文件详解
+- [Подключение моделей](../1-start/04-connect) — руководство по настройке
+- [Справочник опций конфигурации](./config-ref) — подробности файлов конфигурации

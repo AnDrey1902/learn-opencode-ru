@@ -1,97 +1,97 @@
 ---
-title: 5.6b 快捷键
-subtitle: 高效操作的肌肉记忆
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.6b Горячие клавиши
+subtitle: Мышечная память эффективных действий
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.6b"
-duration: 10 分钟
-practice: 15 分钟
-level: 进阶
-description: 自定义 60+ 快捷键，打造顺手的操作体验，提升效率。
+duration: 10 минут
+practice: 15 минут
+level: Продвинутый
+description: Настройте 60+ горячих клавиш под себя для удобной работы и роста эффективности.
 tags:
-  - 快捷键
-  - 效率
+  - Горячие клавиши
+  - Эффективность
   - TUI
 prerequisite:
-  - 5.1 配置全解
+  - 5.1 Всё о конфигурации
 ---
 
-# 5.6b 快捷键
+# 5.6b Горячие клавиши
 
-> 60+ 快捷键全自定义，打造顺手的操作体验。
+> 60+ горячих клавиш полностью настраиваются — работа как удобно.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/06b-keybinds-notes.mini.jpeg" alt="快捷键学霸笔记" data-zoom-src="/images/5-advanced/06b-keybinds-notes.jpeg" />
-
----
-
-## 学完你能做什么
-
-- 掌握 Leader 键机制
-- 自定义任意快捷键
-- 禁用不需要的快捷键
-- 解决终端快捷键冲突
+<img src="/images/5-advanced/06b-keybinds-notes.mini.jpeg" alt="Шпаргалка урока: горячие клавиши" data-zoom-src="/images/5-advanced/06b-keybinds-notes.jpeg" />
 
 ---
 
-## Leader 键
+## Что вы сможете после урока
 
-OpenCode 使用 **Leader 键** 避免与终端快捷键冲突。
+- Владеть механизмом Leader-клавиши
+- Настраивать любые горячие клавиши
+- Отключать ненужные клавиши
+- Решать конфликты клавиш терминала
 
-默认 Leader 键：<kbd>Ctrl</kbd>+<kbd>X</kbd>
+---
 
-**使用方式**：先按 Leader 键，松开，再按第二个键。
+## Клавиша Leader
+
+OpenCode использует **клавишу Leader**, чтобы не конфликтовать с клавишами терминала.
+
+Leader по умолчанию: <kbd>Ctrl</kbd>+<kbd>X</kbd>
+
+**Как пользоваться**: нажмите Leader, отпустите, затем нажмите вторую клавишу.
 
 ```
-Ctrl+X → n    # 新建会话
-Ctrl+X → l    # 会话列表
-Ctrl+X → m    # 模型列表
+Ctrl+X → n    # Новая сессия
+Ctrl+X → l    # Список сессий
+Ctrl+X → m    # Список моделей
 ```
 
 ---
 
-## 快捷键配置
+## Настройка клавиш
 
-TUI 快捷键使用扁平的 `keybinds` 映射，配置在独立的 `tui.json` 或 `tui.jsonc` 中：
+Клавиши TUI задаются плоским отображением `keybinds` в отдельном `tui.json` или `tui.jsonc`:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/tui.json",
   "keybinds": {
-    // 修改 Leader 键
+    // Смена Leader-клавиши
     "leader": "ctrl+x",
-    
-    // 自定义快捷键
+
+    // Свои клавиши
     "session_new": "<leader>n",
     "model_list": "<leader>m",
-    
-    // 多个按键绑定同一功能（逗号分隔）
+
+    // Несколько кнопок на одну функцию (через запятую)
     "app_exit": "ctrl+c,ctrl+d,<leader>q",
-    
-    // 禁用快捷键
+
+    // Отключение клавиши
     "session_compact": false
   }
 }
 ```
 
-常用配置位置如下，后加载的配置覆盖先加载的配置：
+Обычные места конфигурации ниже, позже загруженное перекрывает ранее загруженное:
 
-1. 全局配置目录中的 `tui.json` / `tui.jsonc`
-2. `OPENCODE_TUI_CONFIG` 指向的自定义文件
-3. 从当前打开目录向文件系统根逐层发现，再按根侧到当前目录应用的 `tui.json` / `tui.jsonc`
-4. 沿途 `.opencode/tui.json` / `.opencode/tui.jsonc`
-5. `OPENCODE_CONFIG_DIR` 中的 TUI 配置
+1. `tui.json` / `tui.jsonc` в глобальном каталоге конфигурации
+2. Пользовательский файл, на который указывает `OPENCODE_TUI_CONFIG`
+3. Обнаруженные от текущего открытого каталога к корню файловой системы `tui.json` / `tui.jsonc`, применяемые от корневой стороны к текущему каталогу
+4. Встречные `.opencode/tui.json` / `.opencode/tui.jsonc`
+5. TUI-конфигурация из `OPENCODE_CONFIG_DIR`
 
-普通项目文件按根侧到当前目录应用，越近当前目录越优先；多个 `.opencode` 目录按当前侧到根侧合并，冲突时更靠根侧者后加载并取胜。`OPENCODE_CONFIG_DIR` 最后加载。
+Обычные файлы проекта применяются от корневой стороны к текущему каталогу, чем ближе к текущему — тем приоритетнее; несколько каталогов `.opencode` сливаются от текущей стороны к корневой, при конфликте побеждает позже загруженный (более корневой). `OPENCODE_CONFIG_DIR` грузится последним.
 
-从旧版本升级时，启动 TUI 会检查全局、项目沿途、配置目录和 `OPENCODE_CONFIG` 指定的旧主配置，把其中的 `theme`、`keybinds` 和旧 `tui` 字段迁移到同目录的 `tui.json`。如果目标 `tui.json` 已存在，则跳过该目录；只有 `tui.jsonc` 不会阻止迁移。成功写入新文件并创建或复用 `.tui-migration.bak` 备份后，才从原配置删除旧字段。主配置已不再读取这些 TUI 字段。
+При обновлении со старой версии старт TUI проверяет старые главные конфиги в глобальном, встречных проектных, каталоге конфигурации и указанном `OPENCODE_CONFIG` и переносит оттуда поля `theme`, `keybinds` и старый `tui` в `tui.json` того же каталога. Существующий целевой `tui.json` пропускает каталог; одинокий `tui.jsonc` миграции не мешает. После успешной записи нового файла и создания (или переиспользования) бэкапа `.tui-migration.bak` старые поля удаляются из исходного конфига. Главный конфиг эти TUI-поля больше не читает.
 
-### 禁用快捷键
+### Отключение клавиш
 
-设置为 `"none"` 或 `false` 均可禁用：
+Значения `"none"` и `false` оба отключают:
 
 ```jsonc
 {
@@ -102,9 +102,9 @@ TUI 快捷键使用扁平的 `keybinds` 映射，配置在独立的 `tui.json` �
 }
 ```
 
-### 多键绑定
+### Несколько привязок
 
-用逗号分隔多个按键：
+Несколько кнопок через запятую:
 
 ```jsonc
 {
@@ -116,149 +116,149 @@ TUI 快捷键使用扁平的 `keybinds` 映射，配置在独立的 `tui.json` �
 
 ---
 
-## 常用可配置快捷键
+## Частые настраиваемые клавиши
 
-### 应用控制
+### Управление приложением
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `leader` | `ctrl+x` | Leader 键 |
-| `app_exit` | `ctrl+c,ctrl+d,<leader>q` | 退出应用 |
-| `diff_open` | `none` | 打开 diff viewer（默认通过 `/diff` 或命令面板进入） |
-| `terminal_suspend` | `ctrl+z` | 挂起终端 |
-| `terminal_title_toggle` | `none` | 切换终端标题 |
+| `leader` | `ctrl+x` | Клавиша Leader |
+| `app_exit` | `ctrl+c,ctrl+d,<leader>q` | Выход из приложения |
+| `diff_open` | `none` | Открыть diff viewer (по умолчанию через `/diff` или палитру команд) |
+| `terminal_suspend` | `ctrl+z` | Приостановить терминал |
+| `terminal_title_toggle` | `none` | Переключить заголовок терминала |
 
-### 界面控制
+### Управление интерфейсом
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `editor_open` | `<leader>e` | 打开外部编辑器 |
-| `theme_list` | `<leader>t` | 主题列表 |
-| `sidebar_toggle` | `<leader>b` | 切换侧边栏 |
-| `scrollbar_toggle` | `none` | 切换滚动条 |
-| `status_view` | `<leader>s` | 状态视图 |
-| `tool_details` | `none` | 切换工具详情 |
-| `tips_toggle` | `<leader>h` | 切换首页提示 |
+| `editor_open` | `<leader>e` | Открыть внешний редактор |
+| `theme_list` | `<leader>t` | Список тем |
+| `sidebar_toggle` | `<leader>b` | Переключить боковую панель |
+| `scrollbar_toggle` | `none` | Переключить полосу прокрутки |
+| `status_view` | `<leader>s` | Вид статуса |
+| `tool_details` | `none` | Переключить детали инструментов |
+| `tips_toggle` | `<leader>h` | Переключить подсказки главной |
 
-### 会话管理
+### Управление сессиями
 
 <AdInArticle />
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `session_new` | `<leader>n` | 新建会话 |
-| `session_list` | `<leader>l` | 会话列表 |
-| `session_export` | `<leader>x` | 导出会话 |
-| `session_timeline` | `<leader>g` | 会话时间线 |
-| `session_interrupt` | `escape` | 中断响应 |
-| `session_background` | `ctrl+b` | 将同步运行的子 Agent 转入后台 |
-| `session_compact` | `<leader>c` | 压缩上下文 |
-| `session_fork` | `none` | 从消息分叉 |
-| `session_rename` | `ctrl+r` | 重命名会话 |
-| `session_share` | `none` | 分享会话 |
-| `session_unshare` | `none` | 取消分享 |
+| `session_new` | `<leader>n` | Новая сессия |
+| `session_list` | `<leader>l` | Список сессий |
+| `session_export` | `<leader>x` | Экспорт сессии |
+| `session_timeline` | `<leader>g` | Таймлайн сессии |
+| `session_interrupt` | `escape` | Прервать ответ |
+| `session_background` | `ctrl+b` | Увести синхронно работающего под-агента в фон |
+| `session_compact` | `<leader>c` | Сжать контекст |
+| `session_fork` | `none` | Форкнуть от сообщения |
+| `session_rename` | `ctrl+r` | Переименовать сессию |
+| `session_share` | `none` | Поделиться сессией |
+| `session_unshare` | `none` | Отменить шаринг |
 
-### 会话导航
+### Навигация сессий
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `session_child_cycle` | `right` | 切换子会话 |
-| `session_child_cycle_reverse` | `left` | 反向切换子会话 |
-| `session_parent` | `up` | 返回父会话 |
+| `session_child_cycle` | `right` | Переключить дочернюю сессию |
+| `session_child_cycle_reverse` | `left` | Обратное переключение дочерних сессий |
+| `session_parent` | `up` | Вернуться к родительской сессии |
 
-### 消息操作
+### Действия с сообщениями
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `messages_copy` | `<leader>y` | 复制消息 |
-| `messages_undo` | `<leader>u` | 撤销消息 |
-| `messages_redo` | `<leader>r` | 重做消息 |
-| `messages_toggle_conceal` | `<leader>h` | 切换代码块折叠 |
+| `messages_copy` | `<leader>y` | Копировать сообщение |
+| `messages_undo` | `<leader>u` | Отменить сообщение |
+| `messages_redo` | `<leader>r` | Повторить сообщение |
+| `messages_toggle_conceal` | `<leader>h` | Переключить сворачивание блоков кода |
 
-这里的 `messages_undo` / `messages_redo` 是会话级撤销与恢复：撤销会回到选定消息，并回滚其后的关联文件补丁；重做会恢复被撤销的状态。主配置 `opencode.json` / `opencode.jsonc` 中设置 `"snapshot": false` 时，消息仍可回退，但不会撤销或恢复文件改动。它们不同于输入框内的 `input_undo` / `input_redo`。
+Здесь `messages_undo` / `messages_redo` — отмена и повтор уровня сессии: отмена откатывает к выбранному сообщению вместе со связанными файловыми патчами после него; повтор восстанавливает отменённое состояние. При `"snapshot": false` в главном `opencode.json` / `opencode.jsonc` сообщения всё равно откатываются, но правки файлов не отменяются и не восстанавливаются. Они отличаются от `input_undo` / `input_redo` поля ввода.
 
 ### Diff viewer
 
-Diff viewer 默认启用，可通过 `/diff`、命令面板，或为 `diff_open` 自定义快捷键进入。它带文件树，可在工作区改动和最后一轮 AI 改动之间切换；当前分支不是默认分支时，还会提供与主分支比较。它支持按文件或 hunk 导航、单文件 patch、统一/分栏视图和已审阅标记。
+Diff viewer включён по умолчанию, вход — через `/diff`, палитру команд или свою клавишу `diff_open`. В нём дерево файлов, переключение между изменениями рабочей области и последним кругом правок AI; когда текущая ветка не дефолтная — ещё и сравнение с главной веткой. Поддерживаются навигация по файлам и ханкам, одиночные patch на файл, единый и разделённый виды, метки просмотренности.
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `diff_close` | `escape,q` | 关闭并返回上一屏 |
-| `diff_toggle` | `enter,space` | 展开目录或选择文件 |
-| `diff_expand` / `diff_collapse` | `right` / `left` | 展开或折叠文件树项目 |
-| `diff_expand_all` | `E` | 展开全部目录 |
-| `diff_switch_focus` | `tab` | 在文件树与 patch 区之间切换 |
-| `diff_next_hunk` / `diff_previous_hunk` | `]` / `[` | 跳到下一个/上一个 hunk |
-| `diff_next_file` / `diff_previous_file` | `n` / `p` | 跳到下一个/上一个文件 |
-| `diff_toggle_file_tree` | `b` | 显示或隐藏文件树 |
-| `diff_single_patch` | `s` | 在单个 patch 与全部 patch 之间切换 |
-| `diff_switch_source` | `d` | 切换 diff 来源 |
-| `diff_toggle_view` | `v` | 切换分栏或统一视图 |
-| `diff_help` | `?` | 显示完整 diff 快捷键帮助 |
+| `diff_close` | `escape,q` | Закрыть и вернуться на прошлый экран |
+| `diff_toggle` | `enter,space` | Развернуть каталог или выбрать файл |
+| `diff_expand` / `diff_collapse` | `right` / `left` | Развернуть или свернуть пункт дерева файлов |
+| `diff_expand_all` | `E` | Развернуть все каталоги |
+| `diff_switch_focus` | `tab` | Переключение между деревом файлов и зоной patch |
+| `diff_next_hunk` / `diff_previous_hunk` | `]` / `[` | К следующему или прошлому ханку |
+| `diff_next_file` / `diff_previous_file` | `n` / `p` | К следующему или прошлому файлу |
+| `diff_toggle_file_tree` | `b` | Показать или скрыть дерево файлов |
+| `diff_single_patch` | `s` | Переключение одиночного и полного patch |
+| `diff_switch_source` | `d` | Переключить источник diff |
+| `diff_toggle_view` | `v` | Переключить разделённый или единый вид |
+| `diff_help` | `?` | Показать полную помощь по клавишам diff |
 
-`m` 是 diff viewer 内置的“标记已审阅”按键，不属于 `keybinds` 配置项。
+Клавиша `m` — встроенная в diff viewer «метка просмотренности», не пункт настройки `keybinds`.
 
-### 消息滚动
+### Прокрутка сообщений
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `messages_page_up` | `pageup,ctrl+alt+b` | 向上翻页 |
-| `messages_page_down` | `pagedown,ctrl+alt+f` | 向下翻页 |
-| `messages_half_page_up` | `ctrl+alt+u` | 向上半页 |
-| `messages_half_page_down` | `ctrl+alt+d` | 向下半页 |
-| `messages_first` | `ctrl+g,home` | 跳到第一条 |
-| `messages_last` | `ctrl+alt+g,end` | 跳到最后一条 |
-| `messages_next` | `none` | 下一条消息 |
-| `messages_previous` | `none` | 上一条消息 |
-| `messages_last_user` | `none` | 最后一条用户消息 |
+| `messages_page_up` | `pageup,ctrl+alt+b` | Страница вверх |
+| `messages_page_down` | `pagedown,ctrl+alt+f` | Страница вниз |
+| `messages_half_page_up` | `ctrl+alt+u` | Полстраницы вверх |
+| `messages_half_page_down` | `ctrl+alt+d` | Полстраницы вниз |
+| `messages_first` | `ctrl+g,home` | К первому сообщению |
+| `messages_last` | `ctrl+alt+g,end` | К последнему сообщению |
+| `messages_next` | `none` | Следующее сообщение |
+| `messages_previous` | `none` | Прошлое сообщение |
+| `messages_last_user` | `none` | Последнее сообщение пользователя |
 
-### 模型与 Agent
+### Модели и Agent
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `model_list` | `<leader>m` | 模型列表 |
-| `model_cycle_recent` | `f2` | 切换最近模型 |
-| `model_cycle_recent_reverse` | `shift+f2` | 反向切换 |
-| `model_cycle_favorite` | `none` | 切换收藏模型 |
-| `model_cycle_favorite_reverse` | `none` | 反向切换收藏 |
-| `variant_cycle` | `ctrl+t` | 切换模型变体 |
-| `agent_list` | `<leader>a` | Agent 列表 |
-| `agent_cycle` | `tab` | 切换 Agent |
-| `agent_cycle_reverse` | `shift+tab` | 反向切换 Agent |
-| `command_list` | `ctrl+p` | 命令面板 |
-| `prompt_skills` | `none` | 打开 Skill 选择器 |
+| `model_list` | `<leader>m` | Список моделей |
+| `model_cycle_recent` | `f2` | Переключить недавние модели |
+| `model_cycle_recent_reverse` | `shift+f2` | Обратное переключение |
+| `model_cycle_favorite` | `none` | Переключить избранные модели |
+| `model_cycle_favorite_reverse` | `none` | Обратное переключение избранного |
+| `variant_cycle` | `ctrl+t` | Переключить вариант модели |
+| `agent_list` | `<leader>a` | Список Agent |
+| `agent_cycle` | `tab` | Переключить Agent |
+| `agent_cycle_reverse` | `shift+tab` | Обратное переключение Agent |
+| `command_list` | `ctrl+p` | Палитра команд |
+| `prompt_skills` | `none` | Открыть выбор Skill |
 
-### 输入区基础
+### Основы поля ввода
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `input_submit` | `return` | 发送消息 |
-| `input_newline` | `shift+return,ctrl+return,alt+return,ctrl+j` | 换行 |
-| `input_clear` | `ctrl+c` | 清空输入 |
-| `input_paste` | `ctrl+v` | 粘贴 |
-| `input_undo` | `ctrl+-,super+z` | 撤销输入 |
-| `input_redo` | `ctrl+.,super+shift+z` | 重做输入 |
+| `input_submit` | `return` | Отправить сообщение |
+| `input_newline` | `shift+return,ctrl+return,alt+return,ctrl+j` | Новая строка |
+| `input_clear` | `ctrl+c` | Очистить ввод |
+| `input_paste` | `ctrl+v` | Вставить |
+| `input_undo` | `ctrl+-,super+z` | Отменить ввод |
+| `input_redo` | `ctrl+.,super+shift+z` | Повторить ввод |
 
-### 输入区光标移动
+### Движение курсора в поле ввода
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `input_move_left` | `left,ctrl+b` | 左移一字符 |
-| `input_move_right` | `right,ctrl+f` | 右移一字符 |
-| `input_move_up` | `up` | 上移一行 |
-| `input_move_down` | `down` | 下移一行 |
-| `input_word_forward` | `alt+f,alt+right,ctrl+right` | 前进一单词 |
-| `input_word_backward` | `alt+b,alt+left,ctrl+left` | 后退一单词 |
-| `input_line_home` | `ctrl+a` | 行首 |
-| `input_line_end` | `ctrl+e` | 行尾 |
-| `input_visual_line_home` | `alt+a` | 可视行首 |
-| `input_visual_line_end` | `alt+e` | 可视行尾 |
-| `input_buffer_home` | `home` | 缓冲区开头 |
-| `input_buffer_end` | `end` | 缓冲区结尾 |
+| `input_move_left` | `left,ctrl+b` | На символ влево |
+| `input_move_right` | `right,ctrl+f` | На символ вправо |
+| `input_move_up` | `up` | На строку вверх |
+| `input_move_down` | `down` | На строку вниз |
+| `input_word_forward` | `alt+f,alt+right,ctrl+right` | На слово вперёд |
+| `input_word_backward` | `alt+b,alt+left,ctrl+left` | На слово назад |
+| `input_line_home` | `ctrl+a` | В начало строки |
+| `input_line_end` | `ctrl+e` | В конец строки |
+| `input_visual_line_home` | `alt+a` | В начало видимой строки |
+| `input_visual_line_end` | `alt+e` | В конец видимой строки |
+| `input_buffer_home` | `home` | В начало буфера |
+| `input_buffer_end` | `end` | В конец буфера |
 
-### 光标外观
+### Вид курсора
 
-光标外观不是键绑定，和 `keybinds` 同级配置：
+Вид курсора — не привязка клавиш, настраивается рядом с `keybinds`:
 
 ```jsonc
 {
@@ -270,81 +270,81 @@ Diff viewer 默认启用，可通过 `/diff`、命令面板，或为 `diff_open`
 }
 ```
 
-`style` 可设为 `block`、`underline`、`line` 或 `default`；`default` 保留终端设置，此时 `blinking` 不生效。
+`style` бывает `block`, `underline`, `line` или `default`; `default` сохраняет настройки терминала, тогда `blinking` не действует.
 
-### 输入区选择
+### Выделение в поле ввода
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `input_select_left` | `shift+left` | 向左选择 |
-| `input_select_right` | `shift+right` | 向右选择 |
-| `input_select_up` | `shift+up` | 向上选择 |
-| `input_select_down` | `shift+down` | 向下选择 |
-| `input_select_word_forward` | `alt+shift+f,alt+shift+right` | 选择下一单词 |
-| `input_select_word_backward` | `alt+shift+b,alt+shift+left` | 选择上一单词 |
-| `input_select_line_home` | `ctrl+shift+a` | 选择到行首 |
-| `input_select_line_end` | `ctrl+shift+e` | 选择到行尾 |
-| `input_select_visual_line_home` | `alt+shift+a` | 选择到可视行首 |
-| `input_select_visual_line_end` | `alt+shift+e` | 选择到可视行尾 |
-| `input_select_buffer_home` | `shift+home` | 选择到开头 |
-| `input_select_buffer_end` | `shift+end` | 选择到结尾 |
+| `input_select_left` | `shift+left` | Выделить влево |
+| `input_select_right` | `shift+right` | Выделить вправо |
+| `input_select_up` | `shift+up` | Выделить вверх |
+| `input_select_down` | `shift+down` | Выделить вниз |
+| `input_select_word_forward` | `alt+shift+f,alt+shift+right` | Выделить следующее слово |
+| `input_select_word_backward` | `alt+shift+b,alt+shift+left` | Выделить прошлое слово |
+| `input_select_line_home` | `ctrl+shift+a` | Выделить до начала строки |
+| `input_select_line_end` | `ctrl+shift+e` | Выделить до конца строки |
+| `input_select_visual_line_home` | `alt+shift+a` | Выделить до начала видимой строки |
+| `input_select_visual_line_end` | `alt+shift+e` | Выделить до конца видимой строки |
+| `input_select_buffer_home` | `shift+home` | Выделить до начала |
+| `input_select_buffer_end` | `shift+end` | Выделить до конца |
 
-### 输入区删除
+### Удаление в поле ввода
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `input_backspace` | `backspace,shift+backspace` | 退格 |
-| `input_delete` | `ctrl+d,delete,shift+delete` | 删除字符 |
-| `input_delete_line` | `ctrl+shift+d` | 删除整行 |
-| `input_delete_to_line_end` | `ctrl+k` | 删除到行尾 |
-| `input_delete_to_line_start` | `ctrl+u` | 删除到行首 |
-| `input_delete_word_forward` | `alt+d,alt+delete,ctrl+delete` | 删除下一单词 |
-| `input_delete_word_backward` | `ctrl+w,ctrl+backspace,alt+backspace` | 删除上一单词 |
+| `input_backspace` | `backspace,shift+backspace` | Стереть назад |
+| `input_delete` | `ctrl+d,delete,shift+delete` | Удалить символ |
+| `input_delete_line` | `ctrl+shift+d` | Удалить целую строку |
+| `input_delete_to_line_end` | `ctrl+k` | Удалить до конца строки |
+| `input_delete_to_line_start` | `ctrl+u` | Удалить до начала строки |
+| `input_delete_word_forward` | `alt+d,alt+delete,ctrl+delete` | Удалить следующее слово |
+| `input_delete_word_backward` | `ctrl+w,ctrl+backspace,alt+backspace` | Удалить прошлое слово |
 
-### 历史记录
+### История
 
-| 键名 | 默认值 | 说明 |
+| Имя клавиши | По умолчанию | Описание |
 |------|--------|------|
-| `history_previous` | `up` | 上一条历史 |
-| `history_next` | `down` | 下一条历史 |
+| `history_previous` | `up` | Прошлая запись истории |
+| `history_next` | `down` | Следующая запись истории |
 
 ---
 
-## Desktop 桌面版快捷键
+## Горячие клавиши десктопной версии
 
-OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，不可通过配置修改）：
+Поле ввода десктопной версии OpenCode поддерживает клавиши в стиле Readline и Emacs (встроенные, через конфиг не меняются):
 
-| 快捷键 | 功能 |
+| Сочетание | Функция |
 |--------|------|
-| `Ctrl+A` | 移到行首 |
-| `Ctrl+E` | 移到行尾 |
-| `Ctrl+B` | 后退一字符 |
-| `Ctrl+F` | 前进一字符 |
-| `Alt+B` | 后退一单词 |
-| `Alt+F` | 前进一单词 |
-| `Ctrl+D` | 删除当前字符 |
-| `Ctrl+K` | 删除到行尾 |
-| `Ctrl+U` | 删除到行首 |
-| `Ctrl+W` | 删除上一单词 |
-| `Alt+D` | 删除下一单词 |
-| `Ctrl+T` | 交换字符 |
-| `Ctrl+G` | 取消弹窗 / 中断响应 |
+| `Ctrl+A` | В начало строки |
+| `Ctrl+E` | В конец строки |
+| `Ctrl+B` | На символ назад |
+| `Ctrl+F` | На символ вперёд |
+| `Alt+B` | На слово назад |
+| `Alt+F` | На слово вперёд |
+| `Ctrl+D` | Удалить текущий символ |
+| `Ctrl+K` | Удалить до конца строки |
+| `Ctrl+U` | Удалить до начала строки |
+| `Ctrl+W` | Удалить прошлое слово |
+| `Alt+D` | Удалить следующее слово |
+| `Ctrl+T` | Поменять символы местами |
+| `Ctrl+G` | Закрыть попап и прервать ответ |
 
 ---
 
-## 终端兼容性
+## Совместимость терминалов
 
-### Shift+Enter 问题
+### Проблема Shift+Enter
 
-部分终端默认不发送 `Shift+Enter` 修饰键。
+Отдельные терминалы по умолчанию не отправляют модификатор `Shift+Enter`.
 
-**症状**：按 `Shift+Enter` 不换行，直接发送消息。
+**Симптом**: `Shift+Enter` не переносит строку, а отправляет сообщение.
 
-### Windows Terminal 配置
+### Настройка Windows Terminal
 
-编辑 `settings.json`（路径：`%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json`）：
+Отредактируйте `settings.json` (путь: `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json`):
 
-在 `actions` 数组添加：
+В массив `actions` добавьте:
 
 ```json
 {
@@ -356,7 +356,7 @@ OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，�
 }
 ```
 
-在 `keybindings` 数组添加：
+В массив `keybindings` добавьте:
 
 ```json
 {
@@ -365,20 +365,20 @@ OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，�
 }
 ```
 
-保存后重启 Windows Terminal。
+Сохраните и перезапустите Windows Terminal.
 
-### 其他终端
+### Другие терминалы
 
-- **iTerm2**：默认支持，无需配置
-- **Alacritty**：默认支持
-- **Kitty**：默认支持
-- **GNOME Terminal**：可能需要更新到较新版本
+- **iTerm2**: поддерживается по умолчанию, настраивать не нужно
+- **Alacritty**: поддерживается по умолчанию
+- **Kitty**: поддерживается по умолчанию
+- **GNOME Terminal**: возможно, нужно обновиться до новой версии
 
 ---
 
-## 常用场景配置
+## Частые сценарии настройки
 
-### Vim 风格
+### Стиль Vim
 
 ```jsonc
 {
@@ -392,9 +392,9 @@ OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，�
 }
 ```
 
-### 精简模式
+### Минималистичный режим
 
-禁用不常用的快捷键：
+Отключите неиспользуемые клавиши:
 
 ```jsonc
 {
@@ -409,9 +409,9 @@ OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，�
 }
 ```
 
-### 单手操作
+### Одноручное управление
 
-将常用操作集中到左手：
+Соберите частые действия под левую руку:
 
 ```jsonc
 {
@@ -426,53 +426,53 @@ OpenCode 桌面版的输入框支持 Readline/Emacs 风格快捷键（内置，�
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| 快捷键不生效 | 终端劫持了该按键 | 检查终端设置，或换个按键 |
-| Shift+Enter 不换行 | 终端不发送修饰键 | 配置终端（见上文） |
-| 配置了但没反应 | 用了 `keybind`（单数） | 应使用 `keybinds`（复数） |
-| 用 `null` 禁用不行 | 语法错误 | 应使用 `"none"` 或 `false` |
-| Leader 键冲突 | 和其他程序冲突 | 改用其他 Leader 键如 `ctrl+space` |
-| Ctrl+C 不清空输入 | 被终端的 SIGINT 拦截 | 使用其他按键或接受默认行为 |
+| Клавиши не работают | Клавишу перехватывает терминал | Проверьте настройки терминала или смените клавишу |
+| Shift+Enter не переносит | Терминал не отправляет модификатор | Настройте терминал (см. выше) |
+| Настроили, но не реагирует | Использовали `keybind` (в единственном числе) | Нужно `keybinds` (во множественном) |
+| Отключение через `null` не работает | Ошибка синтаксиса | Используйте `"none"` или `false` |
+| Конфликт Leader-клавиши | Конфликт с другой программой | Смените Leader, например `ctrl+space` |
+| Ctrl+C не чистит ввод | Перехватывает SIGINT терминала | Используйте другую клавишу или примите поведение по умолчанию |
 
 ---
 
-## 快捷键速记口诀
+## Запоминалка клавиш
 
 ```
-Tab 切 Agent，Ctrl+C 清
-Leader 加字母，功能随便挑
-n 新建 l 列表 m 模型
-u 撤销 r 重做不用愁
-方向键左右，子会话来回走
+Tab переключает Agent, Ctrl+C чистит
+Leader плюс буква — функции на выбор
+n — новый, l — список, m — модели
+u — отмена, r — повтор, не горюй
+Стрелки влево-вправо — по дочерним сессиям гуляй
 ```
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. 使用 Leader 键机制避免冲突
-2. 在 `keybinds` 中自定义快捷键
-3. 用 `"none"` 或 `false` 禁用不需要的快捷键
-4. 用逗号分隔绑定多个按键
-5. 解决终端 Shift+Enter 兼容性问题
+1. Механизму Leader-клавиши против конфликтов
+2. Своим клавишам в `keybinds`
+3. Отключению ненужных клавиш через `"none"` или `false`
+4. Привязке нескольких кнопок через запятую
+5. Решению проблемы совместимости Shift+Enter в терминале
 
 ---
 
-## 相关资源
+## Связанные материалы
 
-- [v1.18.22 快捷键定义](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L28-L75) - 扁平绑定、禁用值与 diff 默认键
-- [v1.18.22 后台会话与 Skill 绑定](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L86-L98) / [Skill](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L153-L159) - 新增绑定及默认值
-- [v1.18.22 光标配置](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/index.tsx#L33-L40) - 光标形状与闪烁
-- [v1.18.22 TUI 配置加载顺序](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/config/tui.ts#L171-L209) - 全局、自定义、项目与 `.opencode` 配置
-- [v1.18.22 TUI 配置迁移](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/config/tui-migrate.ts#L24-L67) - `opencode.json` 到 `tui.json` 的迁移行为
-- [v1.18.22 diff viewer](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/feature-plugins/system/diff-viewer.tsx#L563-L704) - 导航、视图与来源切换
-- [v1.18.22 会话撤销](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98) - revert / unrevert 与文件补丁恢复
-- [v1.18.22 snapshot 配置](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55) - `snapshot:false` 的文件恢复边界
-- [速查/快捷键速查表](../appendix/keybinds) - 打印版速查表
-- [5.6a 主题系统](./06a-themes) - 外观定制
-- [5.1 配置全解](./01a-config-basics) - 完整配置说明
+- [Определения клавиш v1.18.22](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L28-L75) — плоские привязки, значения отключения и клавиши diff по умолчанию
+- [v1.18.22 фон сессий и привязки Skill](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L86-L98) / [Skill](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L153-L159) — новые привязки и значения по умолчанию
+- [v1.18.22 конфиг курсора](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/index.tsx#L33-L40) — форма курсора и мигание
+- [v1.18.22 порядок загрузки конфига TUI](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/config/tui.ts#L171-L209) — глобальный, пользовательский, проектный конфиги и `.opencode`
+- [v1.18.22 миграция конфига TUI](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/config/tui-migrate.ts#L24-L67) — поведение переноса из `opencode.json` в `tui.json`
+- [v1.18.22 diff viewer](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/feature-plugins/system/diff-viewer.tsx#L563-L704) — навигация, виды и смена источников
+- [v1.18.22 отмена сессии](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98) — revert и unrevert с восстановлением файловых патчей
+- [v1.18.22 конфиг snapshot](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55) — границы восстановления файлов при `snapshot:false`
+- [Шпаргалка/Таблица клавиш](../appendix/keybinds) — печатная шпаргалка
+- [5.6a Система тем](./06a-themes) — настройка внешнего вида
+- [5.1 Всё о конфигурации](./01a-config-basics) — полные пояснения конфигурации

@@ -70,8 +70,8 @@ yarn global add opencode-ai
 ### Arch Linux
 
 ```bash
-sudo pacman -S opencode    # 稳定版（推荐）
-paru -S opencode-bin       # AUR 最新版
+sudo pacman -S opencode    # стабильная (рекомендуется)
+paru -S opencode-bin       # последняя версия AUR
 ```
 
 ---
@@ -165,13 +165,13 @@ docker run -it --rm -v $(pwd):/workspace -w /workspace ghcr.io/anomalyco/opencod
 Официальный скрипт установки `curl -fsSL https://opencode.ai/install | bash` поддерживает следующие параметры:
 
 ```bash
-# 安装指定版本
+# Установка указанной версии
 curl -fsSL https://opencode.ai/install | bash -s -- --version 1.1.6
 
-# 不修改 shell 配置（不自动添加到 PATH）
+# Не меняем конфиг shell (не добавляем в PATH автоматически)
 curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 
-# 从本地二进制安装
+# Установка из локального бинаря
 ./install --binary /path/to/opencode
 ```
 
@@ -180,7 +180,7 @@ curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 По умолчанию официальный скрипт устанавливает программу в `$HOME/.opencode/bin`. Чтобы выбрать другой каталог, после установки переместите бинарный файл вручную:
 
 ```bash
-# 安装后移动到 /usr/local/bin
+# После установки переносим в /usr/local/bin
 sudo mv ~/.opencode/bin/opencode /usr/local/bin/opencode
 ```
 
@@ -205,33 +205,33 @@ sudo mv ~/.opencode/bin/opencode /usr/local/bin/opencode
 ### Windows
 
 ```powershell
-# PowerShell（官方脚本安装）
-C:\Users\<用户名>\.opencode\bin\opencode.exe
+# PowerShell (официальный скрипт)
+C:\Users\<имя пользователя>\.opencode\bin\opencode.exe
 
-# 简写（用环境变量）
+# Коротко (через переменные окружения)
 $env:USERPROFILE\.opencode\bin\opencode.exe
 
-# Scoop 安装
-C:\Users\<用户名>\scoop\apps\opencode\current\opencode.exe
+# Установка через Scoop
+C:\Users\<имя пользователя>\scoop\apps\opencode\current\opencode.exe
 
-# Chocolatey 安装
+# Установка через Chocolatey
 C:\ProgramData\chocolatey\bin\opencode.exe
 ```
 
 ```cmd
-:: CMD（官方脚本安装）
+:: CMD (официальный скрипт)
 %USERPROFILE%\.opencode\bin\opencode.exe
 ```
 
 ### macOS / Linux
 
 ```bash
-# 官方脚本安装
+# Официальный скрипт
 ~/.opencode/bin/opencode
 
-# 或者展开写
-/Users/<用户名>/.opencode/bin/opencode    # macOS
-/home/<用户名>/.opencode/bin/opencode      # Linux
+# Или подробно:
+/Users/<имя пользователя>/.opencode/bin/opencode    # macOS
+/home/<имя пользователя>/.opencode/bin/opencode      # Linux
 ```
 
 ::: tip Рекомендация

@@ -267,7 +267,7 @@ export default defineConfig({
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/AnDrey1902/learn-opencode-ru' }],
     footer: {
-      message: `Перевод материалов «OpenCode 中文实战课» (github.com/vbgate/learn-opencode) по лицензии <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> | <a href="/privacy">Политика конфиденциальности</a> | © ${new Date().getFullYear()} LearnOpenCode`,
+      message: `Перевод курса vbgate/learn-opencode (github.com/vbgate/learn-opencode) по лицензии <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> | <a href="/privacy">Политика конфиденциальности</a> | © ${new Date().getFullYear()} LearnOpenCode`,
     },
     search: {
       provider: 'local',

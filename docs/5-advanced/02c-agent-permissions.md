@@ -1,193 +1,193 @@
 ---
-title: 5.2c Agent 权限与安全
-subtitle: 精确控制 Agent 能做什么
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.2c Права и безопасность Agent
+subtitle: Точно управляйте возможностями Agent
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.2c"
-duration: 25 分钟
-practice: 20 分钟
-level: 进阶
-description: 精确控制 Agent 可以做什么、不可以做什么，确保 AI 操作的安全性。
+duration: 25 минут
+practice: 20 минут
+level: Продвинутый
+description: Точно управляйте возможностями и запретами Agent для безопасной работы AI.
 tags:
   - Agent
-  - 权限
-  - 安全
+  - Права
+  - Безопасность
   - TaskTool
 prerequisite:
-  - 5.2a Agent 快速入门
+  - 5.2a Быстрый старт с Agent
 ---
 
-# 5.2c Agent 权限与安全
+# 5.2c Права и безопасность Agent
 
-> 精确控制 Agent 可以做什么、不可以做什么。
+> Точно управляйте возможностями и запретами Agent.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/02c-agent-permissions-notes.mini.jpeg" alt="Agent权限与安全学霸笔记" data-zoom-src="/images/5-advanced/02c-agent-permissions-notes.jpeg" />
-
----
-
-## 学完你能做什么
-
-- 理解权限系统架构
-- 配置 bash/edit/task/skill 权限
-- 设计安全的 Agent 系统
-- 实现最小权限原则
+<img src="/images/5-advanced/02c-agent-permissions-notes.mini.jpeg" alt="Шпаргалка урока: права и безопасность Agent" data-zoom-src="/images/5-advanced/02c-agent-permissions-notes.jpeg" />
 
 ---
 
-## 权限系统架构
+## Что вы сможете после урока
 
-### 三种权限动作
+- Понимать архитектуру системы прав
+- Настраивать права bash, edit, task и skill
+- Проектировать безопасную систему Agent
+- Реализовывать принцип минимальных привилегий
 
-| 动作 | 说明 | 效果 |
+---
+
+## Архитектура системы прав
+
+### Три действия прав
+
+| Действие | Описание | Эффект |
 |------|------|------|
-| `allow` | 允许 | 直接执行，无需确认 |
-| `ask` | 询问 | 弹出确认框，用户决定 |
-| `deny` | 禁止 | 拒绝执行，Agent 收到错误 |
+| `allow` | Разрешить | Выполняется сразу, без подтверждений |
+| `ask` | Спросить | Всплывает окно подтверждения, решает пользователь |
+| `deny` | Запретить | Выполнение отклоняется, Agent получает ошибку |
 
-### 权限配置层级
+### Уровни конфигурации прав
 
 ```
-默认权限（源码定义）
-    ↓ 覆盖
-全局配置 permission
-    ↓ 覆盖
-Agent 级别 permission
+Права по умолчанию (определены в исходниках)
+     ↓ перекрывают
+Глобальная конфигурация permission
+     ↓ перекрывает
+Права уровня Agent
 ```
 
-**后面的覆盖前面的**。
+**Позже перечисленное перекрывает ранее перечисленное**.
 
-> 来源：`packages/core/src/v1/config/permission.ts`（Schema 定义）、`packages/opencode/src/agent/agent.ts:145`（Permission.merge 调用）
+> Источник: `packages/core/src/v1/config/permission.ts` (определение Schema),`packages/opencode/src/agent/agent.ts:145` (вызов Permission.merge)
 
-### 规则优先级：最后匹配获胜
+### Приоритет правил: побеждает последнее совпавшее
 
-这是最重要的规则！当多个规则都匹配时，**最后一个匹配的规则生效**。
+Важнейшее правило! При совпадении нескольких правил **действует последнее совпавшее**.
 
 ```jsonc
 {
   "permission": {
     "bash": {
-      "*": "ask",           // 规则 1：所有命令需确认
-      "git *": "allow",     // 规则 2：git 命令允许
-      "git push*": "deny"   // 规则 3：git push 禁止
+      "*": "ask",           // Правило 1: все команды с подтверждением
+      "git *": "allow",     // Правило 2: git-команды разрешены
+      "git push*": "deny"   // Правило 3: git push запрещён
     }
   }
 }
 ```
 
-执行 `git push origin main`：
-1. 匹配规则 1（`*`）→ ask
-2. 匹配规则 2（`git *`）→ allow
-3. 匹配规则 3（`git push*`）→ deny
-4. **最终结果：deny**（规则 3 在最后）
+Выполнение `git push origin main`:
+1. Совпало правило 1 (`*`) → ask
+2. Совпало правило 2 (`git *`) → allow
+3. Совпало правило 3 (`git push*`) → deny
+4. **Итог: deny** (правило 3 — последнее)
 
-> 来源：`agents.mdx:473`，`permissions.mdx:70`
+> Источник: `agents.mdx:473`,`permissions.mdx:70`
 
 ---
 
-## 可配置的权限类型
+## Настраиваемые типы прав
 
-| 权限 | 匹配对象 | 说明 |
+| Право | Что сопоставляется | Описание |
 |------|---------|------|
-| `read` | 文件路径 | 读取文件 |
-| `edit` | 文件路径 | 所有文件修改（edit/write/patch） |
-| `glob` | glob 模式 | 文件搜索 |
-| `grep` | 正则表达式 | 内容搜索 |
-| `list` | 目录路径 | 列出目录内容 |
-| `bash` | 命令字符串 | 执行 shell 命令 |
-| `task` | subagent 名称 | 调用子 Agent |
-| `skill` | skill 名称 | 加载技能 |
-| `lsp` | - | LSP 查询（目前不支持细粒度） |
-| `todowrite` | - | 待办列表读写（门控 `todowrite` 工具） |
-| `webfetch` | URL | 获取网页内容 |
-| `websearch` | 查询字符串 | 网页搜索 |
-| `external_directory` | - | 访问项目目录之外的路径 |
-| `doom_loop` | - | 检测重复调用（同一工具连续调用 3 次相同输入） |
-| `question` | - | 向用户提问（默认 deny，防止 subagent 打扰用户） |
-| `plan_exit` | - | 退出计划模式，切换到 build agent |
+| `read` | Пути файлов | Чтение файлов |
+| `edit` | Пути файлов | Все изменения файлов (edit/write/patch) |
+| `glob` | glob-шаблоны | Поиск файлов |
+| `grep` | Регулярные выражения | Поиск по содержимому |
+| `list` | Пути каталогов | Список содержимого каталогов |
+| `bash` | Строки команд | Выполнение shell-команд |
+| `task` | Имена subagent | Вызовы под-агентов |
+| `skill` | Имена skill | Загрузка навыков |
+| `lsp` | - | LSP-запросы (точечность пока не поддерживается) |
+| `todowrite` | - | Чтение и запись списка дел (гейтит инструмент `todowrite`) |
+| `webfetch` | URL | Получение содержимого страниц |
+| `websearch` | Строки запросов | Поиск в вебе |
+| `external_directory` | - | Доступ к путям вне каталога проекта |
+| `doom_loop` | - | Детект повторов (один инструмент 3 раза подряд с тем же вводом) |
+| `question` | - | Вопросы пользователю (по умолчанию deny, чтобы subagent не беспокоили) |
+| `plan_exit` | - | Выход из режима планирования, переход к build agent |
 
-> 来源：`packages/core/src/v1/config/permission.ts:17-36`
+> Источник: `packages/core/src/v1/config/permission.ts:17-36`
 
 ---
 
-## 权限配置语法
+## Синтаксис настройки прав
 
-### 简单语法：单一动作
+### Простой синтаксис: одно действие
 
 ```jsonc
 {
   "permission": {
-    "edit": "allow",      // 所有文件编辑允许
-    "bash": "ask",        // 所有命令需确认
-    "webfetch": "deny"    // 禁止获取网页
+    "edit": "allow",      // Вся правка файлов разрешена
+    "bash": "ask",        // Все команды с подтверждением
+    "webfetch": "deny"    // Получение страниц запрещено
   }
 }
 ```
 
-### 全局设置
+### Глобальная настройка
 
 ```jsonc
 {
-  "permission": "allow"   // 所有权限都允许
+  "permission": "allow"   // Разрешены все права
 }
 ```
 
-### 对象语法：细粒度控制
+### Объектный синтаксис: точечный контроль
 
 ```jsonc
 {
   "permission": {
     "bash": {
-      "*": "ask",              // 默认需确认
-      "git status": "allow",   // git status 允许
-      "git log*": "allow",     // git log 开头的允许
-      "rm -rf*": "deny"        // rm -rf 禁止
+      "*": "ask",              // По умолчанию с подтверждением
+      "git status": "allow",   // git status разрешён
+      "git log*": "allow",     // Начинающиеся с git log разрешены
+      "rm -rf*": "deny"        // rm -rf запрещён
     }
   }
 }
 ```
 
-### 通配符
+### Wildcard-шаблоны
 
-| 符号 | 含义 | 示例 |
+| Символ | Смысл | Пример |
 |------|------|------|
-| `*` | 匹配任意字符（0个或多个） | `git *` 匹配 `git status`、`git log` |
-| `?` | 匹配单个字符 | `file?.txt` 匹配 `file1.txt` |
+| `*` | Любые символы (ноль и более) | `git *` покрывает `git status` и `git log` |
+| `?` | Ровно один символ | `file?.txt` покрывает `file1.txt` |
 
 ---
 
-## bash 权限详解
+## Подробно о праве bash
 
 <AdInArticle />
 
-bash 权限匹配的是**解析后的命令字符串**。
+Право bash сопоставляет **разобранную строку команды**.
 
-### 常见配置
+### Частые конфигурации
 
 ```jsonc
 {
   "permission": {
     "bash": {
-      "*": "ask",                    // 默认需确认
+      "*": "ask",                    // По умолчанию с подтверждением
 
-      // Git 命令
+      // Команды Git
       "git status": "allow",
       "git log*": "allow",
       "git diff*": "allow",
       "git branch*": "allow",
-      "git checkout*": "ask",        // 切换分支要确认
-      "git push*": "ask",            // 推送要确认
-      "git reset --hard*": "deny",   // 硬重置禁止
+      "git checkout*": "ask",        // Переключение веток — с подтверждением
+      "git push*": "ask",            // Пуш — с подтверждением
+      "git reset --hard*": "deny",   // Жёсткий сброс запрещён
 
-      // 包管理
+      // Пакетные менеджеры
       "npm install*": "allow",
       "npm run*": "allow",
-      "npm publish*": "deny",        // 发布禁止
+      "npm publish*": "deny",        // Публикация запрещена
 
-      // 危险命令
+      // Опасные команды
       "rm -rf*": "deny",
       "sudo*": "deny",
       "chmod 777*": "deny"
@@ -196,7 +196,7 @@ bash 权限匹配的是**解析后的命令字符串**。
 }
 ```
 
-### Plan Agent 的最佳实践
+### Лучшие практики Plan Agent
 
 ```jsonc
 {
@@ -204,8 +204,8 @@ bash 权限匹配的是**解析后的命令字符串**。
     "plan": {
       "permission": {
         "bash": {
-          "*": "deny",               // 默认禁止
-          "git log*": "allow",       // 只读命令允许
+          "*": "deny",               // По умолчанию запрещено
+          "git log*": "allow",       // Только чтение разрешено
           "git diff*": "allow",
           "git status": "allow",
           "ls*": "allow",
@@ -221,33 +221,33 @@ bash 权限匹配的是**解析后的命令字符串**。
 
 ---
 
-## edit 权限详解
+## Подробно о праве edit
 
-edit 权限控制**所有文件修改操作**，包括：
-- `edit` 工具
-- `write` 工具
-- `patch` 工具
+Право edit управляет **всеми операциями изменения файлов**, включая:
+- инструмент `edit`
+- инструмент `write`
+- инструмент `patch`
 
-### 常见配置
+### Частые конфигурации
 
 ```jsonc
 {
   "permission": {
     "edit": {
-      "*": "allow",                    // 默认允许
+      "*": "allow",                    // По умолчанию разрешено
 
-      // 敏感文件
+      // Чувствительные файлы
       "*.env": "deny",
       "*.env.*": "deny",
-      "*.env.example": "allow",        // 示例文件允许
+      "*.env.example": "allow",        // Файлы-примеры разрешены
       ".env.local": "deny",
 
-      // 系统文件
-      "package-lock.json": "deny",     // 锁文件不要改
+      // Системные файлы
+      "package-lock.json": "deny",     // Лок-файлы не трогать
       "pnpm-lock.yaml": "deny",
       "yarn.lock": "deny",
 
-      // 目录
+      // Каталоги
       "node_modules/*": "deny",
       ".git/*": "deny",
       "dist/*": "deny"
@@ -256,16 +256,16 @@ edit 权限控制**所有文件修改操作**，包括：
 }
 ```
 
-### 只读 Agent 配置
+### Конфигурация Agent только для чтения
 
 ```jsonc
 {
   "agent": {
     "readonly-auditor": {
-      "description": "只读代码审计，不修改任何文件",
+      "description": "Аудитор кода только для чтения, файлы не меняет",
       "mode": "subagent",
       "permission": {
-        "edit": "deny"                 // 禁止所有编辑
+        "edit": "deny"                 // Вся правка запрещена
       }
     }
   }
@@ -274,34 +274,34 @@ edit 权限控制**所有文件修改操作**，包括：
 
 ---
 
-## task 权限：控制 subagent 调用
+## Право task: управление вызовами subagent
 
-task 权限控制 **Agent 可以调用哪些 subagent**。
+Право task управляет, **каких subagent умеет вызывать Agent**.
 
-### 工作原理
+### Как это работает
 
-当设置 `task: deny` 时：
-1. 该 subagent 从 Task tool 的描述中**完全移除**
-2. 模型不会尝试调用它（因为看不到）
+При `task: deny`:
+1. Этот subagent **полностью исчезает** из описания инструмента Task
+2. Модель не пытается его вызывать (потому что не видит)
 
-> 注意：用户仍可通过 `@agent-name` 手动调用任何 subagent。task 权限只影响 Agent 自动调用。
-> 
-> 来源：`agents.mdx:557-565`
+> Обратите внимание: пользователь по-прежнему вручную вызывает любого subagent через `@agent-name`. Право task влияет лишь на автовызовы Agent.
+>
+> Источник: `agents.mdx:557-565`
 
-### 配置示例
+### Пример конфигурации
 
 ```jsonc
 {
   "agent": {
     "safe-orchestrator": {
-      "description": "安全编排器，只能调用指定的 subagent",
+      "description": "Безопасный оркестратор: вызывает только указанных subagent",
       "mode": "primary",
       "permission": {
         "task": {
-          "*": "deny",                   // 禁止所有
-          "docs-writer": "allow",        // 允许文档
-          "code-reviewer": "allow",      // 允许审查
-          "dangerous-agent": "deny"      // 显式禁止
+          "*": "deny",                   // Всё запрещено
+          "docs-writer": "allow",        // Документация разрешена
+          "code-reviewer": "allow",      // Ревью разрешено
+          "dangerous-agent": "deny"      // Явно запрещено
         }
       }
     }
@@ -309,7 +309,7 @@ task 权限控制 **Agent 可以调用哪些 subagent**。
 }
 ```
 
-### 通配符使用
+### Использование wildcard
 
 ```jsonc
 {
@@ -318,67 +318,67 @@ task 权限控制 **Agent 可以调用哪些 subagent**。
       "permission": {
         "task": {
           "*": "deny",
-          "safe-*": "allow",            // 所有 safe- 开头的允许
-          "internal/*": "allow",        // 嵌套目录的允许
-          "code-reviewer": "ask"        // 需要确认
+          "safe-*": "allow",            // Все на safe- разрешены
+          "internal/*": "allow",        // Вложенные каталоги разрешены
+          "code-reviewer": "ask"        // С подтверждением
         }
       }
     }
   }
 }
 ```
- 
-### TaskTool 参数详解
 
-Task 工具的完整参数定义如下：
+### Подробно о параметрах TaskTool
 
-| 参数 | 类型 | 必需 | 说明 |
+Полное определение параметров инструмента Task:
+
+| Параметр | Тип | Обязат. | Описание |
 |------|------|------|------|
-| `description` | string | 是 | 任务描述（3-5 个词），用作子会话标题 |
-| `prompt` | string | 是 | 子代理要执行的任务提示 |
-| `subagent_type` | string | 是 | 要调用的子代理名称（必须是非 primary agent） |
-| `task_id` | string | 否 | 继续之前的任务；传入上次返回的 `task_id` 后，会复用同一个子代理会话 |
-| `command` | string | 否 | 触发此任务的命令（用于调试） |
-| `background` | boolean | 否 | 在后台运行；需启用 `OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true` |
+| `description` | string | Да | Описание задачи (3–5 слов), заголовок дочерней сессии |
+| `prompt` | string | Да | Промпт задачи для под-агента |
+| `subagent_type` | string | Да | Имя вызываемого под-агента (обязательно не primary agent) |
+| `task_id` | string | Нет | Продолжение прошлой задачи; с возвращённым `task_id` переиспользуется та же сессия под-агента |
+| `command` | string | Нет | Команда, вызвавшая задачу (для отладки) |
+| `background` | boolean | Нет | Запуск в фоне; требует `OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true` |
 
-### 执行流程
+### Процесс выполнения
 
-TaskTool 的工作流程如下：
+Процесс инструмента TaskTool:
 
 ```
-主 Agent (Build)
+Главный Agent (Build)
     ↓
-    1. 权限检查
-       - 检查调用者是否有 task 权限
-       - 过滤可访问的 subagent
+    1. Проверка прав
+       - Есть ли у вызывающего право task
+       - Фильтрация доступных subagent
        ↓
-     2. 创建子会话
-        - 在主会话下创建独立 session
-        - 标题：描述 + (@subagent subagent)
-        - 使用子代理自己的权限，并继承父会话 deny 与 external_directory 规则
+     2. Создание дочерней сессии
+        - Независимая session под главной сессией
+        - Заголовок: описание + (@subagent subagent)
+        - Свои права под-агента плюс наследуемые deny главной и правила external_directory
        ↓
-    3. 调用子代理
-       - 子代理在独立 session 中执行
-       - 上下文仅包含传入的 prompt
-       - 监听 PartUpdated 事件获取进度
+    3. Вызов под-агента
+       - Под-агент выполняется в независимой session
+       - В контексте только переданный промпт
+       - Прогресс слушается событиями PartUpdated
        ↓
-    4. 返回结果
-       - 收集所有工具调用摘要
-       - 生成对话摘要
-       - 返回给主 Agent
+    4. Возврат результата
+       - Сбор сводок всех вызовов инструментов
+       - Генерация сводки диалога
+       - Возврат главному Agent
 ```
 
-> **关键点**：子代理运行在**独立的 Session** 中，看不到主 Agent 的对话历史。调用时必须提供完整上下文。
+> **Главное**: под-агент выполняется в **независимой сессии** и не видит историю диалога главного Agent. При вызове давайте полный контекст.
 
-### 后台执行与嵌套深度
+### Фоновое выполнение и глубина вложенности
 
-后台子代理仍是实验功能。启用后，Task tool 可传 `background: true`；TUI 也可以把当前阻塞会话的同步子代理转到后台，完成结果会自动通知父会话，不应轮询进度。
+Фоновые под-агенты — пока эксперимент. После включения инструмент Task принимает `background: true`; TUI умеет уводить текущий блокирующий синхронный под-агент в фон, о готовности родителя уведомят автоматически, опрашивать прогресс не нужно.
 
 ```bash
 export OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true
 ```
 
-子代理嵌套深度由顶层 `subagent_depth` 控制，默认是 `1`，即默认不允许子代理继续创建子代理。需要嵌套时，应同时提高深度并在对应子代理自己的权限中显式配置 `task`：
+Глубина вложенности под-агентов управляется корневым `subagent_depth`, по умолчанию `1` — под-агентам создавать под-агентов по умолчанию нельзя. Для вложенности одновременно повышайте глубину и явно настройте `task` в правах соответствующего под-агента:
 
 ```jsonc
 {
@@ -386,24 +386,24 @@ export OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true
 }
 ```
 
-> 来源：[`runtime-flags.ts:43`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/effect/runtime-flags.ts#L43)、[`task.ts:43-61`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L43-L61)、[`task.ts:96-117`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L96-L117)、[`config.ts:84-86`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L84-L86)
+> Источники: [`runtime-flags.ts:43`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/effect/runtime-flags.ts#L43),[`task.ts:43-61`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L43-L61),[`task.ts:96-117`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L96-L117),[`config.ts:84-86`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L84-L86)
 
-### 实际使用示例
+### Практический пример использования
 
-#### 配置允许调用特定子代理
+#### Настройка вызовов конкретных под-агентов
 
 ```jsonc
 {
   "agent": {
     "orchestrator": {
-      "description": "任务编排 Agent，可调用专门子代理",
+      "description": "Agent-оркестратор задач, вызывает профильных под-агентов",
       "mode": "primary",
       "permission": {
         "task": {
-          "docs-writer": "allow",      // 允许文档写作
-          "code-reviewer": "allow",    // 允许代码审查
-          "general": "allow",           // 允许通用任务
-          "*": "deny"                 // 其他禁止
+          "docs-writer": "allow",      // Документация разрешена
+          "code-reviewer": "allow",    // Ревью кода разрешено
+          "general": "allow",           // Общие задачи разрешены
+          "*": "deny"                 // Остальное запрещено
         }
       }
     }
@@ -411,54 +411,54 @@ export OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true
 }
 ```
 
-#### Agent 内部调用 TaskTool
+#### Вызов TaskTool внутри Agent
 
 ```markdown
-# 伪代码示例
-主 Agent 收到：帮我写 API 文档
+# Псевдокод примера
+Главный Agent получил: напиши мне API-документацию
 
-1. 分析任务类型 → 确定需要 docs-writer 子代理
-2. 调用 TaskTool：
-   - description: "编写 API 文档"
-   - prompt: "为以下函数编写文档..."
+1. Разбор типа задачи → нужен под-агент docs-writer
+2. Вызов TaskTool:
+   - description: "Написание API-документации"
+   - prompt: "Напиши документацию для следующих функций..."
    - subagent_type: "docs-writer"
-3. 子代理执行 → 返回文档内容
-4. 主 Agent 接收结果 → 继续对话
+3. Под-агент выполняется → возвращает содержимое документации
+4. Главный Agent принимает результат → продолжает диалог
 ```
 
-#### 继续任务
+#### Продолжение задач
 
-当子代理需要分步执行时，可以传递上次返回的 `task_id` 继续之前的工作：
+Когда под-агенту нужно работать пошагово, передавайте возвращённый `task_id` для продолжения прошлой работы:
 
 ```
 TaskTool(
-  description: "完善文档",
-  prompt: "检查文档完整性并补充缺失内容",
+  description: "Доработать документацию",
+  prompt: "Проверь полноту документации и дополни недостающее",
   subagent_type: "docs-writer",
-  task_id: "abc123"  // 继续之前的任务
+  task_id: "abc123"  // Продолжить прошлую задачу
 )
 ```
 
-> **来源**：[`packages/opencode/src/tool/task.ts:43-172`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L43-L172)
+> **Источник**: [`packages/opencode/src/tool/task.ts:43-172`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L43-L172)
 
 ---
 
-## skill 权限：控制技能加载
+## Право skill: управление загрузкой навыков
 
-skill 权限控制 Agent 可以加载哪些技能。
+Право skill управляет, какие навыки умеет загружать Agent.
 
-### 配置示例
+### Пример конфигурации
 
 ```jsonc
 {
   "agent": {
     "restricted-agent": {
-      "description": "受限 Agent，只能使用指定技能",
+      "description": "Ограниченный Agent: только указанные навыки",
       "mode": "subagent",
       "permission": {
         "skill": {
-          "*": "deny",                   // 禁止所有技能
-          "docs-writer": "allow",        // 只允许文档技能
+          "*": "deny",                   // Все навыки запрещены
+          "docs-writer": "allow",        // Только навык документации
           "translator": "allow"
         }
       }
@@ -467,166 +467,166 @@ skill 权限控制 Agent 可以加载哪些技能。
 }
 ```
 
-> 来源：`skill.ts:15-21`
+> Источник: `skill.ts:15-21`
 
 ---
 
-## 内置安全规则
+## Встроенные правила безопасности
 
-OpenCode 默认配置了一些安全规则：
+В OpenCode по умолчанию настроен ряд правил безопасности:
 
-### .env 文件保护
+### Защита файлов .env
 
 ```jsonc
-// 内置默认配置
+// Встроенная конфигурация по умолчанию
 {
   "permission": {
     "read": {
       "*": "allow",
-      "*.env": "ask",           // .env 文件需确认（安全考虑）
-      "*.env.*": "ask",         // .env.xxx 也需确认
-      "*.env.example": "allow"  // 示例文件允许
+      "*.env": "ask",           // Файлы .env с подтверждением (ради безопасности)
+      "*.env.*": "ask",         // .env.xxx тоже с подтверждением
+      "*.env.example": "allow"  // Файлы-примеры разрешены
     }
   }
 }
 ```
 
-> 来源：`agent.ts:130-135`
+> Источник: `agent.ts:130-135`
 
-### doom_loop 检测
+### Детект doom_loop
 
-当同一工具被连续调用 3 次，且输入完全相同时，触发 doom_loop 检测。
+При троекратном вызове одного инструмента подряд с полностью одинаковым вводом срабатывает детект doom_loop.
 
 ```jsonc
 {
   "permission": {
-    "doom_loop": "ask"    // 默认值：提示用户确认
+    "doom_loop": "ask"    // По умолчанию: спросить пользователя
   }
 }
 ```
 
-### question 权限
+### Право question
 
-控制 Agent 是否能使用 question 工具向用户提问。
+Управляет, умеет ли Agent спрашивать пользователя инструментом question.
 
-| 默认值 | 说明 |
+| Значение по умолчанию | Описание |
 |--------|------|
-| subagent: `deny` | 防止 subagent 随意打扰用户 |
-| build agent: `allow` | 主 Agent 可以提问 |
+| subagent: `deny` | Под-агентам не докучать пользователю |
+| build agent: `allow` | Главный Agent спрашивать умеет |
 
-**使用场景**：当你需要 subagent 在遇到不确定时向你确认，可以设为 `allow`。
+**Сценарий использования**: когда под-агенту нужно подтверждение в неопределённости — задайте `allow`.
 
 ```jsonc
 {
   "agent": {
     "interactive-helper": {
       "permission": {
-        "question": "allow"    // 允许这个 subagent 提问
+        "question": "allow"    // Этому subagent спрашивать разрешено
       }
     }
   }
 }
 ```
 
-> 来源：`agent.ts:126`、`question.ts`
+> Источник: `agent.ts:126`,`question.ts`
 
-### external_directory 保护
+### Защита external_directory
 
-当 Agent 尝试访问项目目录之外的路径时：
+Когда Agent пытается обратиться к путям вне каталога проекта:
 
 ```jsonc
 {
   "permission": {
-    "external_directory": "ask"    // 默认值：提示用户确认
+    "external_directory": "ask"    // По умолчанию: спросить пользователя
   }
 }
 ```
 
-### plan_enter / plan_exit 权限
+### Права plan_enter и plan_exit
 
-控制 Agent 是否能切换计划模式：
+Управляют, умеет ли Agent переключать режим планирования:
 
-- **`plan_enter`**：进入计划模式（保留为权限键，但源码中无对应工具实现；用户通过 Tab 键切换到 plan agent 进入）
-- **`plan_exit`**：退出计划模式，切换到 build agent（有 `PlanExitTool` 工具实现）
+- **`plan_enter`**: вход в режим планирования (ключ права зарезервирован, но реализации инструмента в исходниках нет; переключением на plan agent служат клавиши Tab)
+- **`plan_exit`**: выход из режима планирования с переходом к build agent (реализация инструмента `PlanExitTool` есть)
 
-目标版本没有 `plan_enter` 工具，所以保留同名权限键也不能让 Build Agent 主动切换。Plan Agent 的 `plan_exit` 用于请求回到 Build，并按正常权限规则求值。
+В целевой версии инструмента `plan_enter` нет, поэтому одноимённый ключ прав не даст Build Agent активного переключения. `plan_exit` у Plan Agent запрашивает возврат в Build и вычисляется по обычным правилам прав.
 
 ```jsonc
 {
   "agent": {
     "plan": {
       "permission": {
-        "plan_exit": "allow"      // 允许 Plan Agent 请求回到 Build
+        "plan_exit": "allow"      // Разрешить Plan Agent проситься обратно в Build
       }
     }
   }
 }
 ```
 
-> 来源：[`plan.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/plan.ts#L13-L79)、[`registry.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/registry.ts#L215-L248)
+> Источники: [`plan.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/plan.ts#L13-L79),[`registry.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/registry.ts#L215-L248)
 
-### 废弃字段：tools
+### Устаревшее поле: tools
 
-⚠️ **`tools` 字段已废弃**，请使用 `permission` 字段代替。
+⚠️ **Поле `tools` deprecated**, вместо него используйте поле `permission`.
 
-**旧写法（已废弃）**：
+**Старое написание (deprecated)**:
 
 ```jsonc
 {
   "agent": {
     "my-agent": {
       "tools": {
-        "bash": false,      // 禁用 bash
-        "edit": true        // 允许编辑
+        "bash": false,      // Отключить bash
+        "edit": true        // Разрешить правку
       }
     }
   }
 }
 ```
 
-**新写法**：
+**Новое написание**:
 
 ```jsonc
 {
   "agent": {
     "my-agent": {
       "permission": {
-        "bash": "deny",     // 禁用 bash
-        "edit": "allow"     // 允许编辑
+        "bash": "deny",     // Отключить bash
+        "edit": "allow"     // Разрешить правку
       }
     }
   }
 }
 ```
 
-**迁移说明**：
-- `tools` 中的 `write`/`edit`/`patch` 映射到 `edit` 权限
-- 其他旧工具名可能被转换为同名 permission 键，但目标版本没有对应工具时不会产生可调用能力
-- `true` → `"allow"`，`false` → `"deny"`
-- 系统会自动转换旧配置，但建议手动更新
+**Пояснения к миграции**:
+- `tools` с `write`/`edit`/`patch` отображаются на право `edit`
+- Остальные старые имена инструментов могут превратиться в одноимённые ключи прав, но без соответствующих инструментов в целевой версии вызываемой способности не дадут
+- `true` → `"allow"`, `false` → `"deny"`
+- Система автоматически конвертирует старую конфигурацию, но рекомендуем обновить вручную
 
-> 来源：`packages/core/src/v1/config/agent.ts:71-76`
+> Источник: `packages/core/src/v1/config/agent.ts:71-76`
 
-### 子代理权限继承
+### Наследование прав под-агентами
 
-通过 Task tool 创建子会话时，能力以**子代理自己的权限**为基础，不会继承父 Agent 的 `allow` / `ask`。为避免子代理绕过父会话的安全边界，还会继承父会话的所有 `deny` 规则和全部 `external_directory` 规则。
+Дочерние сессии через Task tool создаются со способностями **по правам самого под-агента** и не наследуют `allow` / `ask` родителя. Чтобы под-агент не обходил границы безопасности родительской сессии, наследуются все правила `deny` родителя и все правила `external_directory`.
 
-此外还有两项默认拒绝：
+Кроме того действуют два умолчательных запрета:
 
-- 如果子代理自己的规则没有配置 `todowrite`，自动追加 `todowrite: deny`。
-- 如果子代理自己的规则没有配置 `task`，自动追加 `task: deny`。
+- Без собственных правил `todowrite` под-агенту автоматически дописывается `todowrite: deny`.
+- Без собственных правил `task` автоматически дописывается `task: deny`.
 
-这两项不是不可覆盖的硬编码禁用。显式配置对应权限后仍需满足 `subagent_depth`。配置在 `experimental.primary_tools` 中的工具则会继续对 Task 子会话追加 deny。
+Это не жёсткие неснимаемые запреты. Явная настройка соответствующих прав плюс `subagent_depth` снимают их. Инструменты из `experimental.primary_tools` продолжают дописывать deny дочерним сессиям Task.
 
-> 来源：[`subagent-permissions.ts:4-26`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/agent/subagent-permissions.ts#L4-L26)、[`task.ts:139-170`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L139-L170)
+> Источники: [`subagent-permissions.ts:4-26`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/agent/subagent-permissions.ts#L4-L26),[`task.ts:139-170`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/task.ts#L139-L170)
 
 ---
 
-## Agent 级别权限覆盖
+## Переопределение прав на уровне Agent
 
-在 Agent 配置中设置的权限会**覆盖**全局权限。
+Настройки прав в конфигурации Agent **перекрывают** глобальные права.
 
-### JSON 配置
+### Конфигурация JSON
 
 ```jsonc
 {
@@ -640,15 +640,15 @@ OpenCode 默认配置了一些安全规则：
     "build": {
       "permission": {
         "bash": {
-          "git push": "allow"       // build agent 额外允许 push
+          "git push": "allow"       // build agent дополнительно разрешён push
         }
       }
     },
     "plan": {
       "permission": {
         "bash": {
-          "*": "deny",              // plan agent 禁止所有命令
-          "git log*": "allow"       // 除了查看日志
+          "*": "deny",              // plan agent все команды запрещены
+          "git log*": "allow"       // Кроме просмотра лога
         }
       }
     }
@@ -656,11 +656,11 @@ OpenCode 默认配置了一些安全规则：
 }
 ```
 
-### Markdown 配置
+### Конфигурация Markdown
 
 ```markdown
 ---
-description: 只读审计 Agent
+description: Аудитор кода только для чтения
 mode: subagent
 permission:
   edit: deny
@@ -671,19 +671,19 @@ permission:
   webfetch: deny
 ---
 
-只分析代码，不做任何修改。
+Только анализируй код и предлагай изменения, ничего не выполняй.
 ```
 
 ---
 
-## 安全最佳实践
+## Лучшие практики безопасности
 
-### 1. 最小权限原则
+### 1. Принцип минимальных привилегий
 
-只授予 Agent 完成任务所需的最小权限。
+Выдавайте Agent лишь минимум прав для задачи.
 
 ```jsonc
-// ❌ 不好：过于宽松
+// ❌ Плохо: слишком свободно
 {
   "agent": {
     "my-agent": {
@@ -692,7 +692,7 @@ permission:
   }
 }
 
-// ✅ 好：明确列出需要的权限
+// ✅ Хорошо: явно перечислить нужные права
 {
   "agent": {
     "my-agent": {
@@ -708,10 +708,10 @@ permission:
 }
 ```
 
-### 2. 显式列出允许的命令
+### 2. Явно перечисляйте разрешённые команды
 
 ```jsonc
-// ❌ 不好：允许所有，然后禁止危险的
+// ❌ Плохо: разрешить всё, потом запрещать опасное
 {
   "permission": {
     "bash": {
@@ -721,7 +721,7 @@ permission:
   }
 }
 
-// ✅ 好：禁止所有，然后允许需要的
+// ✅ Хорошо: запретить всё, потом разрешать нужное
 {
   "permission": {
     "bash": {
@@ -733,66 +733,66 @@ permission:
 }
 ```
 
-### 3. 敏感操作设为 ask
+### 3. Чувствительные действия — через ask
 
 ```jsonc
 {
   "permission": {
     "bash": {
       "*": "allow",
-      "git push*": "ask",        // 推送需确认
-      "npm publish*": "ask",     // 发布需确认
-      "docker *": "ask"          // Docker 操作需确认
+      "git push*": "ask",        // Пуш с подтверждением
+      "npm publish*": "ask",     // Публикация с подтверждением
+      "docker *": "ask"          // Docker-действия с подтверждением
     }
   }
 }
 ```
 
-### 4. 定期审查权限配置
+### 4. Регулярно ревьюйте конфигурацию прав
 
-检查清单：
-- [ ] 是否有不再需要的权限？
-- [ ] 敏感操作是否都设为 ask？
-- [ ] 新增的 Agent 权限是否合理？
+Чек-лист проверки:
+- [ ] Нет ли лишних прав?
+- [ ] Чувствительные действия — через ask?
+- [ ] Права новых Agent разумны?
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| 权限不生效 | 规则顺序错误 | `*` 放最前面，具体规则放后面 |
-| subagent 仍能被调用 | 用户 @ 调用不受限 | task 权限只影响 Task tool |
-| bash 命令匹配失败 | 匹配的是解析后的命令 | 检查实际命令格式（含参数） |
-| .env 无需确认就读取 | 自定义规则覆盖了默认 | 如需保护，设为 .env ask |
-| 权限太严格 | 设了 `*: deny` 忘了允许必要的 | 逐条添加允许规则 |
+| Права не действуют | Неверный порядок правил | `*` — первым, конкретные правила — после |
+| subagent всё равно вызывается | Ручные @-вызовы не ограничены | Право task влияет только на Task tool |
+| Команда bash не сопоставляется | Сопоставляется разобранная команда | Проверьте реальный формат команды (с параметрами) |
+| .env читается без подтверждения | Свои правила перекрыли умолчания | Для защиты задайте .env в ask |
+| Слишком строгие права | Задали `*: deny` и забыли разрешить нужное | Поштучно добавляйте разрешающие правила |
 
 ---
 
-## 与 5.5 权限管控的关系
+## Связь с уроком 5.5 «Контроль прав»
 
-本章专注于 **Agent 级别的权限配置**。
+Эта глава — про права **уровня Agent**.
 
-全局权限配置和更多细节，请参考 [5.5 权限管控](./05-permissions)。
-
----
-
-## 本课小结
-
-你学会了：
-
-1. **权限系统架构**：三种动作、配置层级、最后匹配获胜
-2. **常用权限类型**：bash、edit、task、skill、question、plan_exit 等
-3. **细粒度控制**：使用对象语法和通配符
-4. **TaskTool 机制**：子代理调用、参数定义、执行流程
-5. **子代理边界**：使用自身权限，继承父会话 deny / external_directory，并受默认深度限制
-6. **内置安全规则**：.env 保护、doom_loop、external_directory
-7. **安全最佳实践**：最小权限、显式允许、敏感操作 ask
+Глобальная настройка прав и подробности — в уроке [5.5 Контроль прав](./05-permissions).
 
 ---
 
-## 下一课预告
+## Итоги урока
 
-> 配置好权限，还有更多高级技巧：工具接口设计、透传参数、调试方法。
+Вы научились:
 
-**下一课**：[5.2d Agent 高级技巧](./02d-agent-advanced)
+1. **Архитектуре системы прав**: три действия, уровни конфигурации, победа последнего совпавшего
+2. **Частым типам прав**: bash, edit, task, skill, question, plan_exit и др.
+3. **Точечному управлению**: объектный синтаксис и wildcard-шаблоны
+4. **Механизму TaskTool**: вызовы под-агентов, определение параметров, процесс выполнения
+5. **Границам под-агентов**: собственные права, наследование deny и external_directory родителя, лимит глубины по умолчанию
+6. **Встроенным правилам безопасности**: защита .env, doom_loop, external_directory
+7. **Лучшим практикам безопасности**: минимум привилегий, явные разрешения, ask для чувствительного
+
+---
+
+## Анонс следующего урока
+
+> Настроили права — дальше продвинутые приёмы: дизайн интерфейсов инструментов, сквозные параметры, методы отладки.
+
+**Следующий урок**: [5.2d Продвинутые приёмы Agent](./02d-agent-advanced)

@@ -1,67 +1,67 @@
 ---
-title: 5.4 快捷命令
-subtitle: 一键触发常用任务
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.4 Быстрые команды
+subtitle: Запуск частых задач в один шаг
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.4"
-duration: 15 分钟
-practice: 15 分钟
-level: 进阶
-description: 自定义斜杠命令，用 /命令名 一键触发复杂任务，提升操作效率。
+duration: 15 минут
+practice: 15 минут
+level: Продвинутый
+description: "Свои слэш-команды: запуск сложных задач командой `/имя-команды` для скорости действий."
 tags:
-  - 命令
-  - 快捷
+  - Команды
+  - Быстрые
 prerequisite:
-  - 5.2 自定义 Agent
+  - 5.2 Свои Agent
 ---
 
-# 5.4 快捷命令
+# 5.4 Быстрые команды
 
-> **一句话总结**：自定义斜杠命令，用 `/命令名` 一键触发复杂任务。
+> **Коротко**: свои слэш-команды запускают сложные задачи командой `/имя-команды`.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/04-commands-notes.mini.jpeg" alt="快捷命令学霸笔记" data-zoom-src="/images/5-advanced/04-commands-notes.jpeg" />
-
----
-
-## 学完你能做什么
-
-- 创建自定义斜杠命令（JSON 或 Markdown 两种方式）
-- 使用参数、变量和 Shell 输出
-- 指定命令使用的 Agent 和模型
-- 覆盖内置命令
+<img src="/images/5-advanced/04-commands-notes.mini.jpeg" alt="Шпаргалка урока: быстрые команды" data-zoom-src="/images/5-advanced/04-commands-notes.jpeg" />
 
 ---
 
-## 你现在的困境
+## Что вы сможете после урока
 
-- 常用操作没有快捷方式
-- 每次都要输入完整的提示词
-- 内置命令不够用，想自己加
-
----
-
-## 什么时候用这一招
-
-- 当你需要：一键触发常用任务
-- 而且不想：每次都手打一长串命令
+- Создавать свои слэш-команды (способами JSON и Markdown)
+- Использовать параметры, переменные и вывод Shell
+- Задавать команды Agent и модели
+- Перекрывать встроенные команды
 
 ---
 
-## 命令文件位置
+## С какими трудностями вы столкнулись
 
-| 位置 | 作用范围 | 说明 |
+- У частых действий нет быстрых способов
+- Каждый раз приходится вводить длинные промпты целиком
+- Встроенных команд не хватает, хочется своих
+
+---
+
+## Когда это пригодится
+
+- Когда нужно: запускать частые задачи в один шаг
+- И не хочется: каждый раз вручную набирать длинные команды
+
+---
+
+## Где лежат файлы команд
+
+| Место | Область | Пояснение |
 |-----|---------|------|
-| `.opencode/command/**/*.md` | 当前项目 | 支持嵌套目录 |
-| `.opencode/commands/**/*.md` | 当前项目 | `commands` 复数形式也支持 |
-| `~/.config/opencode/command/**/*.md` | 全局 | 所有项目共享 |
+| `.opencode/command/**/*.md` | Текущий проект | Поддерживаются вложенные каталоги |
+| `.opencode/commands/**/*.md` | Текущий проект | Форма множественного числа `commands` тоже поддерживается |
+| `~/.config/opencode/command/**/*.md` | Глобально | Общий для всех проектов |
 
-> **来源**：[config.ts#L191](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/config.ts#L191)
+> **Источник**: [config.ts#L191](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/config.ts#L191)
 
-嵌套目录示例：
+Пример вложенных каталогов:
 
 ```
 .opencode/
@@ -76,38 +76,38 @@ prerequisite:
 
 ---
 
-## 两种配置方式
+## Два способа настройки
 
-### 方式一：Markdown 文件（推荐）
+### Способ 1: файлы Markdown (рекомендуется)
 
-创建 `.opencode/command/test.md`：
+Создайте `.opencode/command/test.md`:
 
 ```markdown
 ---
-description: 运行测试并显示覆盖率
+description: Запуск тестов с отчётом о покрытии
 agent: build
 model: anthropic/claude-opus-4-5-thinking
 ---
 
-运行完整的测试套件，生成覆盖率报告。
-重点关注失败的测试并提供修复建议。
+Запусти полный набор тестов и создай отчёт о покрытии.
+Особое внимание упавшим тестам с рекомендациями по исправлению.
 ```
 
-使用：`/test`
+Использование: `/test`
 
-### 方式二：JSON 配置
+### Способ 2: конфигурация JSON
 
-在 `opencode.jsonc` 中配置：
+Настройка в `opencode.jsonc`:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
   "command": {
-    // 键名就是命令名
+    // Имя ключа и есть имя команды
     "test": {
-      // template 是必需字段
-      "template": "运行完整的测试套件，生成覆盖率报告。\n重点关注失败的测试并提供修复建议。",
-      "description": "运行测试并显示覆盖率",
+      // template — обязательное поле
+      "template": "Запусти полный набор тестов и создай отчёт о покрытии.\nОсобое внимание упавшим тестам с рекомендациями по исправлению.",
+      "description": "Запуск тестов с отчётом о покрытии",
       "agent": "build",
       "model": "anthropic/claude-opus-4-5-thinking"
     }
@@ -115,36 +115,36 @@ model: anthropic/claude-opus-4-5-thinking
 }
 ```
 
-使用：`/test`
+Использование: `/test`
 
-> **两种方式对比**：Markdown 更适合复杂提示词（多行、格式化）；JSON 适合简单命令或批量管理。
+> **Сравнение двух способов**: Markdown удобнее для сложных промптов (многострочность, форматирование); JSON — для простых команд и пакетного ведения.
 
 ---
 
-## 配置选项详解
+## Подробно об опциях конфигурации
 
-### template（必需）
+### template (обязательно)
 
-命令执行时发送给 LLM 的提示词模板。
+Шаблон промпта, отправляемый LLM при выполнении команды.
 
-- **JSON 配置**：必需字段
-- **Markdown 配置**：文件正文就是 template，无需显式声明
+- **Конфигурация JSON**: обязательное поле
+- **Конфигурация Markdown**: шаблоном является тело файла, объявлять явно не нужно
 
-> **来源**：[config.ts#L450](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/config.ts#L450)
+> **Источник**: [config.ts#L450](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/config.ts#L450)
 
-### description（可选）
+### description (необязательно)
 
-命令描述，显示在 TUI 的命令列表中。
+Описание команды, показывается в списке команд TUI.
 
 ```markdown
 ---
-description: 快速代码审查
+description: Быстрое ревью кода
 ---
 ```
 
-### agent（可选）
+### agent (необязательно)
 
-指定执行此命令的 Agent。
+Agent для выполнения этой команды.
 
 ```markdown
 ---
@@ -152,16 +152,16 @@ agent: plan
 ---
 ```
 
-**行为规则**：
+**Правила поведения**:
 
-- 如果指定的是 subagent（mode=subagent），命令默认触发子代理调用
-- 未指定时使用当前活跃的 Agent
+- Указанный subagent (mode=subagent) — команда по умолчанию вызывает под-агента
+- Без указания используется текущий активный Agent
 
-> **来源**：[官方文档 - Agent](https://opencode.ai/docs/commands#agent)
+> **Источник**: [официальная документация — Agent](https://opencode.ai/docs/commands#agent)
 
-### model（可选）
+### model (необязательно)
 
-覆盖此命令使用的模型。
+Переопределение модели для этой команды.
 
 ```markdown
 ---
@@ -169,9 +169,9 @@ model: anthropic/claude-opus-4-5-thinking
 ---
 ```
 
-### subtask（可选）
+### subtask (необязательно)
 
-强制命令作为子任务运行。
+Принудительный запуск команды как подзадачи.
 
 ```markdown
 ---
@@ -179,247 +179,247 @@ subtask: true
 ---
 ```
 
-**使用场景**：
+**Сценарии использования**:
 
-- 不希望命令执行过程污染主对话上下文
-- 即使 agent 的 mode 设置为 `primary`，也强制作为 subagent 执行
+- Не хочется засорять главный контекст диалога выполнением команды
+- Даже при `mode` агента `primary` выполнить принудительно как subagent
 
-> **来源**：[官方文档 - Subtask](https://opencode.ai/docs/commands#subtask)
+> **Источник**: [официальная документация — Subtask](https://opencode.ai/docs/commands#subtask)
 
 ---
 
-## 提示词模板语法
+## Синтаксис шаблонов промптов
 
-### $ARGUMENTS - 全部参数
+### $ARGUMENTS — все параметры
 
-将命令后的所有内容作为参数传入。
+Всё содержимое после команды передаётся параметрами.
 
 ```markdown
 ---
-description: 创建 React 组件
+description: Создание React-компонента
 ---
 
-创建一个名为 $ARGUMENTS 的 React 组件，包含 TypeScript 类型支持。
+Создай React-компонент с именем $ARGUMENTS и поддержкой типов TypeScript.
 ```
 
-使用：`/component Button` → 将 `$ARGUMENTS` 替换为 `Button`
+Использование: `/component Button` → `$ARGUMENTS` заменится на `Button`
 
-### $1, $2, $3... - 位置参数
+### $1, $2, $3... — позиционные параметры
 
-按位置引用各个参数。
+Обращение к параметрам по позициям.
 
 ```markdown
 ---
-description: 创建指定文件
+description: Создание указанного файла
 ---
 
-在目录 $2 中创建名为 $1 的文件，内容为：$3
+Создай в каталоге $2 файл с именем $1 и содержимым: $3
 ```
 
-使用：
+Использование:
 
 ```bash
 /create-file config.json src "{ \"key\": \"value\" }"
 ```
 
-替换结果：
+Результат подстановки:
 
 - `$1` → `config.json`
 - `$2` → `src`
 - `$3` → `{ "key": "value" }`
 
-### !`command` - Shell 命令输出
+### !`command` — вывод Shell-команд
 
-执行 Shell 命令并将输出嵌入提示词。
+Выполнение Shell-команды со встраиванием вывода в промпт.
 
 ```markdown
 ---
-description: 分析测试覆盖率
+description: Разбор покрытия тестами
 ---
 
-当前测试结果：
+Текущие результаты тестов:
 !`npm test`
 
-根据这些结果，建议提升覆盖率的方法。
+По этим результатам предложи способы поднять покрытие.
 ```
 
-另一个示例：
+Другой пример:
 
 ```markdown
 ---
-description: 审查最近变更
+description: Ревью свежих изменений
 ---
 
-最近的 Git 提交：
+Свежие коммиты Git:
 !`git log --oneline -10`
 
-请审查这些变更并提出改进建议。
+Проверь эти изменения и предложи улучшения.
 ```
 
-> 命令在项目根目录执行，输出成为提示词的一部分。
+> Команды выполняются в корне проекта, вывод становится частью промпта.
 
-### @file - 文件引用
+### @file — ссылки на файлы
 
-引用文件内容。
+Ссылки на содержимое файлов.
 
 ```markdown
 ---
-description: 审查组件
+description: Ревью компонента
 ---
 
-审查 @src/components/Button.tsx 组件。
-检查性能问题并提出改进建议。
+Проверь компонент @src/components/Button.tsx.
+Найди проблемы производительности и предложи улучшения.
 ```
 
-**支持的写法**：
+**Поддерживаемые записи**:
 
-- `@src/file.ts` - 相对路径
-- `@./relative/path.ts` - 显式相对路径
+- `@src/file.ts` — относительный путь
+- `@./relative/path.ts` — явный относительный путь
 
-> **来源**：[markdown.ts#L6](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/markdown.ts#L6)
+> **Источник**: [markdown.ts#L6](https://github.com/anomalyco/opencode/blob/main/packages/opencode/src/config/markdown.ts#L6)
 
 ---
 
-## 完整示例
+## Полный пример
 
-### 代码审查命令
+### Команда ревью кода
 
-`.opencode/command/review.md`：
+`.opencode/command/review.md`:
 
 ```markdown
 ---
-description: 审查指定文件的代码质量
+description: Проверка качества кода указанного файла
 agent: plan
 ---
 
 @$1
 
-请审查这个文件的代码质量，重点关注：
-1. 代码规范和命名
-2. 潜在 Bug
-3. 性能问题
-4. 可维护性
+Проверь качество кода этого файла, фокус:
+1. Нормы кода и именования
+2. Потенциальные баги
+3. Проблемы производительности
+4. Поддерживаемость
 ```
 
-使用：`/review src/main.ts`
+Использование: `/review src/main.ts`
 
-### 智能 Commit 命令
+### Умная команда Commit
 
-`.opencode/command/commit.md`：
+`.opencode/command/commit.md`:
 
 ```markdown
 ---
-description: 根据变更生成 Commit 消息
+description: Создание сообщения Commit по изменениям
 ---
 
-根据以下变更生成 commit 消息：
+Создай сообщение commit по следующим изменениям:
 
 !`git diff --staged`
 
-要求：
-- 遵循 Conventional Commits 规范
-- 简洁明了，说明"为什么"而非"做了什么"
+Требования:
+- Следуй спецификации Conventional Commits
+- Коротко и ясно: «почему», а не «что сделано»
 ```
 
-使用：`/commit`
+Использование: `/commit`
 
-### 翻译命令
+### Команда перевода
 
-`.opencode/command/translate.md`：
+`.opencode/command/translate.md`:
 
 ```markdown
 ---
-description: 翻译为中文
+description: Перевод на китайский
 subtask: true
 ---
 
-请将以下内容翻译为中文：
+Переведи на китайский следующее:
 
 $ARGUMENTS
 ```
 
-使用：`/translate Hello World`
+Использование: `/translate Hello World`
 
-> 使用 `subtask: true` 避免翻译内容污染主对话上下文。
+> `subtask: true` не даёт содержимому перевода засорять главный контекст диалога.
 
 ---
 
-## 覆盖内置命令
+## Перекрытие встроенных команд
 
-创建同名文件即可覆盖内置命令。
+Создайте одноимённый файл — встроенная команда перекроется.
 
-### 可覆盖的内置命令
+### Перекрываемые встроенные команды
 
-| 命令 | 功能 | 别名 |
+| Команда | Функция | Алиасы |
 |-----|------|------|
-| `/connect` | 添加 Provider | - |
-| `/compact` | 压缩当前会话 | `/summarize` |
-| `/details` | 切换工具执行详情 | - |
-| `/editor` | 打开外部编辑器 | - |
-| `/exit` | 退出 OpenCode | `/quit`, `/q` |
-| `/export` | 导出对话为 Markdown | - |
-| `/help` | 显示帮助 | - |
-| `/init` | 创建/更新 AGENTS.md | - |
-| `/models` | 列出可用模型 | - |
-| `/new` | 新建会话 | `/clear` |
-| `/redo` | 恢复已撤销的会话内容和关联文件 | - |
-| `/sessions` | 列出/切换会话 | `/resume`, `/continue` |
-| `/share` | 分享会话 | - |
-| `/themes` | 列出主题 | - |
-| `/undo` | 回到上一条用户消息并回滚关联文件 | - |
-| `/unshare` | 取消分享 | - |
+| `/connect` | Добавление провайдера | - |
+| `/compact` | Сжатие текущей сессии | `/summarize` |
+| `/details` | Переключение деталей выполнения инструментов | - |
+| `/editor` | Открытие внешнего редактора | - |
+| `/exit` | Выход из OpenCode | `/quit`, `/q` |
+| `/export` | Экспорт диалога в Markdown | - |
+| `/help` | Показ помощи | - |
+| `/init` | Создание и обновление AGENTS.md | - |
+| `/models` | Список доступных моделей | - |
+| `/new` | Новая сессия | `/clear` |
+| `/redo` | Повтор отменённого содержимого сессии и связанных файлов | - |
+| `/sessions` | Список и переключение сессий | `/resume`, `/continue` |
+| `/share` | Поделиться сессией | - |
+| `/themes` | Список тем | - |
+| `/undo` | Возврат к прошлому сообщению пользователя с откатом связанных файлов | - |
+| `/unshare` | Отмена шаринга | - |
 
-> **来源**：[官方文档 - TUI Commands](https://opencode.ai/docs/tui#commands)
+> **Источник**: [официальная документация — команды TUI](https://opencode.ai/docs/tui#commands)
 
-`/undo` 和 `/redo` 不只是隐藏或恢复消息，也会通过快照回滚或恢复关联文件。若主配置设置了 `"snapshot": false`，会话仍可撤销/重做，但文件不会随之恢复。
+Команды `/undo` и `/redo` не просто прячут или восстанавливают сообщения — через снапшоты откатывают и восстанавливают связанные файлы. При `"snapshot": false` в главной конфигурации сессия всё равно отменяется и повторяется, но файлы вместе с ней не восстанавливаются.
 
-> **源码（v1.18.22）**：[`session/revert.ts:38-98`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98)、[`config.ts:52-55`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55)
+> **Исходники (v1.18.22)**: [`session/revert.ts:38-98`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98),[`config.ts:52-55`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55)
 
-### 覆盖示例
+### Пример перекрытия
 
-`.opencode/command/help.md`：
+`.opencode/command/help.md`:
 
 ```markdown
 ---
-description: 项目专属帮助
+description: Помощь по проекту
 ---
 
-这是项目专属的帮助信息。
+Это помощь специально для проекта.
 
-## 常用命令
+## Частые команды
 
-- /review <file> - 代码审查
-- /commit - 智能 Commit
-- /translate <text> - 翻译
+- /review <file> — ревью кода
+- /commit — умный Commit
+- /translate <text> — перевод
 ```
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| 命令不显示 | 文件不在正确目录 | 确保在 `command/` 或 `commands/` 目录下 |
-| 命令名错误 | 文件名包含特殊字符 | 命令名来自文件路径，用 `-` 代替空格 |
-| 参数不生效 | 语法错误 | 使用 `$ARGUMENTS` 或 `$1`、`$2` |
-| JSON 配置报错 | 缺少 template | `template` 是 JSON 配置的必需字段 |
-| 嵌套目录命令名 | 不了解规则 | 路径 `git/commit.md` → 命令 `/git/commit` |
-| 覆盖命令失败 | 优先级问题 | 项目级命令优先于全局命令 |
-| Shell 命令失败 | 路径问题 | 命令在项目根目录执行 |
+| Команда не видна | Файл не в том каталоге | Убедитесь, что внутри каталога `command/` или `commands/` |
+| Неверное имя команды | Спецсимволы в имени файла | Имя команды берётся из пути файла, пробелы замените на `-` |
+| Параметры не работают | Ошибка синтаксиса | Используйте `$ARGUMENTS` или `$1`, `$2` |
+| Ошибка конфигурации JSON | Нет template | `template` — обязательное поле JSON-конфигурации |
+| Вложенные каталоги — непонятные имена команд | Незнание правил | Путь `git/commit.md` → команда `/git/commit` |
+| Не удаётся перекрыть | Проблема приоритетов | Команды уровня проекта приоритетнее глобальных |
+| Ошибка Shell-команд | Проблема путей | Команды выполняются в корне проекта |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. 两种配置方式：Markdown 文件和 JSON 配置
-2. 使用参数（`$ARGUMENTS`、`$1`）和 Shell 输出（`` !`cmd` ``）
-3. 配置选项：`description`、`agent`、`model`、`subtask`
-4. 覆盖内置命令
+1. Двум способам конфигурации: файлы Markdown и конфигурация JSON
+2. Параметрам (`$ARGUMENTS`, `$1`) и выводу Shell (`` !`cmd` ``)
+3. Опциям конфигурации: `description`, `agent`, `model`, `subtask`
+4. Перекрытию встроенных команд
 
 ---
 
-## 下一课预告
+## Анонс следующего урока
 
-> 下一课我们将学习权限管控。
+> В следующем уроке займёмся контролем прав.

@@ -132,16 +132,16 @@ opencode upgrade --method npm
 
 **Отредактируйте файл конфигурации:**
 
-**macOS/Linux：**
+**macOS/Linux:**
 
 ```bash
-# 用你喜欢的编辑器打开
+# Открой в любимом редакторе
 vim ~/.config/opencode/opencode.json
-# 或
+# или
 code ~/.config/opencode/opencode.json
 ```
 
-**Windows：**
+**Windows:**
 
 ```powershell
 notepad $env:USERPROFILE\.config\opencode\opencode.json
@@ -235,21 +235,21 @@ error: rate limit exceeded
 **Способ 1: подождать около часа и повторить попытку**
 
 ```bash
-# GitHub API 的 rate limit 每小时重置一次
+# Лимит GitHub API сбрасывается раз в час
 opencode upgrade
 ```
 
 **Способ 2: указать версию вручную (обойти обращение к API)**
 
 ```bash
-# 直接指定版本号，不调用 latest() API
+# Указываем версию напрямую, без вызова latest() API
 opencode upgrade 1.1.6
 ```
 
 **Способ 3: установить через npm (если есть Node.js)**
 
 ```bash
-# npm registry 没有 rate limit 限制
+# У npm registry лимитов нет
 npm install -g opencode-ai@latest
 ```
 

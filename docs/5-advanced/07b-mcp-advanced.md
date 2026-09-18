@@ -1,54 +1,54 @@
 ---
-title: 5.7b MCP 进阶
-subtitle: OAuth、权限管理与常用服务
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.7b MCP — продвинутый уровень
+subtitle: OAuth, управление правами и частые сервисы
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.7b"
-duration: 20 分钟
-practice: 20 分钟
-level: 进阶
-description: 学习 MCP OAuth 认证、权限管理、常用服务集成，构建安全的扩展体系。
+duration: 20 минут
+practice: 20 минут
+level: Продвинутый
+description: Изучите OAuth-аутентификацию MCP, управление правами и интеграцию частых сервисов — постройте безопасную систему расширений.
 tags:
   - MCP
   - OAuth
-  - 权限管理
+  - Управление правами
 prerequisite:
-  - 5.7a MCP 基础
-  - 5.5 权限管控
+  - 5.7a Основы MCP
+  - 5.5 Контроль прав
 ---
 
-# 5.7b MCP 进阶
+# 5.7b MCP — продвинутый уровень
 
-> 💡 **一句话总结**：掌握 OAuth 认证、权限管理和常用 MCP 服务配置。
+> 💡 **Коротко**: освойте OAuth-аутентификацию, управление правами и настройку частых MCP-сервисов.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/07b-mcp-advanced-notes.mini.jpeg" alt="MCP进阶学霸笔记" data-zoom-src="/images/5-advanced/07b-mcp-advanced-notes.jpeg" />
-
----
-
-## 学完你能做什么
-
-- 使用 OAuth 认证连接安全服务
-- 管理 MCP 工具的权限和启用状态
-- 在规则文件中集成 MCP 使用
-- 配置常用 MCP 服务
+<img src="/images/5-advanced/07b-mcp-advanced-notes.mini.jpeg" alt="Шпаргалка урока: MCP — продвинутый уровень" data-zoom-src="/images/5-advanced/07b-mcp-advanced-notes.jpeg" />
 
 ---
 
-## OAuth 认证
+## Что вы сможете после урока
 
-OpenCode 自动处理 OAuth 认证流程：
+- Подключать защищённые сервисы через OAuth-аутентификацию
+- Управлять правами и состоянием включения MCP-инструментов
+- Интегрировать MCP в файлы правил
+- Настраивать частые MCP-сервисы
 
-1. 检测到 401 响应，启动 OAuth 流程
-2. 使用 **动态客户端注册 (RFC 7591)**（如服务器支持）
-3. Token 安全存储在 `~/.local/share/opencode/mcp-auth.json`
+---
 
-### 自动认证
+## OAuth-аутентификация
 
-大多数情况下无需特殊配置：
+OpenCode автоматически отрабатывает OAuth-процесс:
+
+1. Видит ответ 401 и запускает OAuth-процесс
+2. Использует **динамическую регистрацию клиента (RFC 7591)** (если сервер поддерживает)
+3. Безопасно хранит токены в `~/.local/share/opencode/mcp-auth.json`
+
+### Автоаутентификация
+
+В большинстве случаев особая настройка не нужна:
 
 ```jsonc
 {
@@ -61,11 +61,11 @@ OpenCode 自动处理 OAuth 认证流程：
 }
 ```
 
-首次使用时 OpenCode 会自动提示认证。
+При первом использовании OpenCode сам предложит аутентификацию.
 
-### 预注册客户端
+### Предрегистрация клиента
 
-如果服务器不支持动态注册，需要配置客户端凭证：
+Если сервер не поддерживает динамическую регистрацию, задайте credentials клиента:
 
 ```jsonc
 {
@@ -83,34 +83,34 @@ OpenCode 自动处理 OAuth 认证流程：
 }
 ```
 
-### 管理命令
+### Команды управления
 
 ```bash
-# 手动触发认证
+# Вручную запустить аутентификацию
 opencode mcp auth my-oauth-server
 
-# 查看所有服务器认证状态
+# Посмотреть статус аутентификации всех серверов
 opencode mcp auth list
 
-# 列出所有 MCP 服务器
+# Список всех MCP-серверов
 opencode mcp list
 
-# 移除存储的凭据
+# Удалить сохранённые credentials
 opencode mcp logout my-oauth-server
 
-# 调试连接和 OAuth 流程
+# Отладить подключение и OAuth-процесс
 opencode mcp debug my-oauth-server
 ```
 
-### 调试命令详解
+### Разбор команды debug
 
-当 MCP 连接出问题时，用 `debug` 命令诊断：
+Когда с MCP-подключением проблемы — диагностируйте командой `debug`:
 
 ```bash
 opencode mcp debug my-oauth-server
 ```
 
-**输出示例**：
+**Пример вывода**:
 
 ```
 MCP OAuth Debug
@@ -127,26 +127,26 @@ HTTP response: 200 OK
 ✓ Server responded successfully
 ```
 
-**状态含义**：
+**Что значат статусы**:
 
-| 状态 | 说明 |
+| Статус | Описание |
 |------|------|
-| `authenticated` | 已认证，可以正常使用 |
-| `expired` | Token 已过期，需要重新认证 |
-| `not authenticated` | 未认证，需要运行 `opencode mcp auth` |
+| `authenticated` | Аутентифицирован, можно нормально пользоваться |
+| `expired` | Токен просрочен, нужна повторная аутентификация |
+| `not authenticated` | Не аутентифицирован, выполните `opencode mcp auth` |
 
-### 服务器状态图标
+### Иконки состояния серверов
 
-`opencode mcp list` 输出中的图标含义：
+Что значат иконки в выводе `opencode mcp list`:
 
-| 图标 | 状态 | 说明 |
+| Иконка | Состояние | Описание |
 |------|------|------|
-| ✓ | connected | 已连接，工具可用 |
-| ○ | disabled | 已禁用，`enabled: false` |
-| ⚠ | needs_auth | 需要 OAuth 认证 |
-| ✗ | failed | 连接失败，查看错误信息 |
+| ✓ | connected | Подключено, инструменты доступны |
+| ○ | disabled | Отключено, `enabled: false` |
+| ⚠ | needs_auth | Нужна OAuth-аутентификация |
+| ✗ | failed | Ошибка подключения, смотрите текст ошибки |
 
-**示例输出**：
+**Пример вывода**:
 
 ```
 MCP Servers
@@ -161,9 +161,9 @@ MCP Servers
     Connection timeout
 ```
 
-### 禁用 OAuth
+### Отключение OAuth
 
-如果服务器使用 API Key 而非 OAuth：
+Если сервер использует API-ключ вместо OAuth:
 
 ```jsonc
 {
@@ -182,15 +182,15 @@ MCP Servers
 
 ---
 
-## 工具权限管理
+## Управление правами инструментов
 
 <AdInArticle />
 
-MCP 工具注册时使用 `{服务器名}_{工具名}` 格式命名。
+При регистрации MCP-инструменты именуются в формате `{имя-сервера}_{имя-инструмента}`.
 
-### 全局禁用
+### Глобальное отключение
 
-使用 `permission` 配置禁用 MCP 工具：
+Отключайте MCP-инструменты конфигом `permission`:
 
 ```jsonc
 {
@@ -210,7 +210,7 @@ MCP 工具注册时使用 `{服务器名}_{工具名}` 格式命名。
 }
 ```
 
-使用通配符批量禁用：
+Пакетное отключение wildcard'ами:
 
 ```jsonc
 {
@@ -220,9 +220,9 @@ MCP 工具注册时使用 `{服务器名}_{工具名}` 格式命名。
 }
 ```
 
-### 按 Agent 启用
+### Включение для отдельных Agent
 
-全局禁用后，在特定 Agent 中启用：
+После глобального отключения включите в конкретном Agent:
 
 ```jsonc
 {
@@ -245,107 +245,107 @@ MCP 工具注册时使用 `{服务器名}_{工具名}` 格式命名。
 }
 ```
 
-### 通配符规则
+### Правила wildcard'ов
 
-- `*` 匹配零个或多个任意字符
-- `?` 匹配正好一个字符
-- 其他字符字面匹配
+- `*` покрывает ноль и более любых символов
+- `?` покрывает ровно один символ
+- Остальные символы match'атся буквально
 
 ---
 
-## 在规则文件中集成
+## Интеграция в файлы правил
 
-在 `AGENTS.md` 或 `.opencode/agents/*.md` 中配置默认使用 MCP：
+В `AGENTS.md` или `.opencode/agents/*.md` настройте использование MCP по умолчанию:
 
 ```markdown
-## MCP 使用规则
+## Правила использования MCP
 
-当需要查询文档时，使用 `context7` 工具。
+Когда нужно искать по документации — используй инструмент `context7`.
 
-当不确定如何实现某功能时，使用 `gh_grep` 搜索 GitHub 代码示例。
+Когда не уверен, как реализовать функцию, — ищи примеры кода через `gh_grep`.
 ```
 
-这样 AI 会自动选择合适的 MCP 工具，无需每次在提示词中指定。
+Так AI сам выберет подходящий MCP-инструмент без указаний в каждом промпте.
 
 ---
 
-## 工具自动发现与更新
+## Автообнаружение и обновление инструментов
 
-### 工具命名规则
+### Правила именования инструментов
 
-MCP 工具注册时使用 `{服务器名}_{工具名}` 格式：
+MCP-инструменты регистрируются в формате `{имя-сервера}_{имя-инструмента}`:
 
 ```
-filesystem     服务器的 read_file 工具 → filesystem_read_file
-context7 服务器的 search 工具  → context7_search
+Инструмент read_file сервера filesystem → filesystem_read_file
+Инструмент search сервера context7 → context7_search
 ```
 
-服务器名和工具名中的非字母、数字、下划线或连字符会替换为下划线。`v1.18.22` 使用的仍是上述旧格式；`mcp__服务器名__工具名` 只在开发过程中短暂出现过，随后已恢复，不能作为当前配置权限或提示词的依据。
+Небуквенные, нецифровые символы (кроме подчеркивания и дефиса) в именах сервера и инструмента заменяются подчеркиванием. В `v1.18.22` действует старый формат выше; вариант `mcp__имя-сервера__имя-инструмента` мелькал лишь коротко в разработке, затем откачен — опирать на него конфиги прав и промпты нельзя.
 
-源码：[当前工具名的清理与拼接规则](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/mcp/catalog.ts#L117-L119)。
+Исходники: [текущие правила чистки и склейки имён инструментов](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/mcp/catalog.ts#L117-L119).
 
-### 自动发现机制
+### Механизм автообнаружения
 
-配置 MCP 服务器后，OpenCode 会**自动发现**服务器提供的所有工具：
+После настройки MCP-сервера OpenCode **автоматически обнаруживает** все предоставляемые сервером инструменты:
 
-1. 连接到 MCP 服务器
-2. 调用 `listTools` 获取工具列表
-3. 将工具转换为 OpenCode 可用格式
-4. 添加到当前会话的工具集中
+1. Подключается к MCP-серверу
+2. Вызывает `listTools` для списка инструментов
+3. Конвертирует инструменты в формат OpenCode
+4. Добавляет в набор инструментов текущей сессии
 
-### 工具变更通知
+### Уведомления об изменении инструментов
 
-如果 MCP 服务器的工具列表发生变化（新增/删除工具），OpenCode 会**自动接收通知并更新**：
+Если список инструментов MCP-сервера изменился (добавлены или удалены инструменты), OpenCode **автоматически получит уведомление и обновится**:
 
-- 服务器发送工具列表变更通知（`notifications/tools/list_changed`）
-- OpenCode 重新获取工具列表
-- 无需重启 OpenCode
+- Сервер шлёт уведомление об изменении списка (`notifications/tools/list_changed`)
+- OpenCode перезапрашивает список инструментов
+- Перезапуск OpenCode не нужен
 
-这意味着：升级 MCP 服务器版本后，新工具会自动可用。
+Значит: после обновления версии MCP-сервера новые инструменты станут доступны сами.
 
-### 服务器 instructions
+### instructions серверов
 
-MCP 服务器可以在初始化结果中返回 instructions。OpenCode 会把已连接服务器的 instructions 加入系统提示词；如果服务器提供了工具，但这些工具全部被当前 Agent 或会话权限禁用，就不会注入这段说明。
+MCP-сервер может вернуть instructions в результате инициализации. OpenCode добавляет instructions подключённых серверов в системный промпт; если сервер дал инструменты, но все они отключены правами текущего Agent или сессии, — этот текст не инжектится.
 
-源码：[instructions 的权限过滤与注入](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/system.ts#L119-L134)。
+Исходники: [фильтрация прав и инжект instructions](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/system.ts#L119-L134).
 
-### Resources 与 templates
+### Resources и templates
 
-只要至少一个已连接服务器声明 `resources` capability，OpenCode 就会提供三个通用工具：
+Как только хотя бы один подключённый сервер заявит capability `resources`, OpenCode предоставляет три общих инструмента:
 
-| 工具 | 用途 |
+| Инструмент | Назначение |
 |------|------|
-| `list_mcp_resources` | 列出全部或指定服务器的资源 |
-| `list_mcp_resource_templates` | 列出带 URI 参数的资源模板 |
-| `read_mcp_resource` | 按服务器名和精确 URI 读取资源 |
+| `list_mcp_resources` | Список ресурсов всех или указанного сервера |
+| `list_mcp_resource_templates` | Шаблоны ресурсов с URI-параметрами |
+| `read_mcp_resource` | Чтение ресурса по имени сервера и точному URI |
 
-资源可以是文件、数据库 Schema 或服务自己的上下文。模板本身需要先填充 URI 参数，再把得到的 URI 交给 `read_mcp_resource`。应用界面也可以通过 `@` 补全并加入 MCP 资源。
+Ресурсами могут быть файлы, схемы баз данных или собственный контекст сервиса. Шаблон сначала заполняется параметрами URI, полученный URI отдаётся в `read_mcp_resource`. Интерфейс приложения тоже умеет подставлять MCP-ресурсы через `@`-дополнение.
 
-源码：[工具名称](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L27-L31)、[资源能力判断](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L136-L155)、[templates](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L222-L245)、[读取资源](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L305-L325)、[应用内资源补全](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/app/src/components/prompt-input/slash-popover.tsx#L120-L163)。
+Исходники: [имена инструментов](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L27-L31),[проверка capability ресурсов](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L136-L155),[templates](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L222-L245),[чтение ресурсов](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/tools.ts#L305-L325),[дополнение ресурсов в приложении](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/app/src/components/prompt-input/slash-popover.tsx#L120-L163).
 
 ---
 
-## 实验性 MCP Code Mode
+## Экспериментальный MCP Code Mode
 
-设置以下环境变量并重启 OpenCode：
+Задайте переменную окружения и перезапустите OpenCode:
 
 ```bash
 export OPENCODE_EXPERIMENTAL_CODE_MODE=true
 ```
 
-启用开关并不保证一定看到 `execute`。只有当前 Agent 和会话权限下至少一个 MCP 工具可见时，`execute` 才会注册给模型；启用后，普通 MCP 工具不再逐个直接暴露，而是由 `execute` 编排调用。
+Включённый флаг не гарантирует появление `execute`. Регистрируется `execute` лишь когда хотя бы один MCP-инструмент видим в правах текущего Agent и сессии; после включения обычные MCP-инструменты перестают торчать наружу по одному — их вызовы оркестрирует `execute`.
 
-`execute` 运行的是受限解释器代码，不是普通 shell。它只能访问目录化后的可见 MCP 工具，并且每个实际 MCP 调用仍会经过原工具的权限检查。适合一次编排多个 MCP 调用，不适合执行任意本地程序或访问未授权工具。
+`execute` выполняет код ограниченного интерпретатора, а не обычный shell. Ему доступны только каталогизированные видимые MCP-инструменты, и каждый реальный MCP-вызов всё равно проходит проверку прав исходного инструмента. Подходит для оркестрации нескольких MCP-вызовов за раз, не подходит для запуска произвольных локальных программ и доступа к неразрешённым инструментам.
 
-源码：[筛选可见 MCP 工具](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/code-mode.ts#L188-L212)、[受限运行时](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/code-mode.ts#L239-L274)、[`execute` 可见条件](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/registry.ts#L280-L308)。
+Исходники: [фильтрация видимых MCP-инструментов](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/code-mode.ts#L188-L212),[ограниченный рантайм](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/code-mode.ts#L239-L274),[условия видимости `execute`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/tool/registry.ts#L280-L308).
 
 ---
 
-## 常用 MCP 推荐
+## Частые MCP: рекомендации
 
 ### Sentry
 
-连接 Sentry 监控平台，查询错误和问题：
+Подключение мониторинговой платформы Sentry: запросы ошибок и проблем:
 
 ```jsonc
 {
@@ -359,21 +359,21 @@ export OPENCODE_EXPERIMENTAL_CODE_MODE=true
 }
 ```
 
-首次使用需要认证：
+Первая аутентификация:
 
 ```bash
 opencode mcp auth sentry
 ```
 
-使用示例：
+Пример использования:
 
 ```
-use sentry 查看最近未解决的错误
+use sentry: покажи свежие нерешённые ошибки
 ```
 
 ### Context7
 
-搜索各种库和框架的文档：
+Поиск документации всевозможных библиотек и фреймворков:
 
 ```jsonc
 {
@@ -386,7 +386,7 @@ use sentry 查看最近未解决的错误
 }
 ```
 
-使用 API Key 获取更高速率限制：
+API-ключ для повышенных лимитов:
 
 ```jsonc
 {
@@ -402,15 +402,15 @@ use sentry 查看最近未解决的错误
 }
 ```
 
-使用示例：
+Пример использования:
 
 ```
-use context7 查询 Cloudflare Worker 如何缓存 JSON 响应
+use context7: как в Cloudflare Worker кэшировать JSON-ответ
 ```
 
 ### Grep by Vercel
 
-搜索 GitHub 上的代码片段：
+Поиск фрагментов кода на GitHub:
 
 ```jsonc
 {
@@ -423,15 +423,15 @@ use context7 查询 Cloudflare Worker 如何缓存 JSON 响应
 }
 ```
 
-使用示例：
+Пример использования:
 
 ```
-use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
+use the gh_grep tool: как в SST-фреймворке настроить свой домен
 ```
 
 ### Filesystem
 
-本地文件系统操作（沙箱模式）：
+Операции с локальной файловой системой (режим песочницы):
 
 ```jsonc
 {
@@ -449,7 +449,7 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ### Postgres
 
-直接查询 PostgreSQL 数据库：
+Прямые запросы к базе PostgreSQL:
 
 ```jsonc
 {
@@ -467,7 +467,7 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ### Puppeteer
 
-浏览器自动化和网页抓取：
+Автоматизация браузера и скрапинг страниц:
 
 ```jsonc
 {
@@ -482,7 +482,7 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ### Memory
 
-持久化键值存储：
+Персистентное key-value хранилище:
 
 ```jsonc
 {
@@ -497,7 +497,7 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ### SQLite
 
-轻量级数据库操作：
+Лёгкие операции с базой данных:
 
 ```jsonc
 {
@@ -512,7 +512,7 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ### Slack
 
-与 Slack 工作空间交互：
+Взаимодействие с рабочим пространством Slack:
 
 ```jsonc
 {
@@ -531,56 +531,56 @@ use the gh_grep tool 搜索 SST 框架中如何配置自定义域名
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| MCP 工具不出现 | 全局禁用或 Agent 未配置 | 检查 `permission` 配置 |
-| OAuth 认证失败 | Token 过期或凭据无效 | 运行 `opencode mcp logout && opencode mcp auth` |
-| 状态显示 `needs_client_registration` | 服务器不支持动态注册 | 在 `oauth` 中配置 `clientId` |
-| 上下文快速耗尽 | 启用了太多 MCP 工具 | 禁用不常用的 MCP，使用按 Agent 启用 |
-| 工具名称冲突 | 多个 MCP 有同名工具 | 使用 `{服务器名}_{工具名}` 格式区分 |
-| 认证后仍显示 needs_auth | Token 存储失败 | 检查 `~/.local/share/opencode/mcp-auth.json` 权限 |
-| **命令格式错误** | `command` 写成字符串而非数组 | ❌ `"command": "npx xxx"` → ✓ `"command": ["npx", "-y", "xxx"]` |
-| **URL 格式错误** | URL 缺少协议前缀 | ❌ `"url": "example.com/mcp"` → ✓ `"url": "https://example.com/mcp"` |
-| **浏览器无法自动打开** | 在 SSH/远程环境下 | OpenCode 会显示 URL，手动复制到浏览器打开 |
-| **超时时间太短** | `timeout` 设为 1000ms | 远程服务器建议 2000+-10000ms，默认 30000ms |
-| **忘记启用服务器** | `enabled: false` 但疑惑为什么不工作 | 默认就是启用的，检查是否误设为 `false` |
+| MCP-инструменты не появляются | Глобальное отключение или Agent не настроен | Проверьте конфиг `permission` |
+| Ошибка OAuth-аутентификации | Токен просрочен или credentials недействительны | Выполните `opencode mcp logout && opencode mcp auth` |
+| Статус `needs_client_registration` | Сервер не поддерживает динамическую регистрацию | Задайте `clientId` в `oauth` |
+| Контекст быстро заканчивается | Включено слишком много MCP-инструментов | Отключите неиспользуемые MCP, включайте для отдельных Agent |
+| Конфликт имён инструментов | У нескольких MCP одноимённые инструменты | Различайте форматом `{имя-сервера}_{имя-инструмента}` |
+| После аутентификации всё равно needs_auth | Не сохранился токен | Проверьте права `~/.local/share/opencode/mcp-auth.json` |
+| **Неверный формат команды** | `command` строкой вместо массива | ❌ `"command": "npx xxx"` → ✓ `"command": ["npx", "-y", "xxx"]` |
+| **Неверный формат URL** | В URL нет префикса протокола | ❌ `"url": "example.com/mcp"` → ✓ `"url": "https://example.com/mcp"` |
+| **Браузер сам не открывается** | SSH или удалённое окружение | OpenCode покажет URL — скопируйте в браузер вручную |
+| **Слишком короткий тайм-аут** | `timeout` аж 1000ms | Удалённым серверам советуем 2000+–10000ms, по умолчанию 30000ms |
+| **Забыли включить сервер** | `enabled: false`, а удивляетесь, почему не работает | По умолчанию серверы включены, проверьте, не выставили ли `false` |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. **OAuth 认证**：自动处理或手动配置客户端凭证
-2. **调试命令**：`opencode mcp debug` 诊断连接问题
-3. **状态图标**：✓ ○ ⚠ ✗ 四种状态的含义
-4. **权限管理**：使用 `permission` 控制工具访问
-5. **工具自动发现**：工具命名规则和变更通知机制
-6. **扩展上下文**：服务器 instructions、resources 与 templates
-7. **Code Mode**：在受限环境中编排获准的 MCP 工具
-8. **规则集成**：在 AGENTS.md 中配置默认 MCP 使用
-9. **常用 MCP**：Sentry、Context7、Grep、Postgres 等
-
----
-
-## 相关资源
-
-- [5.7a MCP 基础](./07a-mcp-basics) - MCP 入门配置
-- [5.1 配置全解](./01a-config-basics) - 配置文件基础
-- [5.2 自定义 Agent](./02a-agent-quickstart) - Agent 工具配置
-- [5.5 权限管控](./05-permissions) - 详细权限设置
-- [官方 MCP 文档](https://opencode.ai/docs/mcp-servers/) - 英文原版
+1. **OAuth-аутентификации**: автоматической обработке и ручной настройке credentials клиента
+2. **Командам отладки**: диагностике подключений через `opencode mcp debug`
+3. **Иконкам состояний**: смыслу четырёх состояний ✓ ○ ⚠ ✗
+4. **Управлению правами**: контролю доступа к инструментам через `permission`
+5. **Автообнаружению инструментов**: правилам именования и механизму уведомлений об изменениях
+6. **Расширению контекста**: instructions, resources и templates серверов
+7. **Code Mode**: оркестрации разрешённых MCP-инструментов в ограниченной среде
+8. **Интеграции в правила**: настройке использования MCP по умолчанию в AGENTS.md
+9. **Частым MCP**: Sentry, Context7, Grep, Postgres и другим
 
 ---
 
-## 下一课预告
+## Связанные материалы
 
-> 下一课我们将学习 **[Chrome DevTools MCP](./07c-mcp-chrome-devtools)**。
+- [5.7a Основы MCP](./07a-mcp-basics) — стартовая настройка MCP
+- [5.1 Всё о конфигурации](./01a-config-basics) — основы файлов конфигурации
+- [5.2 Свои Agent](./02a-agent-quickstart) — настройка инструментов Agent
+- [5.5 Контроль прав](./05-permissions) — детальная настройка прав
+- [Официальная документация MCP](https://opencode.ai/docs/mcp-servers/) — англоязычный оригинал
+
+---
+
+## Анонс следующего урока
+
+> В следующем уроке изучим **[Chrome DevTools MCP](./07c-mcp-chrome-devtools)**.
 >
-> 你会学到：
-> - 让 AI 直接连接你的 Chrome 浏览器
-> - 调试已登录的页面（无需重新登录）
-> - 在 DevTools 中选中元素/请求让 AI 分析
-> - 使用浏览器截图、执行脚本等功能
+> Вы узнаете:
+> - Как подключить AI напрямую к вашему браузеру Chrome
+> - Как отлаживать залогиненные страницы (без повторного входа)
+> - Как выделять элементы и запросы в DevTools для анализа AI
+> - Функции скриншотов браузера, выполнения скриптов и другие

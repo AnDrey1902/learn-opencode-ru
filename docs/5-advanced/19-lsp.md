@@ -1,311 +1,311 @@
 ---
-title: "LSP 代码智能：让 AI 真正读懂你的代码 | OpenCode 教程"
-subtitle: LSP 代码智能
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: "LSP и кодовый интеллект: пусть AI по-настоящему понимает код"
+subtitle: Кодовый интеллект LSP
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.19"
-duration: 20 分钟
-practice: 10 分钟
-level: 进阶
-description: 学习 OpenCode LSP 集成。本教程讲解 30+ 内置语言服务器、9 种代码智能操作（定义跳转、引用查找、悬停信息等）、自定义 LSP 配置，以及常见问题排查。
+duration: 20 минут
+practice: 10 минут
+level: Продвинутый
+description: "Изучите интеграцию LSP в OpenCode. В уроке: 30+ встроенных языковых серверов, 9 операций кодового интеллекта (переходы к определениям, поиск ссылок, ховеры и др.), свои настройки LSP и разбор частых проблем."
 tags:
   - LSP
-  - 语言服务器
-  - 代码智能
-  - 符号跳转
+  - Языковые серверы
+  - Кодовый интеллект
+  - Переходы по символам
 prerequisite:
-  - 5.1a 配置基础
+  - 5.1a Основы конфигурации
 ---
 
-# LSP 代码智能
+# LSP и кодовый интеллект
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/lsp-notes.mini.jpeg" 
-     alt="5.19 LSP 服务器学霸笔记" 
+<img src="/images/5-advanced/lsp-notes.mini.jpeg"
+     alt="Шпаргалка урока: 5.19 LSP-серверы"
      data-zoom-src="/images/5-advanced/lsp-notes.jpeg" />
 
 ---
 
-AI 帮你改代码时，不知道函数在哪定义、变量被谁引用、接口有哪些实现？
+Когда AI правит код, он не знает: где определена функция, кто ссылается на переменную, какие реализации у интерфейса?
 
-**LSP（Language Server Protocol）** 就是解决这个问题的。它给 AI 装上了"IDE 的大脑"，让 AI 从"看文本"升级到"理解代码结构"。
+**LSP (Language Server Protocol)** решает эту проблему. Он ставит AI «мозг IDE»: AI переходит с «чтения текста» на «понимание структуры кода».
 
-::: info 🤔 什么是 LSP？
-LSP 是微软提出的一套标准协议，让编辑器和语言服务器之间通信。你在 VS Code 里用的"跳转到定义"、"查找引用"，背后就是 LSP 在工作。
+::: info 🤔 Что такое LSP?
+LSP — стандартный протокол от Microsoft для общения редакторов и языковых серверов. «Перейти к определению» и «найти ссылки» в VS Code работают именно на LSP.
 
-OpenCode 把同样的能力带到了终端 AI 助手里。
+OpenCode принёс те же способности в терминального AI-помощника.
 :::
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-::: info 🎯 本课目标
-- 理解 LSP 如何让 AI 获得代码智能
-- 使用 9 种 LSP 操作：定义跳转、引用查找、悬停信息等
-- 了解 OpenCode 内置的 30+ 语言服务器
-- 自定义或禁用 LSP 服务器
-- 排查 LSP 连接问题
+::: info 🎯 Цели урока
+- Понимать, как LSP даёт AI кодовый интеллект
+- Пользоваться 9 операциями LSP: переходы к определениям, поиск ссылок, ховеры и др.
+- Знать про 30+ встроенных языковых серверов OpenCode
+- Настраивать свои LSP-серверы и отключать их
+- Разбирать проблемы подключения LSP
 :::
 
 ---
 
-## 你现在的困境
+## С какими трудностями вы столкнулись
 
-- "AI 不知道这个函数在哪定义，只能靠猜"
-- "想知道某个变量在哪些地方被使用，但 AI 找不全"
-- "AI 改代码时不了解依赖关系，容易改错"
-- "希望能像 IDE 一样快速跳转和查看定义"
-
----
-
-## 什么时候用这一招
-
-- 需要理解大型代码库的结构
-- 需要查找函数/变量的定义和引用
-- 重构前想了解影响范围
-- 需要获得类型信息和文档注释
+- «AI не знает, где определена эта функция, — только гадает»
+- «Хочу знать, где используется переменная, но AI находит не всё»
+- «AI правит код без понимания зависимостей и ошибается»
+- «Хочется прыгать и смотреть определения быстро, как в IDE»
 
 ---
 
-## 🎒 开始前的准备
+## Когда это пригодится
 
-- [ ] 完成了 [5.1a 配置基础](./01a-config-basics)
-- [ ] 已能正常启动 OpenCode
-- [ ] 项目中有代码文件（OpenCode 会自动检测语言类型）
+- Разобраться в структуре большой кодовой базы
+- Найти определения и ссылки функций и переменных
+- Оценить масштаб влияния перед рефакторингом
+- Получить информацию о типах и doc-комментарии
 
 ---
 
-## 核心思路
+## 🎒 Перед началом
 
-LSP 的工作流程很简单：
+- [ ] Пройден урок [5.1a Основы конфигурации](./01a-config-basics)
+- [ ] OpenCode нормально стартует
+- [ ] В проекте есть файлы кода (OpenCode сам определит языки)
 
-1. OpenCode 检测到你打开的文件类型（比如 `.ts`、`.py`、`.go`）
-2. 自动启动对应的语言服务器
-3. AI 在需要理解代码时，向语言服务器发请求
-4. 语言服务器返回精确的代码智能数据
+---
 
-大部分情况下你不需要做任何配置，开箱即用。
+## Основная идея
 
-### LSP vs 纯文本搜索
+Процесс работы LSP прост:
 
-| 对比项 | 纯文本搜索（grep） | LSP 代码智能 |
+1. OpenCode определяет тип открытых файлов (например, `.ts`, `.py`, `.go`)
+2. Автоматически стартует подходящий языковой сервер
+3. Когда AI нужно понять код — шлёт запрос языковому серверу
+4. Языковой сервер возвращает точные данные кодового интеллекта
+
+В большинстве случаев настраивать ничего не нужно — работает из коробки.
+
+### LSP vs текстовый поиск
+
+| Критерий | Текстовый поиск (grep) | Кодовый интеллект LSP |
 |-------|-------------------|-------------|
-| 搜索方式 | 字符串匹配 | 语义符号匹配 |
-| 准确度 | 可能有误报（同名变量） | 精确定位 |
-| 作用域 | 不理解作用域 | 理解作用域和导入关系 |
-| 类型信息 | 无 | 提供完整类型签名 |
-| 重载区分 | 无法区分 | 能区分函数重载 |
+| Способ поиска | Совпадение строк | Совпадение смысловых символов |
+| Точность | Возможны ложные срабатывания (одноимённые переменные) | Точное позиционирование |
+| Области видимости | Не понимает | Понимает области и связи импортов |
+| Информация о типах | Нет | Полные сигнатуры типов |
+| Различение перегрузок | Не различает | Различает перегрузки функций |
 
 ---
 
-## 内置语言服务器
+## Встроенные языковые серверы
 
-OpenCode 内置了 **30+ 语言服务器**，开箱即用。
+В OpenCode встроено **более 30 языковых серверов** — работают из коробки.
 
-### 主流语言
+### Главные языки
 
-| LSP 服务器 | 扩展名 | 要求 |
+| LSP-сервер | Расширения | Требование |
 |-----------|--------|------|
-| typescript | .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts | 项目中有 `typescript` 依赖 |
-| pyright | .py, .pyi | 自动安装 pyright |
-| gopls | .go | `go` 命令可用 |
-| rust (rust-analyzer) | .rs | `rust-analyzer` 命令可用 |
-| jdtls | .java | 已安装 Java SDK（21+） |
-| kotlin-ls | .kt, .kts | 自动下载安装 |
-| clangd | .c, .cpp, .cc, .cxx, .c++, .h, .hpp, .hh, .hxx, .h++ | 自动下载安装 |
-| csharp (csharp-ls) | .cs | 已安装 .NET SDK |
-| fsharp (fsautocomplete) | .fs, .fsi, .fsx, .fsscript | 已安装 .NET SDK |
-| sourcekit-lsp | .swift, .objc, .objcpp | 已安装 Swift（macOS 上为 Xcode） |
-| dart | .dart | `dart` 命令可用 |
+| typescript | .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts | В проекте есть зависимость `typescript` |
+| pyright | .py, .pyi | Автоустановка pyright |
+| gopls | .go | Доступна команда `go` |
+| rust (rust-analyzer) | .rs | Доступна команда `rust-analyzer` |
+| jdtls | .java | Установлен Java SDK (21+) |
+| kotlin-ls | .kt, .kts | Автоскачивание и установка |
+| clangd | .c, .cpp, .cc, .cxx, .c++, .h, .hpp, .hh, .hxx, .h++ | Автоскачивание и установка |
+| csharp (csharp-ls) | .cs | Установлен .NET SDK |
+| fsharp (fsautocomplete) | .fs, .fsi, .fsx, .fsscript | Установлен .NET SDK |
+| sourcekit-lsp | .swift, .objc, .objcpp | Установлен Swift (на macOS — Xcode) |
+| dart | .dart | Доступна команда `dart` |
 
-### 其他语言
+### Остальные языки
 
-| LSP 服务器 | 扩展名 | 要求 |
+| LSP-сервер | Расширения | Требование |
 |-----------|--------|------|
-| ruby-lsp (rubocop) | .rb, .rake, .gemspec, .ru | `ruby` 和 `gem` 命令可用 |
-| elixir-ls | .ex, .exs | `elixir` 命令可用 |
-| zls | .zig, .zon | `zig` 命令可用 |
-| lua-ls | .lua | 自动下载安装 |
-| php intelephense | .php | 自动安装 intelephense |
-| ocaml-lsp | .ml, .mli | `ocamllsp` 命令可用 |
-| gleam | .gleam | `gleam` 命令可用 |
-| clojure-lsp | .clj, .cljs, .cljc, .edn | `clojure-lsp` 命令可用 |
-| nixd | .nix | `nixd` 命令可用 |
-| haskell-language-server | .hs, .lhs | `haskell-language-server-wrapper` 命令可用 |
-| deno | .ts, .tsx, .js, .jsx, .mjs | `deno` 命令可用（自动检测 deno.json） |
+| ruby-lsp (rubocop) | .rb, .rake, .gemspec, .ru | Доступны команды `ruby` и `gem` |
+| elixir-ls | .ex, .exs | Доступна команда `elixir` |
+| zls | .zig, .zon | Доступна команда `zig` |
+| lua-ls | .lua | Автоскачивание и установка |
+| php intelephense | .php | Автоустановка intelephense |
+| ocaml-lsp | .ml, .mli | Доступна команда `ocamllsp` |
+| gleam | .gleam | Доступна команда `gleam` |
+| clojure-lsp | .clj, .cljs, .cljc, .edn | Доступна команда `clojure-lsp` |
+| nixd | .nix | Доступна команда `nixd` |
+| haskell-language-server | .hs, .lhs | Доступна команда `haskell-language-server-wrapper` |
+| deno | .ts, .tsx, .js, .jsx, .mjs | Доступна команда `deno` (автоопределение deno.json) |
 
-### 前端框架
+### Фронтенд-фреймворки
 
-| LSP 服务器 | 扩展名 | 要求 |
+| LSP-сервер | Расширения | Требование |
 |-----------|--------|------|
-| vue | .vue | 自动安装 vue-language-server |
-| svelte | .svelte | 自动安装 svelte-language-server |
-| astro | .astro | 自动安装 astro-language-server |
+| vue | .vue | Автоустановка vue-language-server |
+| svelte | .svelte | Автоустановка svelte-language-server |
+| astro | .astro | Автоустановка astro-language-server |
 
-### 工具和配置
+### Инструменты и конфиги
 
-| LSP 服务器 | 扩展名 | 用途 |
+| LSP-сервер | Расширения | Назначение |
 |-----------|--------|------|
-| eslint | .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts, .vue | 代码规范检查 |
-| oxlint | .ts, .tsx, .js, .jsx 等 + .vue, .astro, .svelte | 快速 linter |
-| biome | .ts, .tsx, .js, .jsx, .json, .css, .vue, .astro, .svelte 等 | 格式化 + linter |
-| yaml-ls | .yaml, .yml | YAML 支持 |
-| bash | .sh, .bash, .zsh, .ksh | Shell 脚本 |
-| terraform | .tf, .tfvars | IaC 配置 |
-| prisma | .prisma | 数据库 schema |
-| texlab | .tex, .bib | LaTeX 文档 |
-| tinymist | .typ, .typc | Typst 排版 |
-| dockerfile | .dockerfile, Dockerfile | Docker 配置 |
+| eslint | .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts, .vue | Проверка стиля кода |
+| oxlint | .ts, .tsx, .js, .jsx и др. + .vue, .astro, .svelte | Быстрый линтер |
+| biome | .ts, .tsx, .js, .jsx, .json, .css, .vue, .astro, .svelte и др. | Форматирование + линтер |
+| yaml-ls | .yaml, .yml | Поддержка YAML |
+| bash | .sh, .bash, .zsh, .ksh | Shell-скрипты |
+| terraform | .tf, .tfvars | IaC-конфиги |
+| prisma | .prisma | Схемы баз данных |
+| texlab | .tex, .bib | LaTeX-документы |
+| tinymist | .typ, .typc | Вёрстка Typst |
+| dockerfile | .dockerfile, Dockerfile | Конфиги Docker |
 
-::: tip 自动安装说明
-大部分服务器会在首次使用时自动下载安装，安装目录是 `~/.local/share/opencode/bin/`。
+::: tip Пояснение автоустановки
+Большинство серверов скачиваются и ставятся при первом использовании в каталог `~/.local/share/opencode/bin/`.
 
-少数服务器（如 rust-analyzer、dart、sourcekit-lsp）需要你提前安装好对应的工具链。
+Отдельные серверы (rust-analyzer, dart, sourcekit-lsp) требуют заранее установленный тулчейн.
 
-设置环境变量 `OPENCODE_DISABLE_LSP_DOWNLOAD=true` 可禁用自动下载。
+Переменная окружения `OPENCODE_DISABLE_LSP_DOWNLOAD=true` отключает автоскачивание.
 :::
 
 ---
 
-## 9 种 LSP 操作
+## 9 операций LSP
 
 <AdInArticle />
 
-OpenCode 提供了 9 种 LSP 操作，AI 会根据需要自动调用。你也可以在对话中明确要求。
+OpenCode предоставляет 9 операций LSP — AI вызывает их сам по необходимости. Можно просить и явно в диалоге.
 
-### 1. goToDefinition：跳转到定义
+### 1. goToDefinition: переход к определению
 
-找到函数、类、变量的定义位置。
-
-```
-你: 找到 src/utils/format.ts 第 15 行的 formatDate 函数的定义
-```
-
-AI 会调用 LSP 的 `goToDefinition`，返回定义所在的文件和行号。
-
-### 2. findReferences：查找引用
-
-找到某个符号在整个项目中的所有使用位置。重构前特别有用。
+Найти место определения функции, класса, переменной.
 
 ```
-你: 查找 src/api/user.ts 第 20 行的 User 类型在哪些地方被使用
+Вы: найди определение функции formatDate в src/utils/format.ts, строка 15
 ```
 
-### 3. hover：悬停信息
+AI вызовет LSP-операцию `goToDefinition` и вернёт файл и номер строки определения.
 
-获取符号的类型签名、文档注释等信息。
+### 2. findReferences: поиск ссылок
 
-```
-你: 查看 src/services/auth.ts 第 45 行的 login 函数的类型签名
-```
-
-### 4. documentSymbol：文档符号
-
-列出文件中的所有符号（函数、类、变量等），快速浏览文件结构。
+Найти все места использования символа в проекте. Особенно полезно перед рефакторингом.
 
 ```
-你: 列出 src/controllers/user.ts 中所有的函数和类
+Вы: найди, где используется тип User из src/api/user.ts, строка 20
 ```
 
-### 5. workspaceSymbol：工作区符号搜索
+### 3. hover: всплывающая информация
 
-在整个项目中搜索符号。返回结果会过滤为类、函数、方法、接口、变量、常量、结构体、枚举这几种类型，最多返回 10 个。
-
-```
-你: 在整个项目中搜索所有包含 "UserService" 的类
-```
-
-### 6. goToImplementation：跳转到实现
-
-找到接口或抽象类的具体实现。
+Получить сигнатуру типа, doc-комментарии и другую информацию о символе.
 
 ```
-你: 找到 src/interfaces/Repository.ts 第 10 行的 Repository 接口的所有实现
+Вы: покажи сигнатуру типа функции login в src/services/auth.ts, строка 45
 ```
 
-### 7. prepareCallHierarchy：准备调用层级
+### 4. documentSymbol: символы документа
 
-获取某个位置的调用层级信息，为后续的入调用/出调用分析做准备。
-
-### 8. incomingCalls：入调用
-
-找到所有调用当前函数的地方。修改函数前用这个评估影响范围。
+Список всех символов файла (функции, классы, переменные и т. д.) — быстрый обзор структуры файла.
 
 ```
-你: 找到 src/utils/validator.ts 第 20 行的 validateEmail 函数被哪些地方调用
+Вы: перечисли все функции и классы в src/controllers/user.ts
 ```
 
-### 9. outgoingCalls：出调用
+### 5. workspaceSymbol: поиск символов по рабочей области
 
-找到当前函数调用的所有其他函数，分析依赖关系。
+Поиск символов по всему проекту. Результаты фильтруются по типам: классы, функции, методы, интерфейсы, переменные, константы, структуры, перечисления — максимум 10 штук.
 
 ```
-你: 查看 src/services/payment.ts 第 50 行的 processPayment 函数调用了哪些其他函数
+Вы: найди в проекте все классы со словом "UserService"
 ```
 
-::: details LSP 工具的参数说明
-所有 LSP 操作都需要三个参数：
-- `filePath`：文件路径（绝对或相对路径）
-- `line`：行号（从 1 开始，和编辑器里看到的一样）
-- `character`：字符偏移（从 1 开始）
+### 6. goToImplementation: переход к реализации
 
-AI 会自动填充这些参数，你只需要用自然语言描述需求。
+Найти конкретные реализации интерфейса или абстрактного класса.
+
+```
+Вы: найди все реализации интерфейса Repository из src/interfaces/Repository.ts, строка 10
+```
+
+### 7. prepareCallHierarchy: подготовка иерархии вызовов
+
+Получить информацию об иерархии вызовов в позиции для последующего анализа входящих и исходящих вызовов.
+
+### 8. incomingCalls: входящие вызовы
+
+Найти все места вызова текущей функции. Перед изменением функции — оценка масштаба влияния.
+
+```
+Вы: найди, где вызывается функция validateEmail из src/utils/validator.ts, строка 20
+```
+
+### 9. outgoingCalls: исходящие вызовы
+
+Найти все функции, вызываемые текущей, — разбор зависимостей.
+
+```
+Вы: посмотри, какие ещё функции вызывает processPayment из src/services/payment.ts, строка 50
+```
+
+::: details Параметры инструментов LSP
+Все операции LSP требуют три параметра:
+- `filePath`: путь к файлу (абсолютный или относительный)
+- `line`: номер строки (с 1, как видно в редакторе)
+- `character`: смещение символа (с 1)
+
+AI заполняет параметры сам — описывайте задачу естественным языком.
 :::
 
 ---
 
-## 在对话中使用 LSP
+## Использование LSP в диалоге
 
-### AI 自动使用
+### AI использует сам
 
-大多数时候你不需要特别提 LSP，AI 会自动判断什么时候该用：
-
-```
-你: 这个 formatDate 函数在哪里定义的？
-
-AI: [自动调用 lsp goToDefinition]
-    formatDate 定义在 src/utils/date.ts 第 42 行...
-```
-
-### 手动请求
-
-你也可以明确要求 AI 使用 LSP：
+Чаще всего специально упоминать LSP не нужно — AI сам решает, когда применять:
 
 ```
-你: 使用 LSP 查找 UserService 类的所有引用
-你: 用 LSP 查看 config.ts 文件的符号列表
-你: 通过 LSP 分析 processOrder 函数的调用关系
+Вы: где определена эта функция formatDate?
+
+AI: [автоматически вызывает lsp goToDefinition]
+    formatDate определена в src/utils/date.ts, строка 42...
+```
+
+### Явные запросы
+
+Можно прямо просить AI использовать LSP:
+
+```
+Вы: через LSP найди все ссылки на класс UserService
+Вы: через LSP выведи список символов файла config.ts
+Вы: через LSP разбери связи вызовов функции processOrder
 ```
 
 ---
 
-## 跟我做：配置 LSP
+## Повторите за мной: настройка LSP
 
-### 第 1 步：确认 LSP 是否正常工作
+### Шаг 1: проверьте, работает ли LSP
 
-**为什么**
-大部分情况下 LSP 开箱即用，先确认一下。
+**Зачем**
+В большинстве случаев LSP работает из коробки — сначала убедитесь.
 
-在 OpenCode 对话中输入：
+В диалоге OpenCode введите:
 
 ```
-帮我查看 src/index.ts 第 1 行的符号信息
+Покажи информацию о символах в src/index.ts, строка 1
 ```
 
-**你应该看到**：AI 返回了类型信息或文档注释，说明 LSP 已经在工作。
+**Вы должны увидеть**: AI вернул информацию о типах или doc-комментарии — значит, LSP работает.
 
-如果看到 `No LSP server available for this file type`，说明对应语言的服务器没有启动，检查是否满足"要求"列的条件。
+Увидели `No LSP server available for this file type` — сервер языка не стартовал, проверьте условия из столбца «Требование».
 
 ---
 
-### 第 2 步：禁用不需要的服务器
+### Шаг 2: отключите ненужные серверы
 
-**为什么**
-有些项目可能同时触发多个服务器（比如 TypeScript 和 Deno），造成冲突。
+**Зачем**
+Отдельные проекты могут дёргать сразу несколько серверов (например, TypeScript и Deno) — возникнет конфликт.
 
-在 `opencode.json` 中禁用特定服务器：
+Отключите отдельные серверы в `opencode.json`:
 
 ```json
 {
@@ -317,7 +317,7 @@ AI: [自动调用 lsp goToDefinition]
 }
 ```
 
-如果想全局禁用所有 LSP（比如调试性能问题时）：
+Чтобы глобально отключить все LSP (например, при отладке производительности):
 
 ```json
 {
@@ -325,14 +325,14 @@ AI: [自动调用 lsp goToDefinition]
 }
 ```
 
-**你应该看到**：被禁用的服务器不再启动，日志中会显示 `LSP server xxx is disabled`。
+**Вы должны увидеть**: отключённые серверы больше не стартуют, в логах будет `LSP server xxx is disabled`.
 
 ---
 
-### 第 3 步：添加自定义 LSP 服务器
+### Шаг 3: добавьте свой LSP-сервер
 
-**为什么**
-如果你用的语言没有内置支持，可以自己配置。
+**Зачем**
+Если для вашего языка нет встроенной поддержки — настройте сами.
 
 ```json
 {
@@ -348,152 +348,152 @@ AI: [自动调用 lsp goToDefinition]
 }
 ```
 
-配置字段说明：
+Описание полей конфигурации:
 
-| 字段 | 类型 | 必填 | 说明 |
+| Поле | Тип | Обязат. | Описание |
 |------|------|------|------|
-| `command` | string[] | ✅（启用时必填） | 启动命令和参数。仅禁用时可省略，只需 `{ "disabled": true }` |
-| `extensions` | string[] | ✅（自定义服务器） | 文件扩展名列表 |
-| `disabled` | boolean | ❌ | 是否禁用（默认 `false`） |
-| `env` | object | ❌ | 环境变量 |
-| `initialization` | object | ❌ | LSP 初始化参数 |
+| `command` | string[] | ✅ (при включении обязательно) | Команда запуска и параметры. Только для отключения можно опустить — достаточно `{ "disabled": true }` |
+| `extensions` | string[] | ✅ (свои серверы) | Список расширений файлов |
+| `disabled` | boolean | ❌ | Отключён ли (по умолчанию `false`) |
+| `env` | object | ❌ | Переменные окружения |
+| `initialization` | object | ❌ | Параметры инициализации LSP |
 
-::: warning 注意
-自定义 LSP 服务器必须提供 `extensions` 字段，否则配置校验会报错：`For custom LSP servers, 'extensions' array is required.`
+::: warning Обратите внимание
+Свои LSP-серверы обязаны задавать поле `extensions`, иначе валидация конфигурации упадёт с ошибкой: `For custom LSP servers, 'extensions' array is required.`
 
-内置服务器可以省略 `extensions`，因为已经有默认值。
+Встроенные серверы `extensions` опускают — значения по умолчанию уже есть.
 :::
 
-**你应该看到**：打开 `.myl` 文件时，AI 能使用 LSP 操作。
+**Вы должны увидеть**: при открытии `.myl`-файлов AI умеет пользоваться операциями LSP.
 
 ---
 
-## 检查点 ✅
+## Контрольные пункты ✅
 
-- [ ] 理解 LSP 的作用：让 AI 从"看文本"升级到"理解代码结构"
-- [ ] 知道 OpenCode 内置了 30+ 语言服务器，大部分开箱即用
-- [ ] 能说出至少 3 种 LSP 操作（定义跳转、引用查找、悬停信息...）
-- [ ] 知道如何禁用特定 LSP 服务器
-- [ ] 知道如何添加自定义 LSP 服务器
-
----
-
-## 踩坑提醒
-
-| 现象 | 原因 | 解决 |
-|------|------|------|
-| `No LSP server available for this file type` | 对应语言的服务器没安装或不满足条件 | 检查"要求"列，安装对应工具链 |
-| LSP 服务器在错误的目录启动 | 项目根目录检测不对 | 确保项目根目录有标志文件（如 `package.json`、`go.mod`） |
-| `File not found: /path/to/file.ts` | 文件路径错误 | 使用相对于项目根目录的路径 |
-| 首次使用等待时间长 | 服务器首次启动需要初始化和建索引 | 正常现象，后续使用会快很多 |
-| TypeScript 和 Deno 服务器冲突 | 两个服务器同时处理 `.ts` 文件 | 在 `opencode.json` 中禁用不需要的那个 |
-| LSP 内存占用高 | 大型项目索引消耗内存 | 禁用不需要的服务器，或设置 `"lsp": false` |
-| 自定义服务器启动失败 | 环境变量缺失或命令路径不对 | 在配置中添加 `env` 字段，使用绝对路径 |
+- [ ] Понимаете роль LSP: AI переходит с «чтения текста» на «понимание структуры кода»
+- [ ] Знаете: в OpenCode встроено 30+ языковых серверов, большинство работает из коробки
+- [ ] Назовёте хотя бы 3 операции LSP (переходы к определениям, поиск ссылок, ховеры...)
+- [ ] Знаете, как отключить отдельный LSP-сервер
+- [ ] Знаете, как добавить свой LSP-сервер
 
 ---
 
-## 附加信息
+## Типичные проблемы
 
-### PHP Intelephense 许可证
+| Симптом | Причина | Решение |
+|-----|-----|-----|
+| `No LSP server available for this file type` | Сервер языка не установлен или не выполнены условия | Проверьте столбец «Требование», установите нужный тулчейн |
+| LSP-сервер стартует не в том каталоге | Неверно определяется корень проекта | Убедитесь, что в корне проекта есть маркерный файл (вроде `package.json`, `go.mod`) |
+| `File not found: /path/to/file.ts` | Ошибка в пути к файлу | Используйте путь относительно корня проекта |
+| Первое использование долго ждёт | Первый старт сервера — инициализация и построение индекса | Нормально, дальше будет намного быстрее |
+| Конфликт серверов TypeScript и Deno | Оба сервера обрабатывают `.ts`-файлы | Отключите ненужный в `opencode.json` |
+| Высокое потребление памяти LSP | Индекс больших проектов ест память | Отключите ненужные серверы или задайте `"lsp": false` |
+| Свой сервер не стартует | Нет переменных окружения или неверный путь команды | Добавьте поле `env` в конфиг, используйте абсолютные пути |
 
-PHP Intelephense 通过许可证密钥提供高级功能。可以将许可证密钥放在文本文件中：
+---
+
+## Дополнительная информация
+
+### Лицензия PHP Intelephense
+
+PHP Intelephense открывает продвинутые функции по лицензионному ключу. Ключ положите текстовым файлом:
 
 - macOS/Linux: `$HOME/intelephense/licence.txt`
 - Windows: `%USERPROFILE%/intelephense/licence.txt`
 
-文件应只包含许可证密钥，无其他内容。
+Файл содержит только лицензионный ключ, без прочего содержимого.
 
-### 实验性功能：ty Python 服务器
+### Экспериментальная функция: Python-сервер ty
 
-设置环境变量 `OPENCODE_EXPERIMENTAL_LSP_TY=1` 可以启用实验性的 ty Python 服务器，替代默认的 pyright。启用后 pyright 会自动禁用。
+Переменная окружения `OPENCODE_EXPERIMENTAL_LSP_TY=1` включает экспериментальный Python-сервер ty вместо pyright по умолчанию. После включения pyright автоматически отключается.
 
-::: warning 实验性功能
-ty 服务器还在实验阶段，可能随版本变化。生产环境建议继续使用 pyright。
+::: warning Экспериментальная функция
+Сервер ty пока экспериментальный и может меняться с версиями. Для production рекомендуем pyright.
 :::
 
 ---
 
-## 本课小结
+## Итоги урока
 
-| 核心概念 | 说明 |
+| Главная концепция | Описание |
 |---------|------|
-| LSP 作用 | 给 AI 提供 IDE 级代码智能，理解代码语义 |
-| 自动检测 | 根据文件扩展名自动启动对应服务器 |
-| 内置支持 | 30+ 语言服务器，大部分开箱即用 |
-| 9 种操作 | 定义跳转、引用查找、悬停信息、符号搜索、实现跳转、调用层级等 |
-| 配置方式 | `opencode.json` 的 `lsp` 字段，支持禁用和自定义 |
+| Роль LSP | Даёт AI IDE-уровень кодового интеллекта и понимание семантики кода |
+| Автодетект | По расширению файлов автоматически стартует нужный сервер |
+| Встроенная поддержка | 30+ языковых серверов, большинство работает из коробки |
+| 9 операций | Переходы к определениям, поиск ссылок, ховеры, поиск символов, переходы к реализациям, иерархии вызовов и др. |
+| Способы настройки | Поле `lsp` в `opencode.json`, поддерживаются отключение и свои серверы |
 
-记住：大部分情况下你不需要配置任何东西，LSP 会自动工作。只有遇到问题或需要自定义时才需要改配置。
+Запомните: в большинстве случаев настраивать ничего не нужно — LSP работает сам. Конфиг нужен лишь при проблемах и своей настройке.
 
 ---
 
-## 下一课预告
+## Анонс следующего урока
 
-> 下一课我们学习 **[上下文压缩](./20-compaction)**。
+> В следующем уроке изучим **[сжатие контекста](./20-compaction)**.
 >
-> 你会学到：
-> - 上下文压缩的触发机制
-> - Context 百分比的含义
-> - 如何手动触发压缩
-> - 压缩对对话质量的影响
+> Вы узнаете:
+> - Механизм срабатывания сжатия контекста
+> - Что означают проценты Context
+> - Как сжимать вручную
+> - Как сжатие влияет на качество диалога
 
 ---
 
-## 相关课程
+## Связанные уроки
 
-- [代码格式化器](18-formatters) - 自动代码格式化
-- [内置工具](17-tools) - 所有内置工具一览
-- [调试指南](22-debugging) - `debug lsp` 命令排查问题
-- [配置参考](../appendix/config-ref) - 完整配置选项
+- [Форматтеры кода](18-formatters) — автоматическое форматирование кода
+- [Встроенные инструменты](17-tools) — обзор всех встроенных инструментов
+- [Руководство по отладке](22-debugging) — диагностика проблем командой `debug lsp`
+- [Справочник конфигурации](../appendix/config-ref) — все опции конфигурации
 
 ---
 
-## 附录：源码参考
+## Приложение: ссылки на исходники
 
 <details>
-<summary><strong>点击展开查看源码位置</strong></summary>
+<summary><strong>Нажмите, чтобы раскрыть расположение исходников</strong></summary>
 
-> 更新时间：2026-02-14
+> Дата обновления: 2026-02-14
 
-| 功能 | 文件路径 | 行号 |
-|------|---------|------|
-| LSP 命名空间和核心逻辑 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L14-L485) | 14-485 |
-| LSP 客户端获取和服务器启动 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L177-L262) | 177-262 |
-| goToDefinition 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L386-L395) | 386-395 |
-| findReferences 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L397-L407) | 397-407 |
-| hover 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L303-L317) | 303-317 |
-| workspaceSymbol（过滤和��制 10 个） | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L359-L369) | 359-369 |
-| documentSymbol 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L371-L384) | 371-384 |
-| goToImplementation 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L409-L418) | 409-418 |
-| prepareCallHierarchy 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L420-L429) | 420-429 |
-| incomingCalls 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L431-L442) | 431-442 |
-| outgoingCalls 实现 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L444-L455) | 444-455 |
-| diagnostics 诊断信息 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L291-L301) | 291-301 |
-| LSP 工具定义（9 种操作） | [`src/tool/lsp.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/lsp.ts#L10-L96) | 10-96 |
-| LSP 工具描述文本 | [`src/tool/lsp.txt`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/lsp.txt#L1-L20) | 1-20 |
-| LSP 配置 Schema | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L1115-L1150) | 1115-1150 |
-| LSPServer 接口定义 | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L53-L59) | 53-59 |
-| TypeScript 服务器 | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L89-L116) | 89-116 |
-| Python 服务器 (pyright) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L505-L557) | 505-557 |
-| Go 服务器 (gopls) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L358-L398) | 358-398 |
-| Rust 服务器 (rust-analyzer) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L847-L891) | 847-891 |
-| 实验性 ty Python 服务器 | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L441-L503) | 441-503 |
-| 实验性服务器过滤逻辑 | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L64-L77) | 64-77 |
-| SymbolKind 过滤（workspaceSymbol） | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L319-L357) | 319-357 |
+| Функция | Путь к файлу | Строки |
+|-----|---------|------|
+| Пространство имён LSP и главная логика | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L14-L485) | 14-485 |
+| Получение LSP-клиента и старт серверов | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L177-L262) | 177-262 |
+| Реализация goToDefinition | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L386-L395) | 386-395 |
+| Реализация findReferences | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L397-L407) | 397-407 |
+| Реализация hover | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L303-L317) | 303-317 |
+| Реализация workspaceSymbol (фильтрация и лимит 10 штук) | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L359-L369) | 359-369 |
+| Реализация documentSymbol | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L371-L384) | 371-384 |
+| Реализация goToImplementation | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L409-L418) | 409-418 |
+| Реализация prepareCallHierarchy | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L420-L429) | 420-429 |
+| Реализация incomingCalls | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L431-L442) | 431-442 |
+| Реализация outgoingCalls | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L444-L455) | 444-455 |
+| Диагностическая информация | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L291-L301) | 291-301 |
+| Определение инструментов LSP (9 операций) | [`src/tool/lsp.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/lsp.ts#L10-L96) | 10-96 |
+| Текст описания инструментов LSP | [`src/tool/lsp.txt`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/lsp.txt#L1-L20) | 1-20 |
+| Schema конфигурации LSP | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L1115-L1150) | 1115-1150 |
+| Определение интерфейса LSPServer | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L53-L59) | 53-59 |
+| Сервер TypeScript | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L89-L116) | 89-116 |
+| Сервер Python (pyright) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L505-L557) | 505-557 |
+| Сервер Go (gopls) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L358-L398) | 358-398 |
+| Сервер Rust (rust-analyzer) | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L847-L891) | 847-891 |
+| Экспериментальный Python-сервер ty | [`src/lsp/server.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/server.ts#L441-L503) | 441-503 |
+| Логика фильтрации экспериментальных серверов | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L64-L77) | 64-77 |
+| Фильтрация SymbolKind (workspaceSymbol) | [`src/lsp/index.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/lsp/index.ts#L319-L357) | 319-357 |
 
-**关键类型**：
-- `LSP.Range`：代码范围（开始/结束位置）
-- `LSP.Symbol`：符号信息（名称、类型、位置）
-- `LSP.DocumentSymbol`：文档符号（包含子符号）
-- `LSP.Status`：LSP 服务器状态（id、name、root、status）
-- `LSPServer.Info`：服务器定义（id、extensions、root、spawn）
+**Ключевые типы**:
+- `LSP.Range`: диапазон кода (позиции начала и конца)
+- `LSP.Symbol`: информация о символе (имя, тип, позиция)
+- `LSP.DocumentSymbol`: символ документа (с дочерними символами)
+- `LSP.Status`: статус LSP-сервера (id, имя, корень, статус)
+- `LSPServer.Info`: определение сервера (id, расширения, корень, spawn)
 
-**关键常量**：
-- `operations`：9 种 LSP 操作的枚举列表（`src/tool/lsp.ts` 第 10-20 行）
-- `kinds`：workspaceSymbol 过滤的符号类型（Class、Function、Method、Interface、Variable、Constant、Struct、Enum）
+**Ключевые константы**:
+- `operations`: перечисление 9 операций LSP (`src/tool/lsp.ts`, строки 10–20)
+- `kinds`: фильтруемые типы символов workspaceSymbol (Class, Function, Method, Interface, Variable, Constant, Struct, Enum)
 
-**环境变量**：
-- `OPENCODE_DISABLE_LSP_DOWNLOAD`：禁用自动下载 LSP 服务器
-- `OPENCODE_EXPERIMENTAL_LSP_TY`：启用实验性 ty Python 服务器
+**Переменные окружения**:
+- `OPENCODE_DISABLE_LSP_DOWNLOAD`: отключить автоскачивание LSP-серверов
+- `OPENCODE_EXPERIMENTAL_LSP_TY`: включить экспериментальный Python-сервер ty
 
 </details>

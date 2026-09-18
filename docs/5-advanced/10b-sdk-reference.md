@@ -1,108 +1,108 @@
 ---
-title: 5.10b API 参考
-subtitle: SDK 完整 API 文档
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.10b Справочник API
+subtitle: Полная документация API SDK
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.10b"
-duration: 30 分钟
-practice: 40 分钟
-level: 进阶
-description: OpenCode SDK 提供 20 个 API 模块加 1 个权限响应方法、32 种事件类型，覆盖会话、文件、配置、MCP、LSP 等全部功能。
+duration: 30 минут
+practice: 40 минут
+level: Продвинутый
+description: SDK OpenCode предоставляет 20 модулей API плюс 1 метод ответа на права и 32 типа событий — сессии, файлы, конфигурация, MCP, LSP и весь остальной функционал.
 tags:
   - SDK
   - API
-  - 参考文档
+  - Справочная документация
 prerequisite:
-  - 5.10a SDK 基础
+  - 5.10a Основы SDK
 ---
 
-# 5.10b API 参考
+# 5.10b Справочник API
 
-> **一句话总结**：OpenCode SDK 提供 20 个 API 模块加 1 个权限响应方法、32 种事件类型，覆盖会话、文件、配置、MCP、LSP 等全部功能。
+> **Коротко**: SDK OpenCode предоставляет 20 модулей API плюс 1 метод ответа на права и 32 типа событий — сессии, файлы, конфигурация, MCP, LSP и весь остальной функционал.
 
 ---
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/5-advanced/10b-sdk-reference-notes.mini.jpeg"
-     alt="5.10b API 参考学霸笔记"
+     alt="Шпаргалка урока: 5.10b Справочник API"
      data-zoom-src="/images/5-advanced/10b-sdk-reference-notes.jpeg" />
 
 ---
 
-## API 模块总览
+## Обзор модулей API
 
-SDK 客户端通过 `OpencodeClient` 类暴露以下模块：
+Клиент SDK открывает модули классом `OpencodeClient`:
 
-::: info 版本边界
-本章表格描述 V1 入口 `@opencode-ai/sdk`。`v1.18.22` 仍导出并保留 V1，同时通过 `@opencode-ai/sdk/v2` 扩展会话、问题、当前位置、事件流、历史分页、运行时操作和权限请求；V2 的平铺参数不能和本章 V1 的 `{ path, body }` 写法混用。
+::: info Границы версий
+Таблицы главы описывают вход V1 `@opencode-ai/sdk`. В `v1.18.22` V1 по-прежнему экспортируется и сохраняется, а через `@opencode-ai/sdk/v2` расширяются сессии, вопросы, текущая позиция, потоки событий, пагинация истории, рантайм-операции и запросы прав; плоские параметры V2 нельзя смешивать с V1-записью `{ path, body }` этой главы.
 :::
 
-> 来源：[`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20)、[`V1 OpencodeClient:1157-1197`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L1157-L1197)、[`V2 Session3:5426-5873`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873)
+> Источники: [`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20),[`V1 OpencodeClient:1157-1197`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L1157-L1197),[`V2 Session3:5426-5873`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5426-L5873)
 
-| 模块 | 描述 | 来源 |
+| Модуль | Описание | Источник |
 |------|------|------|
-| `global` | 全局事件订阅 | `sdk.gen.ts:233-243` |
-| `project` | 项目管理 | `sdk.gen.ts:245-265` |
-| `session` | 会话管理（核心） | `sdk.gen.ts:431-700` |
-| `file` | 文件操作 | `sdk.gen.ts:808-838` |
-| `find` | 搜索功能 | `sdk.gen.ts:776-806` |
-| `config` | 配置管理 | `sdk.gen.ts:337-371` |
-| `app` | 应用信息 | `sdk.gen.ts:840-864` |
-| `tui` | TUI 界面控制 | `sdk.gen.ts:1026-1143` |
-| `event` | 事件订阅 | `sdk.gen.ts:1145-1155` |
-| `auth` | 认证管理 | `sdk.gen.ts:866-926` |
-| `provider` | 模型提供商 | `sdk.gen.ts:753-774` |
-| `mcp` | MCP 服务器管理 | `sdk.gen.ts:928-974` |
-| `lsp` | LSP 服务器状态 | `sdk.gen.ts:976-986` |
-| `formatter` | 格式化器状态 | `sdk.gen.ts:988-998` |
-| `command` | 命令列表 | `sdk.gen.ts:703-713` |
-| `path` | 路径信息 | `sdk.gen.ts:407-417` |
-| `vcs` | 版本控制信息 | `sdk.gen.ts:419-429` |
-| `pty` | PTY 终端会话 | `sdk.gen.ts:267-335` |
-| `tool` | 工具管理（实验性） | `sdk.gen.ts:373-393` |
-| `instance` | 实例管理 | `sdk.gen.ts:395-405` |
+| `global` | Глобальная подписка на события | `sdk.gen.ts:233-243` |
+| `project` | Управление проектами | `sdk.gen.ts:245-265` |
+| `session` | Ведение сессий (ядро) | `sdk.gen.ts:431-700` |
+| `file` | Операции с файлами | `sdk.gen.ts:808-838` |
+| `find` | Функции поиска | `sdk.gen.ts:776-806` |
+| `config` | Управление конфигурацией | `sdk.gen.ts:337-371` |
+| `app` | Информация о приложении | `sdk.gen.ts:840-864` |
+| `tui` | Управление TUI-интерфейсом | `sdk.gen.ts:1026-1143` |
+| `event` | Подписка на события | `sdk.gen.ts:1145-1155` |
+| `auth` | Управление аутентификацией | `sdk.gen.ts:866-926` |
+| `provider` | Провайдеры моделей | `sdk.gen.ts:753-774` |
+| `mcp` | Управление MCP-серверами | `sdk.gen.ts:928-974` |
+| `lsp` | Статус LSP-серверов | `sdk.gen.ts:976-986` |
+| `formatter` | Статус форматтеров | `sdk.gen.ts:988-998` |
+| `command` | Список команд | `sdk.gen.ts:703-713` |
+| `path` | Информация о путях | `sdk.gen.ts:407-417` |
+| `vcs` | Информация контроля версий | `sdk.gen.ts:419-429` |
+| `pty` | PTY-сессии терминалов | `sdk.gen.ts:267-335` |
+| `tool` | Управление инструментами (экспериментальное) | `sdk.gen.ts:373-393` |
+| `instance` | Управление инстансами | `sdk.gen.ts:395-405` |
 
 ---
 
 <AdInArticle />
 
-## Session 会话管理
+## Ведение сессий Session
 
-会话是 SDK 最核心的模块，提供消息发送、历史管理等功能。
+Сессии — главный модуль SDK: отправка сообщений, ведение истории и др.
 
-### 方法列表
+### Список методов
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `session.list()` | 列出所有会话 | `Session[]` |
-| `session.get({ path })` | 获取单个会话 | `Session` |
-| `session.create({ body })` | 创建新会话 | `Session` |
-| `session.delete({ path })` | 删除会话 | `boolean` |
-| `session.update({ path, body })` | 更新会话属性 | `Session` |
-| `session.status()` | 获取所有会话状态 | `{ [sessionID: string]: SessionStatus }` |
-| `session.children({ path })` | 获取子会话列表 | `Session[]` |
-| `session.todo({ path })` | 获取会话 Todo 列表 | `Todo[]` |
-| `session.init({ path, body })` | 分析项目并创建 AGENTS.md | `boolean` |
-| `session.fork({ path, body })` | 在指定消息处分叉会话 | `Session` |
-| `session.abort({ path })` | 中止运行中的会话 | `boolean` |
-| `session.share({ path })` | 分享会话 | `Session` |
-| `session.unshare({ path })` | 取消分享 | `Session` |
-| `session.diff({ path })` | 获取会话的文件变更 | `FileDiff[]` |
-| `session.summarize({ path, body })` | 总结会话内容 | `boolean` |
-| `session.messages({ path })` | 获取会话消息列表 | `{info: Message, parts: Part[]}[]` |
-| `session.message({ path })` | 获取单条消息详情 | `{info: Message, parts: Part[]}` |
-| `session.prompt({ path, body })` | 发送消息并等待响应 | `{info: AssistantMessage, parts: Part[]}` |
-| `session.promptAsync({ path, body })` | 异步发送消息（不等待） | `204 No Content` |
-| `session.command({ path, body })` | 发送命令 | `{info: AssistantMessage, parts: Part[]}` |
-| `session.shell({ path, body })` | 运行 shell 命令 | `AssistantMessage` |
-| `session.revert({ path, body })` | 撤销到指定消息 | `Session` |
-| `session.unrevert({ path })` | 重做已撤销的消息与文件状态 | `Session` |
+| `session.list()` | Список всех сессий | `Session[]` |
+| `session.get({ path })` | Одна сессия | `Session` |
+| `session.create({ body })` | Создание новой сессии | `Session` |
+| `session.delete({ path })` | Удаление сессии | `boolean` |
+| `session.update({ path, body })` | Обновление свойств сессии | `Session` |
+| `session.status()` | Статусы всех сессий | `{ [sessionID: string]: SessionStatus }` |
+| `session.children({ path })` | Список дочерних сессий | `Session[]` |
+| `session.todo({ path })` | Список дел сессии | `Todo[]` |
+| `session.init({ path, body })` | Разбор приложения и создание AGENTS.md | `boolean` |
+| `session.fork({ path, body })` | Форк сессии в указанном сообщении | `Session` |
+| `session.abort({ path })` | Прерывание выполняющейся сессии | `boolean` |
+| `session.share({ path })` | Поделиться сессией | `Session` |
+| `session.unshare({ path })` | Отменить шаринг | `Session` |
+| `session.diff({ path })` | Файловые различия сессии | `FileDiff[]` |
+| `session.summarize({ path, body })` | Суммирование содержимого сессии | `boolean` |
+| `session.messages({ path })` | Список сообщений сессии | `{info: Message, parts: Part[]}[]` |
+| `session.message({ path })` | Детали одного сообщения | `{info: Message, parts: Part[]}` |
+| `session.prompt({ path, body })` | Отправка сообщения с ожиданием ответа | `{info: AssistantMessage, parts: Part[]}` |
+| `session.promptAsync({ path, body })` | Асинхронная отправка сообщения (без ожидания) | `204 No Content` |
+| `session.command({ path, body })` | Отправка команды | `{info: AssistantMessage, parts: Part[]}` |
+| `session.shell({ path, body })` | Выполнение shell-команды | `AssistantMessage` |
+| `session.revert({ path, body })` | Откат к указанному сообщению | `Session` |
+| `session.unrevert({ path })` | Повтор отменённых сообщений и состояния файлов | `Session` |
 
-::: tip 权限响应
-Session 类**没有** `permission()` 方法。响应权限请求请使用 `OpencodeClient` 上的直接方法：
+::: tip Ответы на права
+В классе Session **нет** метода `permission()`. Отвечайте на запросы прав прямым методом `OpencodeClient`:
 
 ```typescript
 await client.postSessionIdPermissionsPermissionId({
@@ -112,134 +112,134 @@ await client.postSessionIdPermissionsPermissionId({
 ```
 :::
 
-### Undo / Revert / Redo
+### Undo, Revert и Redo
 
-V1 的 `session.revert()` 对应 undo/revert：它会把会话边界移到指定 `messageID`（可细化到 `partID`），收集边界之后的 patch，并默认恢复关联文件 snapshot。`session.unrevert()` 对应 redo/unrevert：恢复原 snapshot 后清除 revert 状态。两者都会拒绝运行中的 session。
+V1-метод `session.revert()` соответствует undo и revert: он сдвигает границу сессии к указанному `messageID` (с точностью до `partID`), собирает патчи после границы и по умолчанию восстанавливает связанные файловые снапшоты. `session.unrevert()` соответствует redo и unrevert: восстанавливает исходный снапшот и снимает состояние revert. Оба отклоняют работающие сессии.
 
 ```typescript
-// Undo：回到指定消息，并默认回滚该边界之后的文件补丁
+// Undo: вернуться к указанному сообщению с откатом файловых патчей границы по умолчанию
 await client.session.revert({
   path: { id: sessionID },
   body: { messageID: "msg-123" },
 })
 
-// Redo：恢复刚才撤销的消息与文件状态
+// Redo: восстановить только что отменённые сообщения и состояние файлов
 await client.session.unrevert({ path: { id: sessionID } })
 ```
 
-配置 `snapshot: false` 只禁用文件 snapshot 的 undo/redo，不会删除消息边界的 revert 能力。
+Настройка `snapshot: false` отключает только undo и redo файловых снапшотов, способность revert границ сообщений сохраняется.
 
-> 来源：[`V1 sdk.gen.ts:678-700`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L678-L700)、[`session/revert.ts:38-98`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98)、[`config.ts:52-55`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55)
+> Источники: [`V1 sdk.gen.ts:678-700`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L678-L700),[`session/revert.ts:38-98`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/session/revert.ts#L38-L98),[`config.ts:52-55`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L52-L55)
 
-### 代码示例
+### Пример кода
 
 ```typescript
-// 创建会话
+// Создание сессии
 const session = await client.session.create({
-  body: { title: "代码重构任务" },
+  body: { title: "Задача рефакторинга кода" },
 })
 
-// 发送消息
+// Отправка сообщения
 const result = await client.session.prompt({
   path: { id: session.data!.id },
   body: {
     model: { providerID: "anthropic", modelID: "claude-opus-4-5-thinking" },
-    parts: [{ type: "text", text: "请帮我重构这个函数" }],
+    parts: [{ type: "text", text: "Отрефактори мне эту функцию" }],
   },
 })
 
-// 获取消息列表
+// Список сообщений
 const messages = await client.session.messages({
   path: { id: session.data!.id },
 })
 
-// 获取 Todo 列表
+// Список дел
 const todos = await client.session.todo({
   path: { id: session.data!.id },
 })
 
-// 分叉会话
+// Форк сессии
 const forked = await client.session.fork({
   path: { id: session.data!.id },
   body: { messageID: "msg-123" },
 })
 
-// 获取文件变更
+// Файловые различия
 const diff = await client.session.diff({
   path: { id: session.data!.id },
 })
 
-// 中止会话
+// Прерывание сессии
 await client.session.abort({
   path: { id: session.data!.id },
 })
 
-// 分享会话（生成可访问的 URL）
+// Шаринг сессии (создаёт доступный URL)
 const shared = await client.session.share({ path: { id: session.data!.id } })
-console.log(`分享链接: ${shared.data?.share?.url}`)
+console.log(`Ссылка шаринга: ${shared.data?.share?.url}`)
 
-// 取消分享
+// Отмена шаринга
 await client.session.unshare({ path: { id: session.data!.id } })
 ```
 
-### prompt body 参数
+### Параметры тела prompt
 
-| 参数 | 类型 | 描述 |
+| Параметр | Тип | Описание |
 |------|------|------|
-| `parts` | `Array<TextPartInput \| FilePartInput \| AgentPartInput \| SubtaskPartInput>` | 消息内容部分 |
-| `model` | `{providerID, modelID}` | 指定模型 |
-| `noReply` | `boolean` | 设为 `true` 则不触发 AI 响应（注入上下文） |
-| `agent` | `string` | 使用指定 Agent |
+| `parts` | `Array<TextPartInput \| FilePartInput \| AgentPartInput \| SubtaskPartInput>` | Части содержимого сообщения |
+| `model` | `{providerID, modelID}` | Указать модель |
+| `noReply` | `boolean` | `true` — не вызывать ответ AI (внедрение контекста) |
+| `agent` | `string` | Использовать указанного Agent |
 
-### Token 消耗与费用
+### Расход токенов и стоимость
 
-每次 AI 回复都会返回 token 消耗和费用，无需额外请求。`session.prompt()` 返回的 `info` 字段（类型 `AssistantMessage`）自带 `cost` 和 `tokens`：
+Каждый ответ AI возвращает расход токенов и стоимость без отдельных запросов. Поле `info` (тип `AssistantMessage`), возвращаемое `session.prompt()`, несёт `cost` и `tokens`:
 
 ```typescript
 const result = await client.session.prompt({
   path: { id: sessionID },
   body: {
-    parts: [{ type: "text", text: "分析这段代码" }],
+    parts: [{ type: "text", text: "Разбери этот код" }],
   },
 })
 
 const info = result.data?.info  // AssistantMessage
 if (info) {
-  console.log(`费用: $${info.cost}`)
-  console.log(`输入 token: ${info.tokens.input}`)
-  console.log(`输出 token: ${info.tokens.output}`)
-  console.log(`推理 token: ${info.tokens.reasoning}`)
-  console.log(`缓存读取: ${info.tokens.cache.read}`)
-  console.log(`缓存写入: ${info.tokens.cache.write}`)
+  console.log(`Стоимость: $${info.cost}`)
+  console.log(`Входные токены: ${info.tokens.input}`)
+  console.log(`Выходные токены: ${info.tokens.output}`)
+  console.log(`Токены рассуждений: ${info.tokens.reasoning}`)
+  console.log(`Чтение кэша: ${info.tokens.cache.read}`)
+  console.log(`Запись кэша: ${info.tokens.cache.write}`)
 }
 ```
 
-> 来源：`types.gen.ts:112-141`（AssistantMessage 类型）
+> Источник: `types.gen.ts:112-141` (тип AssistantMessage)
 
-**按步统计**：如果模型分多步执行（如工具调用），每步结束时会产生一个 `StepFinishPart`，同样带 `cost` 和 `tokens` 字段，可以拿到**每一步**的消耗：
+**Пошаговый учёт**: при многошаговой работе модели (например, вызовы инструментов) конец каждого шага порождает `StepFinishPart` тоже с полями `cost` и `tokens` — виден расход **каждого шага**:
 
 ```typescript
-// 遍历消息的所有 Part，统计每步消耗
+// Обход всех Part сообщения, суммирование пошагового расхода
 const msg = await client.session.message({
   path: { id: sessionID, messageID: "msg-1" },
 })
 
 for (const part of msg.data?.parts ?? []) {
   if (part.type === "step-finish") {
-    console.log(`步骤费用: $${part.cost}, 输出: ${part.tokens.output} tokens`)
+    console.log(`Стоимость шага: $${part.cost}, вывод: ${part.tokens.output} tokens`)
   }
 }
 ```
 
-> 来源：`types.gen.ts:315-332`（StepFinishPart 类型）
+> Источник: `types.gen.ts:315-332` (тип StepFinishPart)
 
-::: tip 统计整个会话的累计消耗
-遍历 `session.messages()` 返回的所有消息，把每条 `AssistantMessage` 的 `cost` 和 `tokens` 累加即可。
+::: tip Суммарный расход всей сессии
+Обойдите все сообщения из `session.messages()` и просуммируйте `cost` и `tokens` каждого `AssistantMessage`.
 :::
 
-### 工具调用监控
+### Мониторинг вызовов инструментов
 
-AI 回复中的 `ToolPart` 记录了每次工具调用的完整生命周期。通过 `part.state` 可以判断工具处于哪个阶段，拿到输入、输出和耗时：
+`ToolPart` в ответах AI фиксирует полный жизненный цикл каждого вызова инструмента. По `part.state` видно этап инструмента, его вход, выход и длительность:
 
 ```typescript
 const msg = await client.session.message({
@@ -248,87 +248,87 @@ const msg = await client.session.message({
 
 for (const part of msg.data?.parts ?? []) {
   if (part.type !== "tool") continue
-  console.log(`工具: ${part.tool}`)
+  console.log(`Инструмент: ${part.tool}`)
   const state = part.state
   switch (state.status) {
     case "completed":
-      console.log(`  结果: ${state.output}`)
-      console.log(`  耗时: ${state.time.end - state.time.start}ms`)
+      console.log(`  Результат: ${state.output}`)
+      console.log(`  Длительность: ${state.time.end - state.time.start}ms`)
       break
     case "error":
-      console.log(`  错误: ${state.error}`)
+      console.log(`  Ошибка: ${state.error}`)
       break
     case "running":
-      console.log(`  正在执行...`)
+      console.log(`  Выполняется...`)
       break
     case "pending":
-      console.log(`  等待执行`)
+      console.log(`  Ожидает выполнения`)
       break
   }
 }
 ```
 
-工具调用的四种状态：
+Четыре состояния вызовов инструментов:
 
-| 状态 | 说明 | 可用字段 |
+| Состояние | Описание | Доступные поля |
 |------|------|---------|
-| `pending` | 等待执行 | `input`（参数）、`raw`（原始输入） |
-| `running` | 正在执行 | `input`、`title`、`time.start` |
-| `completed` | 已完成 | `input`、`output`（结果）、`title`、`time.{start,end}`、`attachments`（附件） |
-| `error` | 出错 | `input`、`error`（错误信息）、`time.{start,end}` |
+| `pending` | Ожидает выполнения | `input` (параметры), `raw` (сырой ввод) |
+| `running` | Выполняется | `input`, `title`, `time.start` |
+| `completed` | Завершён | `input`, `output` (результат), `title`, `time.{start,end}`, `attachments` (вложения) |
+| `error` | Ошибка | `input`, `error` (текст ошибки), `time.{start,end}` |
 
-> 来源：`types.gen.ts:237-305`（ToolState 四种子类型 + ToolPart）
+> Источник: `types.gen.ts:237-305` (четыре подтипа ToolState + ToolPart)
 
-### 会话代码变更统计
+### Статистика изменений кода сессий
 
-`Session` 类型自带 `summary` 字段，记录这个会话修改了多少代码，无需手动 diff：
+Тип `Session` несёт поле `summary` — сколько кода изменила сессия, без ручного diff:
 
 ```typescript
 const session = await client.session.get({ path: { id: sessionID } })
 const summary = session.data?.summary
 if (summary) {
-  console.log(`修改文件: ${summary.files}`)
-  console.log(`新增行: ${summary.additions}`)
-  console.log(`删除行: ${summary.deletions}`)
-  // summary.diffs 包含每个文件的差异
+  console.log(`Файлов изменено: ${summary.files}`)
+  console.log(`Строк добавлено: ${summary.additions}`)
+  console.log(`Строк удалено: ${summary.deletions}`)
+  // summary.diffs — различия каждого файла
 }
 ```
 
-| 字段 | 类型 | 说明 |
+| Поле | Тип | Описание |
 |------|------|------|
-| `summary.files` | `number` | 修改的文件数 |
-| `summary.additions` | `number` | 新增行数 |
-| `summary.deletions` | `number` | 删除行数 |
-| `summary.diffs` | `FileDiff[]?` | 每个文件的差异明细 |
+| `summary.files` | `number` | Число изменённых файлов |
+| `summary.additions` | `number` | Число добавленных строк |
+| `summary.deletions` | `number` | Число удалённых строк |
+| `summary.diffs` | `FileDiff[]?` | Детализация различий каждого файла |
 
-> 来源：`types.gen.ts:533-560`（Session.summary 字段）
+> Источник: `types.gen.ts:533-560` (поле Session.summary)
 
 ---
 
-## Project 项目管理
+## Управление проектами Project
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `project.list()` | 列出所有项目 | `Project[]` |
-| `project.current()` | 获取当前项目 | `Project` |
+| `project.list()` | Список всех проектов | `Project[]` |
+| `project.current()` | Текущий проект | `Project` |
 
 ```typescript
-// 获取当前项目
+// Текущий проект
 const current = await client.project.current()
-console.log(`项目路径: ${current.data?.worktree}`)
+console.log(`Путь проекта: ${current.data?.worktree}`)
 
-// 列出所有项目
+// Все проекты
 const projects = await client.project.list()
 ```
 
-### Project 类型
+### Тип Project
 
 ```typescript
 type Project = {
   id: string
-  worktree: string      // 工作目录
-  vcsDir?: string       // VCS 目录（如 .git）
-  vcs?: "git"           // 版本控制类型
+  worktree: string      // Рабочий каталог
+  vcsDir?: string       // Каталог VCS (вроде .git)
+  vcs?: "git"           // Тип контроля версий
   time: {
     created: number
     initialized?: number
@@ -338,27 +338,27 @@ type Project = {
 
 ---
 
-## File 文件操作
+## Операции с файлами File
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `file.list({ query })` | 列出文件和目录 | `FileNode[]` |
-| `file.read({ query })` | 读取文件内容 | `FileContent` |
-| `file.status()` | 获取文件状态（git 变更） | `File[]` |
+| `file.list({ query })` | Список файлов и каталогов | `FileNode[]` |
+| `file.read({ query })` | Чтение содержимого файла | `FileContent` |
+| `file.status()` | Статус файлов (изменения git) | `File[]` |
 
 ```typescript
-// 列出目录内容
+// Содержимое каталога
 const nodes = await client.file.list({
   query: { path: "src" },
 })
 
-// 读取文件
+// Чтение файла
 const content = await client.file.read({
   query: { path: "src/index.ts" },
 })
 console.log(content.data?.content)
 
-// 获取 git 状态
+// Статус git
 const status = await client.file.status()
 for (const file of status.data ?? []) {
   console.log(`${file.status}: ${file.path} (+${file.added}/-${file.removed})`)
@@ -367,39 +367,39 @@ for (const file of status.data ?? []) {
 
 ---
 
-## Find 搜索功能
+## Функции поиска Find
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `find.text({ query })` | 在文件内容中搜索文本 | 匹配结果数组 |
-| `find.files({ query })` | 按名称查找文件/目录 | `string[]` |
-| `find.symbols({ query })` | 查找工作区符号 | `Symbol[]` |
+| `find.text({ query })` | Поиск текста в содержимом файлов | Массив совпадений |
+| `find.files({ query })` | Поиск файлов и каталогов по имени | `string[]` |
+| `find.symbols({ query })` | Поиск символов рабочей области | `Symbol[]` |
 
-### find.files 查询参数
+### Параметры запроса find.files
 
-| 参数 | 类型 | 描述 |
+| Параметр | Тип | Описание |
 |------|------|------|
-| `query` | `string` | 搜索模式（支持 glob，必填） |
-| `dirs` | `"true" \| "false"` | 是否只返回目录（字符串，可选） |
-| `directory` | `string` | 覆盖搜索根目录（可选） |
+| `query` | `string` | Шаблон поиска (поддерживает glob, обязательный) |
+| `dirs` | `"true" \| "false"` | Только каталоги (строка, необязательно) |
+| `directory` | `string` | Перекрыть корень поиска (необязательно) |
 
 ```typescript
-// 搜索文本
+// Поиск текста
 const matches = await client.find.text({
   query: { pattern: "TODO|FIXME" },
 })
 
-// 查找文件
+// Поиск файлов
 const tsFiles = await client.find.files({
   query: { query: "*.ts" },
 })
 
-// 只查找目录
+// Только каталоги
 const dirs = await client.find.files({
   query: { query: "src", dirs: "true" },
 })
 
-// 查找符号
+// Поиск символов
 const symbols = await client.find.symbols({
   query: { query: "handleRequest" },
 })
@@ -407,20 +407,20 @@ const symbols = await client.find.symbols({
 
 ---
 
-## Config 配置管理
+## Управление конфигурацией Config
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `config.get()` | 获取当前配置 | `Config` |
-| `config.update({ body })` | 更新配置 | `Config` |
-| `config.providers()` | 获取提供商列表和默认模型 | `{providers, default}` |
+| `config.get()` | Текущая конфигурация | `Config` |
+| `config.update({ body })` | Обновление конфигурации | `Config` |
+| `config.providers()` | Список провайдеров и моделей по умолчанию | `{providers, default}` |
 
 ```typescript
-// 获取配置
+// Получить конфигурацию
 const config = await client.config.get()
-console.log(`当前模型: ${config.data?.model}`)
+console.log(`Текущая модель: ${config.data?.model}`)
 
-// 动态更新配置
+// Динамическое обновление конфигурации
 await client.config.update({
   body: {
     model: "anthropic/claude-haiku-4-5",
@@ -428,30 +428,30 @@ await client.config.update({
   },
 })
 
-// 获取提供商信息
+// Информация о провайдерах
 const { providers, default: defaults } = (await client.config.providers()).data!
 ```
 
 ---
 
-## App 应用信息
+## Информация о приложении App
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `app.log({ body })` | 写入日志条目 | `boolean` |
-| `app.agents()` | 列出所有 Agent | `Agent[]` |
+| `app.log({ body })` | Запись в лог | `boolean` |
+| `app.agents()` | Список всех Agent | `Agent[]` |
 
 ```typescript
-// 写入日志
+// Запись в лог
 await client.app.log({
   body: {
     service: "my-plugin",
     level: "info",
-    message: "操作完成",
+    message: "Операция завершена",
   },
 })
 
-// 获取 Agent 列表
+// Список Agent
 const agents = await client.app.agents()
 for (const agent of agents.data ?? []) {
   console.log(`${agent.name}: ${agent.description}`)
@@ -460,44 +460,44 @@ for (const agent of agents.data ?? []) {
 
 ---
 
-## TUI 界面控制
+## Управление TUI-интерфейсом
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `tui.appendPrompt({ body })` | 向输入框追加文本 | `boolean` |
-| `tui.submitPrompt()` | 提交当前输入 | `boolean` |
-| `tui.clearPrompt()` | 清空输入框 | `boolean` |
-| `tui.showToast({ body })` | 显示通知 | `boolean` |
-| `tui.openHelp()` | 打开帮助对话框 | `boolean` |
-| `tui.openSessions()` | 打开会话选择器 | `boolean` |
-| `tui.openThemes()` | 打开主题选择器 | `boolean` |
-| `tui.openModels()` | 打开模型选择器 | `boolean` |
-| `tui.executeCommand({ body })` | 执行 TUI 命令 | `boolean` |
-| `tui.publish({ body })` | 发布 TUI 事件 | `boolean` |
-| `tui.control.next()` | 获取下一个 TUI 请求 | - |
-| `tui.control.response()` | 提交 TUI 响应 | - |
+| `tui.appendPrompt({ body })` | Дописать текст в поле ввода | `boolean` |
+| `tui.submitPrompt()` | Отправить текущий ввод | `boolean` |
+| `tui.clearPrompt()` | Очистить поле ввода | `boolean` |
+| `tui.showToast({ body })` | Показать уведомление | `boolean` |
+| `tui.openHelp()` | Открыть диалог помощи | `boolean` |
+| `tui.openSessions()` | Открыть выбор сессий | `boolean` |
+| `tui.openThemes()` | Открыть выбор тем | `boolean` |
+| `tui.openModels()` | Открыть выбор моделей | `boolean` |
+| `tui.executeCommand({ body })` | Выполнить команду TUI | `boolean` |
+| `tui.publish({ body })` | Опубликовать событие TUI | `boolean` |
+| `tui.control.next()` | Получить следующий запрос TUI | - |
+| `tui.control.response()` | Отправить ответ TUI | - |
 
-### showToast 参数
+### Параметры showToast
 
-| 参数 | 类型 | 描述 |
+| Параметр | Тип | Описание |
 |------|------|------|
-| `message` | `string` | 通知内容 |
-| `title` | `string` | 通知标题（可选） |
-| `variant` | `"info" \| "success" \| "warning" \| "error"` | 通知类型 |
-| `duration` | `number` | 显示时长（毫秒） |
+| `message` | `string` | Содержимое уведомления |
+| `title` | `string` | Заголовок уведомления (необязательно) |
+| `variant` | `"info" \| "success" \| "warning" \| "error"` | Тип уведомления |
+| `duration` | `number` | Длительность показа (миллисекунды) |
 
 ```typescript
-// 显示成功通知
+// Уведомление об успехе
 await client.tui.showToast({
   body: {
-    title: "操作成功",
-    message: "文件已保存",
+    title: "Операция успешна",
+    message: "Файл сохранён",
     variant: "success",
     duration: 3000,
   },
 })
 
-// 执行命令
+// Выполнение команды
 await client.tui.executeCommand({
   body: { command: "session.new" },
 })
@@ -505,24 +505,24 @@ await client.tui.executeCommand({
 
 ---
 
-## Auth 认证管理
+## Управление аутентификацией Auth
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `auth.set({ path, body })` | 设置认证凭据 | `boolean` |
-| `auth.remove({ path })` | 移除 MCP OAuth 凭据 | `boolean` |
-| `auth.start({ path })` | 启动 OAuth 流程 | - |
-| `auth.callback({ path, body })` | OAuth 回调 | - |
-| `auth.authenticate({ path })` | 自动 OAuth（打开浏览器） | - |
+| `auth.set({ path, body })` | Задать credentials аутентификации | `boolean` |
+| `auth.remove({ path })` | Удалить OAuth-credentials MCP | `boolean` |
+| `auth.start({ path })` | Запустить OAuth-процесс | - |
+| `auth.callback({ path, body })` | OAuth-колбэк | - |
+| `auth.authenticate({ path })` | Авто-OAuth (открыть браузер) | - |
 
 ```typescript
-// 设置 API Key
+// Задать API-ключ
 await client.auth.set({
   path: { id: "anthropic" },
   body: { type: "api", key: "sk-xxx" },
 })
 
-// 设置 OAuth 凭据
+// Задать OAuth-credentials
 await client.auth.set({
   path: { id: "github" },
   body: {
@@ -536,23 +536,23 @@ await client.auth.set({
 
 ---
 
-## Provider 提供商管理
+## Управление провайдерами Provider
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `provider.list()` | 列出所有提供商 | `{ all: Provider[], default: Record<string, string>, connected: string[] }` |
-| `provider.auth()` | 获取提供商认证方法 | `Record<string, ProviderAuthMethod[]>` |
-| `provider.oauth.authorize({ path, body })` | OAuth 授权 | - |
-| `provider.oauth.callback({ path, body })` | OAuth 回调 | - |
+| `provider.list()` | Список всех провайдеров | `{ all: Provider[], default: Record<string, string>, connected: string[] }` |
+| `provider.auth()` | Способы аутентификации провайдеров | `Record<string, ProviderAuthMethod[]>` |
+| `provider.oauth.authorize({ path, body })` | OAuth-авторизация | - |
+| `provider.oauth.callback({ path, body })` | OAuth-колбэк | - |
 
 ```typescript
-// 获取提供商列表
+// Список провайдеров
 const providers = await client.provider.list()
 for (const p of providers.data?.all ?? []) {
-  console.log(`${p.name} (${p.id}): ${Object.keys(p.models).length} 个模型`)
+  console.log(`${p.name} (${p.id}): ${Object.keys(p.models).length} моделей`)
 }
 
-// 获取认证方法
+// Способы аутентификации
 const authMethods = await client.provider.auth()
 for (const [providerID, methods] of Object.entries(authMethods.data ?? {})) {
   console.log(providerID, methods)
@@ -561,20 +561,20 @@ for (const [providerID, methods] of Object.entries(authMethods.data ?? {})) {
 
 ---
 
-## MCP 服务器管理
+## Управление MCP-серверами
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `mcp.status()` | 获取 MCP 服务器状态 | `Record<string, McpStatus>` |
-| `mcp.add({ body })` | 动态添加 MCP 服务器 | - |
-| `mcp.connect({ path })` | 连接 MCP 服务器 | - |
-| `mcp.disconnect({ path })` | 断开 MCP 服务器 | - |
-| `mcp.auth.*` | MCP OAuth 认证 | - |
+| `mcp.status()` | Статус MCP-серверов | `Record<string, McpStatus>` |
+| `mcp.add({ body })` | Динамическое добавление MCP-сервера | - |
+| `mcp.connect({ path })` | Подключить MCP-сервер | - |
+| `mcp.disconnect({ path })` | Отключить MCP-сервер | - |
+| `mcp.auth.*` | OAuth-аутентификация MCP | - |
 
-### McpStatus 类型
+### Тип McpStatus
 
 ```typescript
-type McpStatus = 
+type McpStatus =
   | { status: "connected" }
   | { status: "disabled" }
   | { status: "failed"; error: string }
@@ -583,13 +583,13 @@ type McpStatus =
 ```
 
 ```typescript
-// 获取状态
+// Получить статусы
 const status = await client.mcp.status()
 for (const [name, value] of Object.entries(status.data ?? {})) {
   console.log(name, value.status)
 }
 
-// 动态添加 MCP 服务器
+// Динамически добавить MCP-сервер
 await client.mcp.add({
   body: {
     name: "my-mcp",
@@ -600,45 +600,45 @@ await client.mcp.add({
   },
 })
 
-// 连接/断开
+// Подключить и отключить
 await client.mcp.connect({ path: { name: "my-mcp" } })
 await client.mcp.disconnect({ path: { name: "my-mcp" } })
 ```
 
 ---
 
-## LSP 和 Formatter 状态
+## Статус LSP и форматтеров
 
 ```typescript
-// LSP 状态
+// Статус LSP
 const lspStatus = await client.lsp.status()
 for (const lsp of lspStatus.data ?? []) {
   console.log(`${lsp.name}: ${lsp.status}`)
 }
 
-// 格式化器状态
+// Статус форматтеров
 const formatterStatus = await client.formatter.status()
 for (const fmt of formatterStatus.data ?? []) {
-  console.log(`${fmt.name}: ${fmt.enabled ? "启用" : "禁用"}`)
+  console.log(`${fmt.name}: ${fmt.enabled ? "включён" : "отключён"}`)
 }
 ```
 
 ---
 
-## PTY 终端会话
+## PTY-сессии терминалов
 
-用于管理伪终端会话（实验性功能）。
+Управление сессиями псевдотерминалов (экспериментальная функция).
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `pty.list()` | 列出所有 PTY 会话 | `Pty[]` |
-| `pty.create({ body })` | 创建 PTY 会话 | `Pty` |
-| `pty.get({ path })` | 获取 PTY 会话信息 | `Pty` |
-| `pty.update({ path, body })` | 更新 PTY 会话 | `Pty` |
-| `pty.remove({ path })` | 移除 PTY 会话 | `boolean` |
-| `pty.connect({ path })` | 连接 PTY 会话 | `boolean` |
+| `pty.list()` | Список всех PTY-сессий | `Pty[]` |
+| `pty.create({ body })` | Создание PTY-сессии | `Pty` |
+| `pty.get({ path })` | Информация о PTY-сессии | `Pty` |
+| `pty.update({ path, body })` | Обновление PTY-сессии | `Pty` |
+| `pty.remove({ path })` | Удаление PTY-сессии | `boolean` |
+| `pty.connect({ path })` | Подключение к PTY-сессии | `boolean` |
 
-### Pty 类型
+### Тип Pty
 
 ```typescript
 type Pty = {
@@ -653,16 +653,16 @@ type Pty = {
 ```
 
 ```typescript
-// 创建 PTY 会话
+// Создать PTY-сессию
 const pty = await client.pty.create({
   body: {
     command: "bash",
     cwd: "/home/user/project",
-    title: "开发终端",
+    title: "Терминал разработки",
   },
 })
 
-// 更新窗口大小
+// Обновить размер окна
 await client.pty.update({
   path: { id: pty.data!.id },
   body: {
@@ -673,21 +673,21 @@ await client.pty.update({
 
 ---
 
-## Tool 工具管理（实验性）
+## Управление инструментами Tool (экспериментальное)
 
-> 以下 API 位于 `/experimental/` 路径，可能在未来版本变更。
+> API ниже по путям `/experimental/` — в будущих версиях могут измениться.
 
-| 方法 | 描述 | 返回类型 |
+| Метод | Описание | Тип возврата |
 |------|------|----------|
-| `tool.ids()` | 列出所有工具 ID | `string[]` |
-| `tool.list({ query })` | 获取工具的 JSON Schema | `ToolListItem[]` |
+| `tool.ids()` | Список ID всех инструментов | `string[]` |
+| `tool.list({ query })` | JSON-схемы инструментов | `ToolListItem[]` |
 
 ```typescript
-// 获取所有工具 ID
+// Все ID инструментов
 const toolIds = await client.tool.ids()
-console.log("可用工具:", toolIds.data)
+console.log("Доступные инструменты:", toolIds.data)
 
-// 获取工具详情（需指定模型）
+// Детали инструментов (нужны модель и провайдер)
 const tools = await client.tool.list({
   query: {
     provider: "anthropic",
@@ -698,36 +698,36 @@ const tools = await client.tool.list({
 
 ---
 
-## Path 和 VCS 信息
+## Информация о путях и VCS
 
 ```typescript
-// 获取路径信息
+// Информация о путях
 const pathInfo = await client.path.get()
-console.log(`状态目录: ${pathInfo.data?.state}`)
-console.log(`配置目录: ${pathInfo.data?.config}`)
-console.log(`工作树: ${pathInfo.data?.worktree}`)
-console.log(`当前目录: ${pathInfo.data?.directory}`)
+console.log(`Каталог состояния: ${pathInfo.data?.state}`)
+console.log(`Каталог конфигурации: ${pathInfo.data?.config}`)
+console.log(`Рабочее дерево: ${pathInfo.data?.worktree}`)
+console.log(`Текущий каталог: ${pathInfo.data?.directory}`)
 
-// 获取 VCS 信息
+// Информация VCS
 const vcsInfo = await client.vcs.get()
-console.log(`当前分支: ${vcsInfo.data?.branch}`)
+console.log(`Текущая ветка: ${vcsInfo.data?.branch}`)
 ```
 
 ---
 
-## Instance 实例管理
+## Управление инстансами Instance
 
 ```typescript
-// 销毁当前实例
+// Уничтожить текущий инстанс
 await client.instance.dispose()
 ```
 
 ---
 
-## Command 命令列表
+## Список команд Command
 
 ```typescript
-// 获取所有命令
+// Все команды
 const commands = await client.command.list()
 for (const cmd of commands.data ?? []) {
   console.log(`/${cmd.name}: ${cmd.description}`)
@@ -736,103 +736,103 @@ for (const cmd of commands.data ?? []) {
 
 ---
 
-## 事件类型完整列表
+## Полный список типов событий
 
-SDK 支持 32 种实时事件，通过 `client.event.subscribe()` 订阅。
+SDK поддерживает 32 типа событий реального времени через подписку `client.event.subscribe()`.
 
-### 服务器事件
+### События сервера
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `server.connected` | 服务器已连接 | - |
-| `server.instance.disposed` | 实例已销毁 | `directory` |
+| `server.connected` | Сервер подключён | - |
+| `server.instance.disposed` | Инстанс уничтожен | `directory` |
 
-### 安装事件
+### События установки
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `installation.updated` | 安装已更新 | `version` |
-| `installation.update-available` | 有可用更新 | `version` |
+| `installation.updated` | Установка обновлена | `version` |
+| `installation.update-available` | Доступно обновление | `version` |
 
-### 会话事件
+### События сессий
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `session.created` | 会话已创建 | `info: Session` |
-| `session.updated` | 会话已更新 | `info: Session` |
-| `session.deleted` | 会话已删除 | `info: Session` |
-| `session.status` | 会话状态变更 | `sessionID`, `status` |
-| `session.idle` | 会话进入空闲 | `sessionID` |
-| `session.compacted` | 会话已压缩 | `sessionID` |
-| `session.diff` | 会话文件变更 | `sessionID`, `diff: FileDiff[]` |
-| `session.error` | 会话错误 | `sessionID?`, `error` |
+| `session.created` | Сессия создана | `info: Session` |
+| `session.updated` | Сессия обновлена | `info: Session` |
+| `session.deleted` | Сессия удалена | `info: Session` |
+| `session.status` | Статус сессии изменился | `sessionID`, `status` |
+| `session.idle` | Сессия в простое | `sessionID` |
+| `session.compacted` | Сессия сжата | `sessionID` |
+| `session.diff` | Файловые изменения сессии | `sessionID`, `diff: FileDiff[]` |
+| `session.error` | Ошибка сессии | `sessionID?`, `error` |
 
-### 消息事件
+### События сообщений
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `message.updated` | 消息已更新 | `info: Message` |
-| `message.removed` | 消息已删除 | `sessionID`, `messageID` |
-| `message.part.updated` | 消息部分更新 | `part: Part`, `delta?: string` |
-| `message.part.removed` | 消息部分删除 | `sessionID`, `messageID`, `partID` |
+| `message.updated` | Сообщение обновлено | `info: Message` |
+| `message.removed` | Сообщение удалено | `sessionID`, `messageID` |
+| `message.part.updated` | Часть сообщения обновлена | `part: Part`, `delta?: string` |
+| `message.part.removed` | Часть сообщения удалена | `sessionID`, `messageID`, `partID` |
 
-### 权限事件
+### События прав
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `permission.updated` | 权限请求待处理 | `Permission` |
-| `permission.replied` | 权限已响应 | `sessionID`, `permissionID`, `response` |
+| `permission.updated` | Запрос права ожидает | `Permission` |
+| `permission.replied` | На право ответили | `sessionID`, `permissionID`, `response` |
 
-### 文件事件
+### События файлов
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `file.edited` | 文件已编辑 | `file` |
-| `file.watcher.updated` | 文件监视器更新 | `file`, `event: "add" \| "change" \| "unlink"` |
+| `file.edited` | Файл отредактирован | `file` |
+| `file.watcher.updated` | Наблюдатель файлов обновлён | `file`, `event: "add" \| "change" \| "unlink"` |
 
-### Todo 事件
+### События дел
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `todo.updated` | Todo 列表更新 | `sessionID`, `todos: Todo[]` |
+| `todo.updated` | Список дел обновлён | `sessionID`, `todos: Todo[]` |
 
-### 命令事件
+### События команд
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `command.executed` | 命令已执行 | `name`, `sessionID`, `arguments`, `messageID` |
+| `command.executed` | Команда выполнена | `name`, `sessionID`, `arguments`, `messageID` |
 
-### VCS 事件
+### События VCS
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `vcs.branch.updated` | 分支已切换 | `branch?` |
+| `vcs.branch.updated` | Ветка переключена | `branch?` |
 
-### LSP 事件
+### События LSP
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `lsp.updated` | LSP 状态更新 | - |
-| `lsp.client.diagnostics` | LSP 诊断信息 | `serverID`, `path` |
+| `lsp.updated` | Статус LSP обновлён | - |
+| `lsp.client.diagnostics` | Диагностика LSP | `serverID`, `path` |
 
-### TUI 事件
+### События TUI
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `tui.prompt.append` | 输入框追加文本 | `text` |
-| `tui.command.execute` | TUI 命令执行 | `command` |
-| `tui.toast.show` | 显示通知 | `title?`, `message`, `variant`, `duration?` |
+| `tui.prompt.append` | В поле ввода дописан текст | `text` |
+| `tui.command.execute` | Команда TUI выполнена | `command` |
+| `tui.toast.show` | Показано уведомление | `title?`, `message`, `variant`, `duration?` |
 
-### PTY 事件
+### События PTY
 
-| 事件类型 | 描述 | 属性 |
+| Тип события | Описание | Свойства |
 |----------|------|------|
-| `pty.created` | PTY 会话已创建 | `info: Pty` |
-| `pty.updated` | PTY 会话已更新 | `info: Pty` |
-| `pty.exited` | PTY 会话已退出 | `id`, `exitCode` |
-| `pty.deleted` | PTY 会话已删除 | `id` |
+| `pty.created` | PTY-сессия создана | `info: Pty` |
+| `pty.updated` | PTY-сессия обновлена | `info: Pty` |
+| `pty.exited` | PTY-сессия завершена | `id`, `exitCode` |
+| `pty.deleted` | PTY-сессия удалена | `id` |
 
-### 事件监听示例
+### Пример слушания событий
 
 ```typescript
 const events = await client.event.subscribe()
@@ -840,41 +840,41 @@ const events = await client.event.subscribe()
 for await (const event of events.stream) {
   switch (event.type) {
     case "message.part.updated":
-      // 增量更新，可用于流式显示
+      // Инкрементальные обновления — для стримингового показа
       if (event.properties.delta) {
         process.stdout.write(event.properties.delta)
       }
       break
-      
+
     case "session.status":
       const { sessionID, status } = event.properties
       if (status.type === "busy") {
-        console.log(`会话 ${sessionID} 正在处理...`)
+        console.log(`Сессия ${sessionID} обрабатывает...`)
       } else if (status.type === "idle") {
-        console.log(`会话 ${sessionID} 已完成`)
+        console.log(`Сессия ${sessionID} завершена`)
       } else if (status.type === "retry") {
-        console.log(`会话 ${sessionID} 重试中 (${status.attempt})`)
+        console.log(`Сессия ${sessionID} повторяется (${status.attempt})`)
       }
       break
-      
+
     case "permission.updated":
-      console.log(`权限请求: ${event.properties.title}`)
-      // 可以自动响应权限请求
+      console.log(`Запрос права: ${event.properties.title}`)
+      // Автоматически отвечаем на запросы прав
       await client.postSessionIdPermissionsPermissionId({
         path: {
           id: event.properties.sessionID,
           permissionID: event.properties.id,
         },
-        body: { response: "always" },  // "once" 允许一次 | "always" 总是允许 | "reject" 拒绝
+        body: { response: "always" },  // "once" — разово, "always" — всегда, "reject" — отклонить
       })
       break
-      
+
     case "file.edited":
-      console.log(`文件已修改: ${event.properties.file}`)
+      console.log(`Файл изменён: ${event.properties.file}`)
       break
-      
+
     case "todo.updated":
-      console.log(`Todo 更新:`, event.properties.todos)
+      console.log(`Дела обновлены:`, event.properties.todos)
       break
   }
 }
@@ -882,12 +882,12 @@ for await (const event of events.stream) {
 
 ---
 
-## 完整类型定义
+## Полные определения типов
 
-### 核心类型
+### Главные типы
 
 ```typescript
-// 会话
+// Сессия
 type Session = {
   id: string
   projectID: string
@@ -915,13 +915,13 @@ type Session = {
   }
 }
 
-// 会话状态
+// Статус сессии
 type SessionStatus =
   | { type: "idle" }
   | { type: "busy" }
   | { type: "retry"; attempt: number; message: string; next: number }
 
-// 消息
+// Сообщение
 type Message = UserMessage | AssistantMessage
 
 type UserMessage = {
@@ -959,7 +959,7 @@ type AssistantMessage = {
 }
 ```
 
-### Part 类型
+### Типы Part
 
 ```typescript
 type Part =
@@ -1006,7 +1006,7 @@ type ToolState =
   | { status: "error"; input: object; error: string; time: { start: number; end: number } }
 ```
 
-### 错误类型
+### Типы ошибок
 
 ```typescript
 type MessageError =
@@ -1028,15 +1028,15 @@ type ApiError = {
 }
 ```
 
-`AssistantMessage.error` 可能是以下 5 种之一：
+`AssistantMessage.error` — один из 5 типов:
 
-| 错误类型 | 含义 | 常见原因 |
+| Тип ошибки | Смысл | Частые причины |
 |---------|------|---------|
-| `ProviderAuthError` | 认证失败 | API Key 无效或过期 |
-| `MessageOutputLengthError` | 输出超长 | 超过模型最大输出 token |
-| `MessageAbortedError` | 被中断 | 用户调了 `session.abort()` 或超时 |
-| `ApiError` | API 返回错误 | 速率限制（429）、服务端错误（500）等，看 `data.statusCode` 和 `data.isRetryable` |
-| `UnknownError` | 未知错误 | 其他未分类错误 |
+| `ProviderAuthError` | Ошибка аутентификации | Недействительный или просроченный API-ключ |
+| `MessageOutputLengthError` | Превышена длина вывода | Больше максимума выходных токенов модели |
+| `MessageAbortedError` | Прервано | Пользователь вызвал `session.abort()` или тайм-аут |
+| `ApiError` | Ошибка API | Лимиты частоты (429), ошибки сервера (500) и т. д. — смотрите `data.statusCode` и `data.isRetryable` |
+| `UnknownError` | Неизвестная ошибка | Прочие неклассифицированные ошибки |
 
 ```typescript
 const result = await client.session.prompt({ path: { id: sessionID }, body: { ... } })
@@ -1044,20 +1044,20 @@ const error = result.data?.info.error
 if (error) {
   switch (error.name) {
     case "APIError":
-      if (error.data.isRetryable) console.log("可重试，稍后再试")
-      else console.log(`API 错误 ${error.data.statusCode}: ${error.data.message}`)
+      if (error.data.isRetryable) console.log("Можно повторить, попробуйте позже")
+      else console.log(`Ошибка API ${error.data.statusCode}: ${error.data.message}`)
       break
     case "ProviderAuthError":
-      console.log("API Key 问题，检查认证配置")
+      console.log("Проблема с API-ключом, проверьте конфигурацию аутентификации")
       break
     // ...
   }
 }
 ```
 
-> 来源：`types.gen.ts:70-110`（MessageError 五种子类型）
+> Источник: `types.gen.ts:70-110` (пять подтипов MessageError)
 
-### 其他类型
+### Остальные типы
 
 ```typescript
 type Todo = {
@@ -1112,44 +1112,43 @@ type FileDiff = {
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| `data` 返回 `undefined` | 请求失败，检查 `error` 字段 | 检查 `result.error` |
-| 事件流断开 | 网络中断或服务器重启 | 实现重连逻辑 |
-| `tool.list` 返回空 | 需要指定 `provider` 和 `model` | 添加 query 参数 |
-| 权限请求无响应 | 需要手动响应 | 使用 `postSessionIdPermissionsPermissionId` |
-| MCP 状态 `needs_auth` | MCP 服务器需要 OAuth 认证 | 调用 `mcp.auth.authenticate` |
+| `data` возвращает `undefined` | Запрос упал, проверьте поле `error` | Проверьте `result.error` |
+| Поток событий рвётся | Обрыв сети или перезапуск сервера | Реализуйте логику переподключения |
+| `tool.list` пуст | Нужны `provider` и `model` | Добавьте query-параметры |
+| Запросы прав без ответа | Нужно отвечать вручную | Используйте `postSessionIdPermissionsPermissionId` |
+| Статус MCP `needs_auth` | MCP-серверу нужна OAuth-аутентификация | Вызовите `mcp.auth.authenticate` |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
-1. **20 个 API 模块加 1 个权限响应方法**的完整方法列表
-
-2. **32 种事件类型**及其属性
-3. **核心类型定义**：Session、Message、Part、Todo、Agent 等
-4. **实验性 API**：Tool 管理、PTY 终端
+Вы научились:
+1. **Полному списку из 20 модулей API плюс 1 метод ответа на права**
+2. **32 типам событий** и их свойствам
+3. **Главным определениям типов**: Session, Message, Part, Todo, Agent и др.
+4. **Экспериментальным API**: управление Tool, PTY-терминалы
 
 ---
 
-## 下一课预告
+## Анонс следующего урока
 
-> V1 讲完了，但 OpenCode 还并存一个持续演进的 V2 入口。下一课我们学习 **[5.10c SDK V2 下一代 API](./10c-sdk-v2)**。
+> V1 разобрали, но в OpenCode сосуществует развивающийся вход V2. В следующем уроке — **[5.10c SDK V2 нового поколения](./10c-sdk-v2)**.
 >
-> 你会学到：
-> - 顶层兼容模块与 `client.v2.*` 命名空间
-> - 独立的 Permission/Question 模块（跨 session 管理权限和提问）
-> - Session3 增强方法（interrupt/wait/compact/切换模型/切换 agent）
-> - Sync、Worktree、Workspace 等 V2 新概念
-> - 从 V1 迁移到 V2 的完整指南
+> Вы узнаете:
+> - Совместимые модули верхнего уровня и пространство имён `client.v2.*`
+> - Независимые модули Permission и Question (кросс-сессионное управление правами и вопросами)
+> - Усиленные методы Session3 (interrupt, wait, compact, смена модели и агента)
+> - Новые понятия Sync, Worktree и Workspace в V2
+> - Полный гид миграции с V1 на V2
 
 ---
 
-## 相关资源
+## Связанные материалы
 
-- [5.10a SDK 基础](./10a-sdk-basics) - 入门教程
-- [5.9 远程开发](./09a-remote-basics) - HTTP Server 详解
-- [SDK 类型定义源码（v1.18.22）](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/types.gen.ts)
+- [5.10a Основы SDK](./10a-sdk-basics) — вводный урок
+- [5.9 Удалённая разработка](./09a-remote-basics) — подробно о HTTP-сервере
+- [Исходники типов SDK (v1.18.22)](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/types.gen.ts)

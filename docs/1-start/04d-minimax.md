@@ -60,7 +60,7 @@ https://platform.minimaxi.com/subscribe/token-plan?code=2OOzWR9jAE&source=link
 
 После оформления подписки скопируйте персональный API Key на странице «Управление тарифом»:
 
-<img src="/images/1-start/minimax-token-plan.png" alt="MiniMax Token Plan 页面 - 复制 API Key" style="border: 1px solid #e1e4e8; border-radius: 6px; margin: 16px 0;" />
+<img src="/images/1-start/minimax-token-plan.png" alt="Страница MiniMax Token Plan — копирование API-ключа" style="border: 1px solid #e1e4e8; border-radius: 6px; margin: 16px 0;" />
 
 > 💡 На скриншоте показана страница Token Plan: выберите «Token Plan» в меню слева и нажмите «Копировать» в разделе API Key.
 :::
@@ -104,7 +104,7 @@ https://platform.minimaxi.com/subscribe/token-plan?code=2OOzWR9jAE&source=link
 Выберите `MiniMax-M2.7` или `MiniMax-M2.7-highspeed` (либо другую модель из настроенного списка), затем отправьте фразу для проверки:
 
 ```
-你好，请介绍一下你自己
+Привет! Расскажи о себе
 ```
 
 ---

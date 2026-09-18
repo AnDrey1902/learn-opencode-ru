@@ -1,191 +1,191 @@
 ---
-title: CLI 命令参考
-description: OpenCode 命令行工具完整参考
+title: Справочник команд CLI
+description: Полный справочник инструмента командной строки OpenCode
 ---
 
-# CLI 命令参考
+# Справочник команд CLI
 
-> `opencode` 命令行工具的所有命令和选项
+> Все команды и опции инструмента командной строки `opencode`
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/appendix/cli-notes.mini.jpeg"
-     alt="CLI 命令参考学霸笔记"
+     alt="Шпаргалка: справочник команд CLI"
      data-zoom-src="/images/appendix/cli-notes.jpeg" />
 
 ---
 
-## 命令速览
+## Обзор команд
 
-| 命令 | 功能 |
+| Команда | Функция |
 |------|------|
-| `opencode` | 启动 TUI 交互界面 |
-| `opencode --mini` | 启动精简交互界面 |
-| `opencode run` | 非交互模式执行任务 |
-| `opencode serve` | 启动无头服务器 |
-| `opencode web` | 启动 Web 界面 |
-| `opencode attach` | 连接远程服务器 |
-| `opencode auth` | 认证管理 |
-| `opencode models` | 列出可用模型 |
-| `opencode agent` | Agent 管理 |
-| `opencode mcp` | MCP 服务器管理 |
-| `opencode session` | 会话管理 |
-| `opencode stats` | 使用统计 |
-| `opencode export` | 导出会话 |
-| `opencode import` | 导入会话 |
-| `opencode github` | GitHub 集成 |
-| `opencode pr` | 拉取并处理 PR |
-| `opencode acp` | ACP 服务器 |
-| `opencode upgrade` | 升级版本 |
-| `opencode uninstall` | 卸载 OpenCode |
+| `opencode` | Старт TUI-интерфейса |
+| `opencode --mini` | Старт сжатого интерактива |
+| `opencode run` | Неинтерактивное выполнение задач |
+| `opencode serve` | Старт headless-сервера |
+| `opencode web` | Старт веб-интерфейса |
+| `opencode attach` | Подключение к удалённому серверу |
+| `opencode auth` | Управление аутентификацией |
+| `opencode models` | Список доступных моделей |
+| `opencode agent` | Управление Agent |
+| `opencode mcp` | Управление MCP-серверами |
+| `opencode session` | Управление сессиями |
+| `opencode stats` | Статистика использования |
+| `opencode export` | Экспорт сессий |
+| `opencode import` | Импорт сессий |
+| `opencode github` | Интеграция GitHub |
+| `opencode pr` | Забор и обработка PR |
+| `opencode acp` | Сервер ACP |
+| `opencode upgrade` | Обновление версии |
+| `opencode uninstall` | Деинсталляция OpenCode |
 
 ---
 
-## 主要命令
+## Главные команды
 
 ### opencode
 
-启动 TUI 交互界面。
+Старт TUI-интерфейса.
 
 ```bash
 opencode [project]
 ```
 
-**选项**：
-| 选项 | 短选项 | 说明 |
+**Опции**:
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--continue` | `-c` | 继续上次会话 |
-| `--session` | `-s` | 指定会话 ID |
-| `--prompt` | | 初始提示语 |
-| `--model` | `-m` | 指定模型（格式：provider/model） |
-| `--agent` | | 指定 Agent |
-| `--auto` | | 自动批准未被显式拒绝的权限请求（危险） |
-| `--mini` | | 启动精简交互界面 |
-| `--no-replay` | | Mini 继续会话或终端缩放时不回放历史 |
-| `--replay-limit` | | Mini 最多回放最近 N 条消息 |
-| `--port` | | 监听端口 |
-| `--hostname` | | 监听地址 |
+| `--continue` | `-c` | Продолжить прошлую сессию |
+| `--session` | `-s` | Указать ID сессии |
+| `--prompt` | | Стартовый промпт |
+| `--model` | `-m` | Указать модель (формат: provider/model) |
+| `--agent` | | Указать Agent |
+| `--auto` | | Автоподтверждение запросов прав, не запрещённых явно (опасно) |
+| `--mini` | | Старт сжатого интерактива |
+| `--no-replay` | | В Mini при продолжении сессии и ресайзе терминала не проигрывать историю |
+| `--replay-limit` | | В Mini проигрывать максимум N свежих сообщений |
+| `--port` | | Порт прослушивания |
+| `--hostname` | | Адрес прослушивания |
 
-**示例**：
+**Примеры**:
 ```bash
-# 启动 TUI
+# Старт TUI
 opencode
 
-# 带初始提示语启动
-opencode --prompt "帮我分析这个项目的代码结构"
+# Старт со стартовым промптом
+opencode --prompt "Разбери структуру кода этого проекта"
 
-# 使用特定模型
+# С указанной моделью
 opencode -m anthropic/claude-sonnet-4-20250514
 
-# 继续上次会话
+# Продолжить прошлую сессию
 opencode -c
 
-# 启动 Mini；继续会话时默认回放历史
+# Старт Mini; при продолжении история проигрывается по умолчанию
 opencode --mini -c
 
-# 继续会话但关闭回放
+# Продолжить сессию без replay
 opencode --mini -c --no-replay
 ```
 
-Mini 是 `opencode --mini`，不是 `opencode run --mini`。在 Mini 输入框开头输入 `!` 可进入 Shell mode；按 <kbd>Esc</kbd> 可直接退出，或在光标位于输入开头时按 <kbd>Backspace</kbd> 退出。
+Mini — это `opencode --mini`, а не `opencode run --mini`. В поле ввода Mini восклицательный знак `!` в начале включает Shell mode; выход сразу по <kbd>Esc</kbd> либо клавишей <kbd>Backspace</kbd> при курсоре в начале ввода.
 
-`--auto` 适用于标准 TUI。目标版本仍接受隐藏的 `--yolo` 作为兼容别名，但新脚本应使用公开参数 `--auto`。Mini 入口不会转发这个自动批准开关。
+`--auto` действует в стандартном TUI. Целевая версия принимает скрытый `--yolo` как алиас совместимости, но в новые скрипты пишите открытый параметр `--auto`. Вход Mini этот флаг автоподтверждения не пробрасывает.
 
 ---
 
 ### opencode run
 
-非交互模式执行任务，适合脚本和 CI/CD。
+Неинтерактивное выполнение задач для скриптов и CI/CD.
 
 ```bash
 opencode run [message..]
 ```
 
-**选项**：
-| 选项 | 短选项 | 说明 |
+**Опции**:
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--command` | | 要执行的斜杠命令名称，message 作为命令参数 |
-| `--continue` | `-c` | 继续上次会话 |
-| `--session` | `-s` | 指定会话 ID |
-| `--share` | | 分享会话 |
-| `--model` | `-m` | 指定模型（格式：provider/model） |
-| `--agent` | | 指定 Agent |
-| `--file` | `-f` | 附加文件（可多个） |
-| `--format` | | 输出格式：default（格式化）或 json（原始 JSON） |
-| `--title` | | 会话标题 |
-| `--attach` | | 连接运行中的服务器（如 `http://localhost:4096`） |
-| `--port` | | 本地服务器端口（默认随机） |
-| `--variant` | | 模型变体（推理力度：high、max、minimal） |
-| `--auto` | | 自动批准未被显式拒绝的权限请求（危险） |
+| `--command` | | Имя выполняемой слэш-команды, message — параметры команды |
+| `--continue` | `-c` | Продолжить прошлую сессию |
+| `--session` | `-s` | Указать ID сессии |
+| `--share` | | Поделиться сессией |
+| `--model` | `-m` | Указать модель (формат: provider/model) |
+| `--agent` | | Указать Agent |
+| `--file` | `-f` | Приложить файлы (можно несколько) |
+| `--format` | | Формат вывода: default (форматированный) или json (сырой JSON) |
+| `--title` | | Заголовок сессии |
+| `--attach` | | Подключиться к работающему серверу (вроде `http://localhost:4096`) |
+| `--port` | | Порт локального сервера (по умолчанию случайный) |
+| `--variant` | | Вариант модели (сила рассуждений: high, max, minimal) |
+| `--auto` | | Автоподтверждение запросов прав, не запрещённых явно (опасно) |
 
-**示例**：
+**Примеры**:
 ```bash
-# 基本使用
-opencode run "修复 src/main.ts 中的类型错误"
+# Базовое использование
+opencode run "Исправь ошибки типов в src/main.ts"
 
-# 指定模型
+# С указанной моделью
 opencode run -m anthropic/claude-sonnet-4-5 "Review this code"
 
-# 附加文件（支持多文件）
+# С приложенными файлами (можно несколько)
 opencode run -f src/main.ts -f package.json "Analyze this project"
 
-# 继续上一个会话
+# Продолжить прошлую сессию
 opencode run -c "What else needs to be done?"
 
-# 使用 JSON 格式输出（适合脚本）
+# Вывод в JSON (удобно скриптам)
 opencode run --format json "List all TypeScript files"
 
-# 连接到远程服务器（避免 MCP 冷启动）
-opencode serve  # 在另一个终端启动
+# Подключиться к удалённому серверу (без холодного старта MCP)
+opencode serve  # В другом терминале стартует
 opencode run --attach http://localhost:4096 "Explain async/await"
 
-# 使用自定义命令
+# Своей командой
 opencode run --command explain --file code.ts "How does this work?"
 
-# 指定模型变体（推理力度）
+# С вариантом модели (сила рассуждений)
 opencode run -m anthropic/claude-opus-4-5 --variant max "Analyze entire codebase"
 
-# 自动分享会话
+# С автошарингом сессии
 opencode run --share "Generate project documentation"
 
-# 指定会话标题
+# С заголовком сессии
 opencode run --title "Bug Fix" "Fix the login issue"
 
-# 从 stdin 读取输入
+# Читать ввод из stdin
 echo "Count lines of code" | opencode run "Analyze"
 
-# 非交互执行，并自动批准会触发询问的权限
-opencode run --auto "运行测试并修复失败项"
+# Неинтерактивно с автоподтверждением спрашиваемых прав
+opencode run --auto "Прогони тесты и почини упавшее"
 ```
 
-`opencode run` 默认是非交互模式。隐藏的 `--yolo` 在目标版本中与 `--auto` 兼容，但不应写入新脚本。两者都只自动批准原本会询问的请求，配置为 `deny` 的规则仍然拒绝执行。
+`opencode run` по умолчанию неинтерактивен. Скрытый `--yolo` в целевой версии совместим с `--auto`, но в новые скрипты его не пишите. Оба автоматически подтверждают лишь изначально спрашиваемые запросы, правила с `deny` в конфигурации по-прежнему отклоняют выполнение.
 
 ---
 
 ### opencode serve
 
-启动无头服务器模式，提供 API 访问。
+Старт headless-сервера с доступом по API.
 
 ```bash
 opencode serve
 ```
 
-**选项**：
-| 选项 | 说明 |
+**Опции**:
+| Опция | Описание |
 |------|------|
-| `--port` | 监听端口 |
-| `--hostname` | 监听地址 |
-| `--mdns` | 启用 mDNS 发现 |
-| `--cors` | 允许的 CORS 源 |
+| `--port` | Порт прослушивания |
+| `--hostname` | Адрес прослушивания |
+| `--mdns` | Включить обнаружение mDNS |
+| `--cors` | Разрешённые CORS-источники |
 
-**示例**：
+**Примеры**:
 ```bash
-# 默认配置启动
+# Старт с умолчаниями
 opencode serve
 
-# 指定端口和允许远程访问
+# Указать порт и разрешить удалённый доступ
 opencode serve --port 4096 --hostname 0.0.0.0
 ```
 
@@ -193,26 +193,26 @@ opencode serve --port 4096 --hostname 0.0.0.0
 
 ### opencode web
 
-启动 Web 界面。
+Старт с веб-интерфейсом.
 
 ```bash
 opencode web
 ```
 
-**选项**：
-| 选项 | 说明 |
+**Опции**:
+| Опция | Описание |
 |------|------|
-| `--port` | 监听端口 |
-| `--hostname` | 监听地址 |
-| `--mdns` | 启用 mDNS 发现 |
-| `--cors` | 允许的 CORS 源 |
+| `--port` | Порт прослушивания |
+| `--hostname` | Адрес прослушивания |
+| `--mdns` | Включить обнаружение mDNS |
+| `--cors` | Разрешённые CORS-источники |
 
-**示例**：
+**Примеры**:
 ```bash
-# 启动 Web 界面
+# Старт веб-интерфейса
 opencode web
 
-# 指定端口
+# Указать порт
 opencode web --port 4096
 ```
 
@@ -220,56 +220,56 @@ opencode web --port 4096
 
 ### opencode attach
 
-连接到远程 OpenCode 服务器。
+Подключение к удалённому серверу OpenCode.
 
 ```bash
 opencode attach [url]
 ```
 
-**选项**：
-| 选项 | 短选项 | 说明 |
+**Опции**:
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--dir` | | TUI 工作目录 |
-| `--session` | `-s` | 指定会话 ID |
+| `--dir` | | Рабочий каталог TUI |
+| `--session` | `-s` | Указать ID сессии |
 
-**示例**：
+**Примеры**:
 ```bash
-# 在一个终端启动服务器
+# В одном терминале стартует сервер
 opencode web --port 4096 --hostname 0.0.0.0
 
-# 在另一个终端连接
+# В другом терминале подключаемся
 opencode attach http://10.20.30.40:4096
 ```
 
 ---
 
-## 管理命令
+## Команды управления
 
 <AdInArticle />
 
 ### opencode auth
 
-管理认证和 API Key。凭证存储在 `~/.local/share/opencode/auth.json`。
+Управление аутентификацией и API-ключами. Credentials хранятся в `~/.local/share/opencode/auth.json`.
 
 ```bash
 opencode auth <subcommand>
 ```
 
-| 子命令 | 功能 |
+| Подкоманда | Функция |
 |--------|------|
-| `login` | 登录（交互式选择提供商） |
-| `list` / `ls` | 列出已认证的提供商 |
-| `logout` | 登出提供商 |
+| `login` | Вход (интерактивный выбор провайдера) |
+| `list` / `ls` | Список настроенных провайдеров |
+| `logout` | Выход из провайдера |
 
-**示例**：
+**Примеры**:
 ```bash
-# 交互式登录
+# Интерактивный вход
 opencode auth login
 
-# 列出已认证的提供商
+# Список настроенных провайдеров
 opencode auth list
 
-# 登出
+# Выход
 opencode auth logout
 ```
 
@@ -277,27 +277,27 @@ opencode auth logout
 
 ### opencode models
 
-列出可用模型。
+Список доступных моделей.
 
 ```bash
 opencode models [provider]
 ```
 
-**选项**：
-| 选项 | 说明 |
+**Опции**:
+| Опция | Описание |
 |------|------|
-| `--refresh` | 刷新模型缓存 |
-| `--verbose` | 显示详细信息（包括成本等元数据） |
+| `--refresh` | Обновить кэш моделей |
+| `--verbose` | Подробности (включая метаданные стоимости) |
 
-**示例**：
+**Примеры**:
 ```bash
-# 列出所有可用模型
+# Все доступные модели
 opencode models
 
-# 只列出 Anthropic 的模型
+# Только модели Anthropic
 opencode models anthropic
 
-# 刷新模型列表
+# Обновить список моделей
 opencode models --refresh
 ```
 
@@ -305,23 +305,23 @@ opencode models --refresh
 
 ### opencode agent
 
-管理 Agent 配置。
+Управление конфигурацией Agent.
 
 ```bash
 opencode agent <subcommand>
 ```
 
-| 子命令 | 功能 |
+| Подкоманда | Функция |
 |--------|------|
-| `list` | 列出所有 Agent |
-| `create` | 创建新 Agent（交互式） |
+| `list` | Список всех Agent |
+| `create` | Создание нового Agent (интерактивно) |
 
-**示例**：
+**Примеры**:
 ```bash
-# 列出 Agent
+# Список Agent
 opencode agent list
 
-# 创建新 Agent
+# Создать нового Agent
 opencode agent create
 ```
 
@@ -329,36 +329,36 @@ opencode agent create
 
 ### opencode mcp
 
-管理 MCP 服务器。
+Управление MCP-серверами.
 
 ```bash
 opencode mcp <subcommand>
 ```
 
-| 子命令 | 功能 |
+| Подкоманда | Функция |
 |--------|------|
-| `list` / `ls` | 列出 MCP 服务器及连接状态 |
-| `add` | 添加 MCP 服务器（交互式） |
-| `auth [name]` | OAuth 认证 |
-| `auth list` / `auth ls` | 列出支持 OAuth 的服务器及认证状态 |
-| `logout [name]` | 移除 OAuth 凭证 |
-| `debug <name>` | 调试 OAuth 连接问题 |
+| `list` / `ls` | Список MCP-серверов со статусами подключений |
+| `add` | Добавление MCP-сервера (интерактивно) |
+| `auth [name]` | OAuth-аутентификация |
+| `auth list` / `auth ls` | Список серверов с OAuth и статусы аутентификации |
+| `logout [name]` | Удаление OAuth-credentials |
+| `debug <name>` | Отладка проблем OAuth-подключения |
 
-**示例**：
+**Примеры**:
 ```bash
-# 列出 MCP 服务器
+# Список MCP-серверов
 opencode mcp list
 
-# 添加新服务器
+# Добавить новый сервер
 opencode mcp add
 
-# OAuth 认证
+# OAuth-аутентификация
 opencode mcp auth context7
 
-# 列出 OAuth 状态
+# Список OAuth-статусов
 opencode mcp auth ls
 
-# 调试连接
+# Отладка подключения
 opencode mcp debug context7
 ```
 
@@ -366,31 +366,31 @@ opencode mcp debug context7
 
 ### opencode session
 
-管理会话。
+Управление сессиями.
 
 ```bash
 opencode session <subcommand>
 ```
 
-| 子命令 | 功能 |
+| Подкоманда | Функция |
 |--------|------|
-| `list` | 列出会话 |
+| `list` | Список сессий |
 
-**选项**（list）：
-| 选项 | 短选项 | 说明 |
+**Опции** (list):
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--max-count` | `-n` | 限制最近 N 个会话 |
-| `--format` | | 输出格式：table 或 json |
+| `--max-count` | `-n` | Ограничить N свежими сессиями |
+| `--format` | | Формат вывода: table или json |
 
-**示例**：
+**Примеры**:
 ```bash
-# 列出会话
+# Список сессий
 opencode session list
 
-# 列出最近 10 个会话
+# Последние 10 сессий
 opencode session list -n 10
 
-# 输出为 JSON
+# Вывод в JSON
 opencode session list --format json
 ```
 
@@ -398,29 +398,29 @@ opencode session list --format json
 
 ### opencode stats
 
-查看使用统计。
+Статистика использования.
 
 ```bash
 opencode stats
 ```
 
-**选项**：
-| 选项 | 说明 |
+**Опции**:
+| Опция | Описание |
 |------|------|
-| `--days` | 最近 N 天的统计 |
-| `--tools` | 显示的工具数量（默认显示全部） |
-| `--models` | 显示模型使用明细（传入数字显示 Top N） |
-| `--project` | 按项目筛选（空字符串表示当前项目） |
+| `--days` | Статистика за свежие N дней |
+| `--tools` | Число показываемых инструментов (по умолчанию все) |
+| `--models` | Детализация использования моделей (числом — Top N) |
+| `--project` | Фильтр по проектам (пустая строка — текущий проект) |
 
-**示例**：
+**Примеры**:
 ```bash
-# 查看统计
+# Статистика
 opencode stats
 
-# 查看最近 7 天
+# Последние 7 дней
 opencode stats --days 7
 
-# 显示模型使用 Top 5
+# Топ-5 использования моделей
 opencode stats --models 5
 ```
 
@@ -428,15 +428,15 @@ opencode stats --models 5
 
 ### opencode export
 
-导出会话数据为 JSON。
+Экспорт данных сессии в JSON.
 
 ```bash
 opencode export [sessionID]
 ```
 
-如果不指定会话 ID，会提示选择。
+Без ID сессии предложит выбрать.
 
-**示例**：
+**Примеры**:
 ```bash
 opencode export abc123
 ```
@@ -445,20 +445,20 @@ opencode export abc123
 
 ### opencode import
 
-导入会话数据。
+Импорт данных сессий.
 
 ```bash
 opencode import <file>
 ```
 
-支持从本地文件或 OpenCode 分享 URL 导入。
+Поддерживает импорт из локальных файлов и URL шаринга OpenCode.
 
-**示例**：
+**Примеры**:
 ```bash
-# 从文件导入
+# Импорт из файла
 opencode import session.json
 
-# 从分享 URL 导入
+# Импорт по URL шаринга
 opencode import https://opncd.ai/share/abc123
 ```
 
@@ -466,26 +466,26 @@ opencode import https://opncd.ai/share/abc123
 
 ### opencode github
 
-GitHub 集成管理。
+Управление интеграцией GitHub.
 
 ```bash
 opencode github <subcommand>
 ```
 
-| 子命令 | 功能 |
+| Подкоманда | Функция |
 |--------|------|
-| `install` | 安装 GitHub Actions 工作流 |
-| `run` | 运行 GitHub Agent（用于 Actions） |
+| `install` | Установка workflow GitHub Actions |
+| `run` | Запуск GitHub Agent (для Actions) |
 
-**run 选项**：
-| 选项 | 说明 |
+**Опции run**:
+| Опция | Описание |
 |------|------|
-| `--event` | GitHub mock 事件 |
-| `--token` | GitHub 个人访问令牌 |
+| `--event` | Mock-событие GitHub |
+| `--token` | Персональный токен доступа GitHub |
 
-**示例**：
+**Примеры**:
 ```bash
-# 安装 Actions
+# Установка Actions
 opencode github install
 ```
 
@@ -493,28 +493,28 @@ opencode github install
 
 ### opencode pr
 
-拉取并切换到 GitHub PR 分支，然后启动 OpenCode。
+Забор ветки GitHub PR локально и старт OpenCode.
 
 ```bash
 opencode pr <number>
 ```
 
-这个命令会：
-1. 使用 `gh pr checkout` 拉取 PR 到本地分支 `pr/<PR号>`
-2. 如果是 Fork PR，自动添加远程仓库
-3. 如果 PR 描述包含 OpenCode 会话链接，自动导入
-4. 启动 OpenCode TUI
+Команда:
+1. Забирает PR через `gh pr checkout` в локальную ветку `pr/<номер-PR>`
+2. Для Fork PR автоматически добавляет remote репозитория
+3. При ссылке на сессию OpenCode в описании PR — импортирует её
+4. Стартует OpenCode TUI
 
-**前置条件**：
-- 已安装 `gh` CLI 并认证
-- 当前目录是 Git 仓库
+**Предусловия**:
+- Установлен и настроен `gh` CLI
+- Текущий каталог — Git-репозиторий
 
-**示例**：
+**Примеры**:
 ```bash
-# 拉取 PR #123 并启动 OpenCode
+# Забрать PR #123 и стартовать OpenCode
 opencode pr 123
 
-# 你会看到：
+# Вы увидите:
 # Fetching and checking out PR #123...
 # Successfully checked out PR #123 as branch 'pr/123'
 # Starting opencode...
@@ -524,45 +524,45 @@ opencode pr 123
 
 ### opencode acp
 
-启动 ACP（Agent Client Protocol）服务器。
+Старт сервера ACP (Agent Client Protocol).
 
 ```bash
 opencode acp
 ```
 
-通过 stdin/stdout 使用 nd-JSON 通信。
+Общение через nd-JSON в stdin и stdout.
 
-**选项**：
-| 选项 | 说明 |
+**Опции**:
+| Опция | Описание |
 |------|------|
-| `--cwd` | 工作目录 |
-| `--port` | 监听端口 |
-| `--hostname` | 监听地址 |
+| `--cwd` | Рабочий каталог |
+| `--port` | Порт прослушивания |
+| `--hostname` | Адрес прослушивания |
 
 ---
 
 ### opencode upgrade
 
-升级到最新版本或指定版本。
+Обновление до свежей или указанной версии.
 
 ```bash
 opencode upgrade [target]
 ```
 
-**选项**：
-| 选项 | 短选项 | 说明 |
+**Опции**:
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--method` | `-m` | 安装方式：curl、npm、pnpm、bun、brew |
+| `--method` | `-m` | Способ установки: curl, npm, pnpm, bun, brew |
 
-**示例**：
+**Примеры**:
 ```bash
-# 升级到最新
+# Обновить до свежей
 opencode upgrade
 
-# 升级到指定版本
+# Обновить до указанной версии
 opencode upgrade v1.0.5
 
-# 降级到 0.x
+# Откатить на 0.x
 opencode upgrade 0.15.31
 ```
 
@@ -570,135 +570,135 @@ opencode upgrade 0.15.31
 
 ### opencode uninstall
 
-卸载 OpenCode 并删除相关文件。
+Деинсталляция OpenCode с удалением связанных файлов.
 
 ```bash
 opencode uninstall
 ```
 
-**选项**：
-| 选项 | 短选项 | 说明 |
+**Опции**:
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--keep-config` | `-c` | 保留配置文件 |
-| `--keep-data` | `-d` | 保留会话数据和快照 |
-| `--dry-run` | | 只显示将删除的内容 |
-| `--force` | `-f` | 跳过确认提示 |
+| `--keep-config` | `-c` | Сохранить файлы конфигурации |
+| `--keep-data` | `-d` | Сохранить данные сессий и снапшоты |
+| `--dry-run` | | Только показать удаляемое |
+| `--force` | `-f` | Пропустить запросы подтверждений |
 
-**示例**：
+**Примеры**:
 ```bash
-# 完全卸载
+# Полная деинсталляция
 opencode uninstall
 
-# 保留配置
+# С сохранением конфигурации
 opencode uninstall --keep-config
 
-# 预览删除内容
+# Предпросмотр удаляемого
 opencode uninstall --dry-run
 ```
 
 ---
 
-## 全局选项
+## Глобальные опции
 
-所有命令都支持以下全局选项：
+Все команды поддерживают глобальные опции:
 
-| 选项 | 短选项 | 说明 |
+| Опция | Коротко | Описание |
 |------|--------|------|
-| `--help` | `-h` | 显示帮助 |
-| `--version` | `-v` | 显示版本号 |
-| `--print-logs` | | 打印日志到 stderr |
-| `--log-level` | | 日志级别：DEBUG、INFO、WARN、ERROR |
+| `--help` | `-h` | Показать помощь |
+| `--version` | `-v` | Показать номер версии |
+| `--print-logs` | | Печатать логи в stderr |
+| `--log-level` | | Уровень логов: DEBUG, INFO, WARN, ERROR |
 
 ---
 
-## 环境变量
+## Переменные окружения
 
-| 变量 | 类型 | 说明 |
+| Переменная | Тип | Описание |
 |------|------|------|
-| `OPENCODE_CONFIG` | string | 配置文件路径 |
-| `OPENCODE_CONFIG_DIR` | string | 配置目录路径 |
-| `OPENCODE_CONFIG_CONTENT` | string | 内联 JSON 配置 |
-| `OPENCODE_PERMISSION` | string | 内联 JSON 权限配置 |
-| `OPENCODE_AUTO_SHARE` | boolean | 自动分享会话 |
-| `OPENCODE_DISABLE_AUTOUPDATE` | boolean | 禁用自动更新检查 |
-| `OPENCODE_DISABLE_PRUNE` | boolean | 禁用旧数据清理 |
-| `OPENCODE_DISABLE_TERMINAL_TITLE` | boolean | 禁用终端标题更新 |
-| `OPENCODE_DISABLE_DEFAULT_PLUGINS` | boolean | 禁用默认插件 |
-| `OPENCODE_DISABLE_LSP_DOWNLOAD` | boolean | 禁用 LSP 服务器自动下载 |
-| `OPENCODE_DISABLE_AUTOCOMPACT` | boolean | 禁用自动上下文压缩 |
-| `OPENCODE_ENABLE_EXPERIMENTAL_MODELS` | boolean | 启用实验性模型 |
-| `OPENCODE_ENABLE_EXA` | boolean | 启用 Exa 网页搜索 |
-| `OPENCODE_CLIENT` | string | 客户端标识（默认 `cli`） |
-| `OPENCODE_GIT_BASH_PATH` | string | Windows Git Bash 路径 |
+| `OPENCODE_CONFIG` | string | Путь файла конфигурации |
+| `OPENCODE_CONFIG_DIR` | string | Путь каталога конфигурации |
+| `OPENCODE_CONFIG_CONTENT` | string | Инлайн-JSON конфигурации |
+| `OPENCODE_PERMISSION` | string | Инлайн-JSON конфигурации прав |
+| `OPENCODE_AUTO_SHARE` | boolean | Автошаринг сессий |
+| `OPENCODE_DISABLE_AUTOUPDATE` | boolean | Отключить проверку автообновлений |
+| `OPENCODE_DISABLE_PRUNE` | boolean | Отключить чистку старых данных |
+| `OPENCODE_DISABLE_TERMINAL_TITLE` | boolean | Отключить обновление заголовка терминала |
+| `OPENCODE_DISABLE_DEFAULT_PLUGINS` | boolean | Отключить плагины по умолчанию |
+| `OPENCODE_DISABLE_LSP_DOWNLOAD` | boolean | Отключить автоскачивание LSP-серверов |
+| `OPENCODE_DISABLE_AUTOCOMPACT` | boolean | Отключить автосжатие контекста |
+| `OPENCODE_ENABLE_EXPERIMENTAL_MODELS` | boolean | Включить экспериментальные модели |
+| `OPENCODE_ENABLE_EXA` | boolean | Включить веб-поиск Exa |
+| `OPENCODE_CLIENT` | string | Идентификатор клиента (по умолчанию `cli`) |
+| `OPENCODE_GIT_BASH_PATH` | string | Путь Git Bash в Windows |
 
-### 服务器安全
+### Безопасность сервера
 
-用于 `opencode serve` 和 `opencode web` 的认证配置：
+Настройка аутентификации `opencode serve` и `opencode web`:
 
-| 变量 | 类型 | 说明 |
+| Переменная | Тип | Описание |
 |------|------|------|
-| `OPENCODE_SERVER_PASSWORD` | string | 服务器密码（**强烈建议设置**） |
-| `OPENCODE_SERVER_USERNAME` | string | 用户名（默认 `opencode`） |
+| `OPENCODE_SERVER_PASSWORD` | string | Пароль сервера (**настоятельно рекомендуем задать**) |
+| `OPENCODE_SERVER_USERNAME` | string | Имя пользователя (по умолчанию `opencode`) |
 
-::: warning 安全提醒
-如果不设置 `OPENCODE_SERVER_PASSWORD`，服务器将**无认证保护**，任何人都能访问。
+::: warning Напоминание о безопасности
+Без `OPENCODE_SERVER_PASSWORD` сервер **без защиты аутентификацией** — доступен кому угодно.
 :::
 
-**示例**：
+**Пример**:
 ```bash
-# 设置服务器认证
+# Задать аутентификацию сервера
 export OPENCODE_SERVER_PASSWORD=your-secure-password
 export OPENCODE_SERVER_USERNAME=admin
 
 opencode serve --hostname 0.0.0.0
 ```
 
-### 提供商 API Key
+### API-ключи провайдеров
 
-各提供商的 API Key 通过对应环境变量设置：
+API-ключи провайдеров задаются подходящими переменными окружения:
 
-| 变量 | 说明 |
+| Переменная | Описание |
 |------|------|
-| `ANTHROPIC_API_KEY` | Anthropic API Key |
-| `OPENAI_API_KEY` | OpenAI API Key |
-| `DEEPSEEK_API_KEY` | DeepSeek API Key |
-| `GROQ_API_KEY` | Groq API Key |
+| `ANTHROPIC_API_KEY` | API-ключ Anthropic |
+| `OPENAI_API_KEY` | API-ключ OpenAI |
+| `DEEPSEEK_API_KEY` | API-ключ DeepSeek |
+| `GROQ_API_KEY` | API-ключ Groq |
 
-### 实验性变量
+### Экспериментальные переменные
 
-> 来源：[cli.mdx](https://github.com/anomalyco/opencode/blob/dev/packages/web/src/content/docs/cli.mdx)
+> Источник: [cli.mdx](https://github.com/anomalyco/opencode/blob/dev/packages/web/src/content/docs/cli.mdx)
 
-| 变量 | 类型 | 说明 |
+| Переменная | Тип | Описание |
 |------|------|------|
-| `OPENCODE_EXPERIMENTAL` | boolean | 启用所有实验性功能 |
-| `OPENCODE_EXPERIMENTAL_ICON_DISCOVERY` | boolean | 启用图标发现 |
-| `OPENCODE_EXPERIMENTAL_DISABLE_COPY_ON_SELECT` | boolean | 禁用 TUI 中选中即复制 |
-| `OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS` | number | Bash 默认超时（毫秒） |
-| `OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX` | number | LLM 最大输出 token |
-| `OPENCODE_EXPERIMENTAL_FILEWATCHER` | boolean | 启用目录文件监听 |
-| `OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER` | boolean | 禁用目录文件监听 |
-| `OPENCODE_EXPERIMENTAL_OXFMT` | boolean | 启用 oxfmt 格式化器 |
-| `OPENCODE_EXPERIMENTAL_LSP_TOOL` | boolean | 启用实验性 LSP 工具 |
-| `OPENCODE_EXPERIMENTAL_LSP_TY` | boolean | 启用 LSP 类型推断 |
-| `OPENCODE_ENABLE_EXA` | boolean | 启用 Exa 代码搜索 |
+| `OPENCODE_EXPERIMENTAL` | boolean | Включить все экспериментальные функции |
+| `OPENCODE_EXPERIMENTAL_ICON_DISCOVERY` | boolean | Включить обнаружение иконок |
+| `OPENCODE_EXPERIMENTAL_DISABLE_COPY_ON_SELECT` | boolean | Отключить копирование выделением в TUI |
+| `OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS` | number | Тайм-аут Bash по умолчанию (миллисекунды) |
+| `OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX` | number | Максимум выходных токенов LLM |
+| `OPENCODE_EXPERIMENTAL_FILEWATCHER` | boolean | Включить монитор файлов каталогов |
+| `OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER` | boolean | Отключить монитор файлов каталогов |
+| `OPENCODE_EXPERIMENTAL_OXFMT` | boolean | Включить форматтер oxfmt |
+| `OPENCODE_EXPERIMENTAL_LSP_TOOL` | boolean | Включить экспериментальный инструмент LSP |
+| `OPENCODE_EXPERIMENTAL_LSP_TY` | boolean | Включить вывод типов LSP |
+| `OPENCODE_ENABLE_EXA` | boolean | Включить поиск кода Exa |
 
 ---
 
-## 相关资源
+## Связанные материалы
 
-- [配置选项参考](./config-ref) - 配置文件详解
-- [斜杠命令速查表](./commands) - TUI 内命令
-- [模型提供商列表](./providers) - 可用模型
+- [Справочник опций конфигурации](./config-ref) — подробности файлов конфигурации
+- [Шпаргалка слэш-команд](./commands) — команды внутри TUI
+- [Список провайдеров моделей](./providers) — доступные модели
 
-## 源码参考
+## Ссылки на исходники
 
-以下行为固定参考 [`v1.18.22`](https://github.com/anomalyco/opencode/tree/v1.18.22)：
+Поведение ниже зафиксировано по [`v1.18.22`](https://github.com/anomalyco/opencode/tree/v1.18.22):
 
-| 行为 | 源码 | 行号 |
+| Поведение | Исходники | Строки |
 |------|------|------|
-| `run` 默认非交互、Mini 入口 | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L3-L15) | 3-15 |
-| `--mini`、回放与 `--no-replay` | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L123-L175) | 123-175 |
-| `--auto` 与隐藏兼容别名 | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L242-L274) | 242-274 |
-| 标准 TUI 的自动批准参数 | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L108-L121) | 108-121 |
-| 标准 TUI 的自动批准参数映射 | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L287-L295) | 287-295 |
-| Mini Shell mode | [`packages/opencode/src/cli/cmd/run/footer.prompt.tsx`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run/footer.prompt.tsx#L1055-L1094) | 1055-1094 |
+| Неинтерактивность `run` по умолчанию, вход Mini | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L3-L15) | 3-15 |
+| Параметры `--mini`, replay и `--no-replay` | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L123-L175) | 123-175 |
+| `--auto` и скрытый алиас совместимости | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L242-L274) | 242-274 |
+| Параметры автоподтверждения стандартного TUI | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L108-L121) | 108-121 |
+| Отображение параметров автоподтверждения стандартного TUI | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L287-L295) | 287-295 |
+| Режим Mini Shell | [`packages/opencode/src/cli/cmd/run/footer.prompt.tsx`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run/footer.prompt.tsx#L1055-L1094) | 1055-1094 |

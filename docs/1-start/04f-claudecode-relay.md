@@ -25,7 +25,7 @@ prerequisite:
 Краткий конспект основных идей урока:
 
 <img src="/images/1-start/claudecode-relay-notes.mini.jpeg"
-     alt="第三方中转（Claude Code 兼容）学霸笔记"
+     alt="Сторонний прокси (совместимый с Claude Code) — шпаргалка"
      data-zoom-src="/images/1-start/claudecode-relay-notes.jpeg" />
 
 Эта страница решает одну задачу: подключает к OpenCode сторонний шлюз, заявляющий о совместимости с Claude Code.
@@ -76,7 +76,7 @@ prerequisite:
       },
       "models": {
         "claude-opus-4-5-20251101": {
-          "name": "中转站的 opus 4.5",
+          "name": "Opus 4.5 через прокси",
           "limit": {
             "context": 200000,
             "output": 64000
@@ -163,7 +163,7 @@ prerequisite:
     "claudecode-relay": {
       "options": {
         "baseURL": "https://url.com/v1",
-        "apiKey": "你的API Key"
+        "apiKey": "твой API-ключ"
       }
     }
   }
@@ -196,7 +196,7 @@ prerequisite:
 Затем добавьте в файл конфигурации shell (`~/.bashrc` или `~/.zshrc`):
 
 ```bash
-export CLAUDECODE_RELAY_API_KEY="你的API Key"
+export CLAUDECODE_RELAY_API_KEY="твой API-ключ"
 ```
 
 Сохраните файл и выполните `source ~/.bashrc` (или перезапустите терминал), чтобы переменная окружения вступила в силу.
@@ -249,7 +249,7 @@ opencode
 Выберите `claudecode-relay/claude-opus-4-5-20251101`, затем отправьте фразу для проверки:
 
 ```text
-你好，请简单介绍一下你自己
+Привет! Коротко расскажи о себе
 ```
 
 ---
@@ -284,11 +284,11 @@ OpenCode поддерживает одновременную настройку 
       "npm": "@ai-sdk/anthropic",
       "options": {
         "baseURL": "https://relay-a.com/v1",
-        "apiKey": "你的 A 中转商 Key"
+        "apiKey": "твой ключ провайдера A"
       },
       "models": {
         "claude-opus-4-5-20251101": {
-          "name": "A 中转的 opus 4.5",
+          "name": "Opus 4.5 через провайдера A",
           "limit": {
             "context": 200000,
             "output": 64000
@@ -300,11 +300,11 @@ OpenCode поддерживает одновременную настройку 
       "npm": "@ai-sdk/anthropic",
       "options": {
         "baseURL": "https://relay-b.com/v1",
-        "apiKey": "你的 B 中转商 Key"
+        "apiKey": "твой ключ провайдера B"
       },
       "models": {
         "claude-sonnet-4-5-20250514": {
-          "name": "B 中转的 sonnet 4.5",
+          "name": "Sonnet 4.5 через провайдера B",
           "limit": {
             "context": 200000,
             "output": 64000

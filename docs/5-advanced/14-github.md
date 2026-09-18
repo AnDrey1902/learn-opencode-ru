@@ -1,63 +1,63 @@
 ---
-title: 5.14 GitHub 集成
-subtitle: 在 GitHub Actions 中使用 OpenCode
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.14 Интеграция GitHub
+subtitle: OpenCode в GitHub Actions
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.14"
-duration: 15 分钟
-practice: 20 分钟
-level: 进阶
-description: 在 GitHub Actions 中使用 OpenCode，实现 Issue 分流、自动修复、PR 审查等功能。
+duration: 15 минут
+practice: 20 минут
+level: Продвинутый
+description: Используйте OpenCode в GitHub Actions для разбора Issue, автоисправлений и ревью PR.
 tags:
   - GitHub
   - CI/CD
-  - 自动化
+  - Автоматизация
 prerequisite:
-  - 5.9 远程开发
+  - 5.9 Удалённая разработка
 ---
 
-# GitHub 集成
+# Интеграция GitHub
 
-OpenCode 与 GitHub 工作流深度集成。在 Issue 或 PR 的评论中提及 `/opencode` 或 `/oc`，OpenCode 将在你的 GitHub Actions runner 中执行任务。
+Глубокая интеграция OpenCode с процессами GitHub. Упомяните `/opencode` или `/oc` в комментарии к Issue или PR — OpenCode выполнит задачу на вашем GitHub Actions runner.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/5-advanced/github-notes.mini.jpeg"
-     alt="5.14 GitHub 集成学霸笔记"
+     alt="Шпаргалка урока: 5.14 Интеграция GitHub"
      data-zoom-src="/images/5-advanced/github-notes.jpeg" />
 
-## 功能
+## Возможности
 
-- **分流问题**：让 OpenCode 查看 Issue 并解释问题
-- **修复和实现**：让 OpenCode 修复 Issue 或实现功能，它会在新分支中工作并提交 PR
-- **审查 PR**：自动审查 Pull Request 代码质量
-- **安全**：OpenCode 在你自己的 GitHub runner 中运行，代码不会离开你的环境
+- **Разбор вопросов**: пусть OpenCode смотрит Issue и объясняет проблему
+- **Исправления и реализация**: пусть OpenCode чинит Issue или реализует функцию — работает в новой ветке и открывает PR
+- **Ревью PR**: автоматическое ревью качества кода Pull Request
+- **Безопасность**: OpenCode работает на вашем собственном GitHub runner, код не покидает ваше окружение
 
-## 安装
+## Установка
 
-在 GitHub 仓库的项目目录中运行：
+В каталоге проекта GitHub-репозитория выполните:
 
 ```bash
 opencode github install
 ```
 
-这会引导你完成：安装 GitHub App、选择提供商和模型、创建 workflow 文件、设置 secrets。
+Мастер проведёт вас через шаги: установка GitHub App, выбор провайдера и модели, создание workflow-файла, настройка secrets.
 
-### 手动设置
+### Ручная настройка
 
 <AdInArticle />
 
-也可以手动设置：
+Можно настроить и вручную:
 
-**1. 安装 GitHub App**
+**1. Установка GitHub App**
 
-前往 [github.com/apps/opencode-agent](https://github.com/apps/opencode-agent)，确保在目标仓库上安装。
+Перейдите на [github.com/apps/opencode-agent](https://github.com/apps/opencode-agent) и убедитесь, что приложение установлено на целевой репозиторий.
 
-**2. 添加 workflow**
+**2. Добавление workflow**
 
-在仓库的 `.github/workflows/opencode.yml` 添加以下内容：
+Добавьте в `.github/workflows/opencode.yml` репозитория:
 
 ```yaml
 name: opencode
@@ -93,33 +93,33 @@ jobs:
           model: anthropic/claude-sonnet-4-20250514
 ```
 
-> **注意**：if 条件使用 `startsWith` 和 `contains(' /oc')` 的组合，确保触发短语在行首或前面有空格，避免误匹配 URL 或代码中的内容。
+> **Обратите внимание**: условие if комбинирует `startsWith` и `contains(' /oc')`, чтобы триггерная фраза стояла в начале строки или после пробела — без ложных срабатываний на URL и содержимое кода.
 
-**3. 存储 API 密钥**
+**3. Хранение API-ключей**
 
-在组织或项目的 **Settings** > **Secrets and variables** > **Actions** 中添加所需的 API 密钥。
+В настройках организации или проекта **Settings** > **Secrets and variables** > **Actions** добавьте нужные API-ключи.
 
-## 配置选项
+## Опции конфигурации
 
-| 选项 | 必填 | 默认值 | 说明 |
+| Опция | Обязат. | По умолчанию | Описание |
 |------|------|--------|------|
-| `model` | **是** | - | 使用的模型，格式为 `provider/model` |
-| `agent` | 否 | config 中的 `default_agent` 或 `"build"` | 使用的代理，必须是 primary 代理 |
-| `share` | 否 | 公开仓库 `true` | 是否分享会话链接 |
-| `prompt` | 否 | - | 自定义提示，覆盖默认行为（`schedule`/`workflow_dispatch`/`issues` 事件必填） |
-| `use_github_token` | 否 | `false` | 使用 GITHUB_TOKEN 替代 OpenCode App 令牌交换，跳过 OIDC |
-| `mentions` | 否 | `/opencode,/oc` | 自定义触发短语（逗号分隔，不区分大小写） |
-| `oidc_base_url` | 否 | `https://api.opencode.ai` | 自定义 OIDC 令牌交换 API 地址，仅运行私有 GitHub App 时需要 |
+| `model` | **Да** | - | Используемая модель, формат `provider/model` |
+| `agent` | Нет | `default_agent` из конфига или `"build"` | Используемый агент, только primary-агент |
+| `share` | Нет | Публичные репозитории `true` | Делиться ли ссылкой на сессию |
+| `prompt` | Нет | - | Свой промпт, перекрывает поведение по умолчанию (для событий `schedule`/`workflow_dispatch`/`issues` обязателен) |
+| `use_github_token` | Нет | `false` | Использовать GITHUB_TOKEN вместо обмена токена OpenCode App, пропустить OIDC |
+| `mentions` | Нет | `/opencode,/oc` | Свои триггерные фразы (через запятую, без учёта регистра) |
+| `oidc_base_url` | Нет | `https://api.opencode.ai` | Свой адрес обмена OIDC-токенов, нужен только для приватного GitHub App |
 
-来源：`opencode/github/action.yml:7-35`
+Источник: `opencode/github/action.yml:7-35`
 
-### 关于 Token 来源
+### Про источник токенов
 
-默认情况下，OpenCode 使用 OIDC 令牌交换从 OpenCode GitHub App 获取安装访问令牌，提交、评论和 PR 显示为来自该应用。
+По умолчанию OpenCode через обмен OIDC-токенов получает install access token от OpenCode GitHub App, и коммиты, комментарии и PR показываются от имени этого приложения.
 
-**替代方案 1：使用 GITHUB_TOKEN**
+**Альтернатива 1: использование GITHUB_TOKEN**
 
-设置 `use_github_token: true` 可跳过 OIDC 令牌交换，直接使用 GitHub Action runner 的内置 GITHUB_TOKEN：
+Задайте `use_github_token: true`, чтобы пропустить обмен OIDC-токенов и использовать напрямую встроенный GITHUB_TOKEN runner GitHub Action:
 
 ```yaml
 - name: Run OpenCode
@@ -132,7 +132,7 @@ jobs:
     use_github_token: true
 ```
 
-需要在 workflow 中授予权限：
+В workflow выдайте права:
 
 ```yaml
 permissions:
@@ -142,61 +142,61 @@ permissions:
   issues: write
 ```
 
-**替代方案 2：使用个人访问令牌 (PAT)**
+**Альтернатива 2: персональный токен доступа (PAT)**
 
-也可以使用 [个人访问令牌](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)。
+Можно использовать и [персональный токен доступа](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
-## 工作机制
+## Как это работает
 
-### 事件分类
+### Классификация событий
 
-OpenCode 将 GitHub 事件分为两类，处理逻辑不同：
+OpenCode делит события GitHub на два класса с разной логикой обработки:
 
-| 类别 | 事件类型 | 特点 |
+| Класс | Типы событий | Особенности |
 |------|----------|------|
-| **用户事件** | `issue_comment`、`pull_request_review_comment`、`issues`、`pull_request` | 有触发者信息，可以在 Issue/PR 上添加评论和 reaction |
-| **仓库事件** | `schedule`、`workflow_dispatch` | 无 Issue/PR 上下文，输出仅记录到日志或创建 PR |
+| **Пользовательские события** | `issue_comment`, `pull_request_review_comment`, `issues`, `pull_request` | Есть информация о триггерящем, можно добавлять комментарии и reaction в Issue/PR |
+| **События репозитория** | `schedule`, `workflow_dispatch` | Нет контекста Issue/PR, вывод только в лог или созданием PR |
 
-来源：`opencode/packages/opencode/src/cli/cmd/github.ts:141-143`
+Источник: `opencode/packages/opencode/src/cli/cmd/github.ts:141-143`
 
-### 处理流程
+### Процесс обработки
 
 ```
-1. 事件触发
+1. Срабатывание события
    ↓
-2. 检查触发短语 (/opencode 或 /oc)
+2. Проверка триггерной фразы (/opencode или /oc)
    ↓
-3. 获取访问令牌 (OIDC 交换 或 GITHUB_TOKEN)
+3. Получение токена доступа (обмен OIDC или GITHUB_TOKEN)
    ↓
-4. 权限验证 (仅用户事件，需要 admin 或 write 权限)
+4. Проверка прав (только пользовательские события, нужны права admin или write)
    ↓
-5. 添加 👀 reaction (仅用户事件，表示正在处理)
+5. Добавление reaction 👀 (только пользовательские события, знак «в работе»)
    ↓
-6. 根据事件类型处理：
-   - Issue: 创建新分支 → 执行任务 → 提交 → 创建 PR
-   - 本地 PR: 检出分支 → 执行任务 → 提交到同一 PR
-   - Fork PR: 添加 fork remote → 执行任务 → 推送到 fork
-   - 仓库事件: 创建新分支 → 执行任务 → 创建 PR
+6. Обработка по типу события:
+   - Issue: новая ветка → выполнение задачи → коммит → создание PR
+   - Локальный PR: checkout ветки → выполнение задачи → коммит в тот же PR
+   - Fork PR: добавить fork remote → выполнение задачи → пуш в fork
+   - События репозитория: новая ветка → выполнение задачи → создание PR
    ↓
-7. 创建评论并移除 reaction
+7. Создание комментария и снятие reaction
 ```
 
-### 分支命名规则
+### Правила именования веток
 
-OpenCode 自动创建的分支遵循以下命名规则：
+Автоматически создаваемые OpenCode ветки именуются по правилам:
 
-| 场景 | 分支名格式 | 示例 |
+| Сценарий | Формат имени ветки | Пример |
 |------|-----------|------|
-| Issue 修复 | `opencode/issue{ID}-{timestamp}` | `opencode/issue42-20250108120000` |
-| PR 操作 | `opencode/pr{ID}-{timestamp}` | `opencode/pr15-20250108120000` |
-| 定时任务 | `opencode/schedule-{hex}-{timestamp}` | `opencode/schedule-a1b2c3-20250108120000` |
-| 手动触发 | `opencode/dispatch-{hex}-{timestamp}` | `opencode/dispatch-d4e5f6-20250108120000` |
+| Исправление Issue | `opencode/issue{ID}-{timestamp}` | `opencode/issue42-20250108120000` |
+| Операции PR | `opencode/pr{ID}-{timestamp}` | `opencode/pr15-20250108120000` |
+| Задачи по расписанию | `opencode/schedule-{hex}-{timestamp}` | `opencode/schedule-a1b2c3-20250108120000` |
+| Ручной запуск | `opencode/dispatch-{hex}-{timestamp}` | `opencode/dispatch-d4e5f6-20250108120000` |
 
-来源：`github.ts:1047-1059`
+Источник: `github.ts:1047-1059`
 
-### Co-author 归属
+### Атрибуция Co-author
 
-OpenCode 提交的代码会自动添加 Co-authored-by 信息，将触发者标记为共同作者：
+В код, коммиченный OpenCode, автоматически добавляется информация Co-authored-by с указанием триггерящего как соавтора:
 
 ```
 Fix authentication issue
@@ -204,55 +204,55 @@ Fix authentication issue
 Co-authored-by: username <username@users.noreply.github.com>
 ```
 
-> **注意**：`schedule` 事件没有触发者，因此不会添加 Co-author 信息。
+> **Обратите внимание**: у события `schedule` триггерящего нет, поэтому информация Co-author не добавляется.
 
-来源：`github.ts:1061-1100`
+Источник: `github.ts:1061-1100`
 
-## 权限配置详解
+## Подробно о настройке прав
 
-根据使用场景，需要配置不同的权限级别：
+Под разные сценарии нужны разные уровни прав:
 
-### 只读场景（审查、分析）
-
-```yaml
-permissions:
-  id-token: write      # OIDC 令牌交换必需
-  contents: read       # 读取代码
-  pull-requests: read  # 读取 PR 信息
-  issues: read         # 读取 Issue 信息
-```
-
-### 写入场景（修复、实现）
+### Только чтение (ревью, анализ)
 
 ```yaml
 permissions:
-  id-token: write       # OIDC 令牌交换必需
-  contents: write       # 创建分支、提交代码
-  pull-requests: write  # 创建/更新 PR
-  issues: write         # 创建评论
+  id-token: write      # Обязателен для обмена OIDC-токенов
+  contents: read       # Чтение кода
+  pull-requests: read  # Чтение информации PR
+  issues: read         # Чтение информации Issue
 ```
 
-> **提示**：使用 OpenCode GitHub App 时，权限由 App 控制。使用 `use_github_token: true` 时，需要在 workflow 中明确授予权限。
+### Запись (исправления, реализация)
 
-## 支持的事件
+```yaml
+permissions:
+  id-token: write       # Обязателен для обмена OIDC-токенов
+  contents: write       # Создание веток, коммиты кода
+  pull-requests: write  # Создание и обновление PR
+  issues: write         # Создание комментариев
+```
 
-| 事件类型 | 触发方式 | 说明 |
+> **Подсказка**: при использовании OpenCode GitHub App правами управляет App. При `use_github_token: true` права выдавайте явно в workflow.
+
+## Поддерживаемые события
+
+| Тип события | Способ срабатывания | Описание |
 |----------|----------|------|
-| `issue_comment` | Issue 或 PR 上的评论 | 在评论中提及 `/opencode` 或 `/oc` |
-| `pull_request_review_comment` | PR 中特定代码行的评论 | 代码审查时提及触发短语 |
-| `issues` | Issue 创建或编辑 | 需要 `prompt` 输入 |
-| `pull_request` | PR 创建或更新 | 用于自动审查 |
-| `schedule` | 基于 cron 的定时任务 | 需要 `prompt` 输入，无评论输出 |
-| `workflow_dispatch` | 从 GitHub UI 手动触发 | 需要 `prompt` 输入 |
+| `issue_comment` | Комментарий к Issue или PR | Упомяните `/opencode` или `/oc` в комментарии |
+| `pull_request_review_comment` | Комментарий к конкретной строке кода PR | Упомяните триггерную фразу при ревью кода |
+| `issues` | Создание или правка Issue | Нужен вход `prompt` |
+| `pull_request` | Создание или обновление PR | Для авторевью |
+| `schedule` | Задачи по cron-расписанию | Нужен вход `prompt`, без вывода в комментарии |
+| `workflow_dispatch` | Ручной запуск из интерфейса GitHub | Нужен вход `prompt` |
 
-### 定时任务示例
+### Пример задачи по расписанию
 
 ```yaml
 name: Scheduled OpenCode Task
 
 on:
   schedule:
-    - cron: "0 9 * * 1" # 每周一 UTC 9:00
+    - cron: "0 9 * * 1" # Каждый понедельник 9:00 UTC
 
 jobs:
   opencode:
@@ -277,9 +277,9 @@ jobs:
             If you find issues worth addressing, open an issue to track them.
 ```
 
-> **注意**：定时事件需要 `prompt` 输入，因为没有评论可提取指令。输出记录到 Actions 日志，如有代码更改会创建 PR。
+> **Обратите внимание**: событиям по расписанию нужен вход `prompt`, потому что извлекать инструкции не из чего. Вывод пишется в лог Actions, изменения кода создают PR.
 
-### PR 自动审查示例
+### Пример авторевью PR
 
 ```yaml
 name: opencode-review
@@ -310,11 +310,11 @@ jobs:
             - Suggest improvements
 ```
 
-对于 `pull_request` 事件，如果未提供 `prompt`，OpenCode 默认审查 PR。
+Для события `pull_request` без переданного `prompt` OpenCode по умолчанию ревьюит PR.
 
-### Issue 分流示例
+### Пример разбора Issue
 
-自动分流新 Issue，此示例过滤账号年龄超过 30 天的用户以减少垃圾信息：
+Автоматический разбор новых Issue; пример фильтрует аккаунты старше 30 дней для снижения спама:
 
 ```yaml
 name: Issue Triage
@@ -361,9 +361,9 @@ jobs:
             Otherwise, do not comment.
 ```
 
-## 自定义触发短语
+## Свои триггерные фразы
 
-使用 `mentions` 参数自定义触发短语：
+Параметром `mentions` задайте свои триггерные фразы:
 
 ```yaml
 - uses: anomalyco/opencode/github@latest
@@ -372,95 +372,95 @@ jobs:
     mentions: "/ai,/bot,/help"
 ```
 
-现在可以使用 `/ai`、`/bot` 或 `/help` 触发 OpenCode。
+Теперь OpenCode срабатывает на `/ai`, `/bot` или `/help`.
 
-> **注意**：触发短语匹配不区分大小写，多个短语用逗号分隔。
+> **Обратите внимание**: сопоставление триггерных фраз нечувствительно к регистру, несколько фраз — через запятую.
 
-## Fork PR 处理
+## Обработка Fork PR
 
-OpenCode 支持处理来自 Fork 仓库的 PR。处理逻辑与本地 PR 略有不同：
+OpenCode умеет обрабатывать PR из Fork-репозиториев. Логика немного отличается от локальных PR:
 
-### 本地 PR vs Fork PR
+### Локальные PR vs Fork PR
 
-| 对比项 | 本地 PR | Fork PR |
+| Критерий | Локальные PR | Fork PR |
 |--------|---------|---------|
-| 分支来源 | 同一仓库 | Fork 仓库 |
-| 检出方式 | `git fetch origin && git checkout` | `git remote add fork && git fetch fork` |
-| 推送目标 | 原分支 | Fork 仓库的分支 |
-| 分支名 | 保持原分支名 | 创建新的本地分支 `opencode/pr{ID}-{timestamp}` |
+| Источник ветки | Тот же репозиторий | Fork-репозиторий |
+| Способ checkout | `git fetch origin && git checkout` | `git remote add fork && git fetch fork` |
+| Цель пуша | Исходная ветка | Ветка Fork-репозитория |
+| Имя ветки | Сохраняется исходное имя ветки | Новая локальная ветка `opencode/pr{ID}-{timestamp}` |
 
-### 工作流程
+### Процесс работы
 
-1. 检测 PR 的 `headRepository` 是否与 `baseRepository` 不同
-2. 添加 Fork 仓库作为 remote
-3. 拉取 Fork 分支代码
-4. 创建本地分支执行任务
-5. 推送更改回 Fork 仓库的原分支
+1. Проверяется, отличается ли `headRepository` PR от `baseRepository`
+2. Fork-репозиторий добавляется как remote
+3. Подтягивается код Fork-ветки
+4. Создаётся локальная ветка для выполнения задачи
+5. Изменения пушатся обратно в исходную ветку Fork-репозитория
 
-来源：`github.ts:1035-1045`
+Источник: `github.ts:1035-1045`
 
-> **注意**：Fork PR 需要 Fork 仓库的维护者允许上游仓库推送更改（在 PR 页面勾选 "Allow edits from maintainers"）。
+> **Обратите внимание**: для Fork PR мейнтейнер Fork-репозитория должен разрешить пуш апстриму (галочка "Allow edits from maintainers" на странице PR).
 
-## CLI 命令
+## Команды CLI
 
 ### opencode pr
 
-快速检出 PR 并启动 OpenCode：
+Быстрый checkout PR с запуском OpenCode:
 
 ```bash
-opencode pr <PR号>
+opencode pr <номер-PR>
 ```
 
-执行流程：
-1. 自动 fetch PR 分支
-2. 创建本地分支 `pr/<PR号>`
-3. 检出到该分支
-4. 自动启动 OpenCode
+Процесс выполнения:
+1. Автоматический fetch ветки PR
+2. Создание локальной ветки `pr/<номер-PR>`
+3. Checkout на эту ветку
+4. Автозапуск OpenCode
 
-**示例**：
+**Пример**:
 
 ```bash
-# 检出 PR #123
+# Забрать PR #123
 opencode pr 123
 ```
 
-**Fork PR 处理**：
+**Обработка Fork PR**:
 
-对于来自 Fork 的 PR，命令会自动：
-1. 添加 Fork 作为 remote
-2. 设置 upstream 跟踪
-3. 确保 push 到正确的仓库
+Для PR из Fork команда автоматически:
+1. Добавляет Fork как remote
+2. Настраивает upstream-трекинг
+3. Гарантирует пуш в верный репозиторий
 
-**导入关联的 Session**：
+**Импорт связанной сессии**:
 
-如果 PR 描述中包含 OpenCode Session 链接（如 `https://opncd.ai/s/abc123`），命令会自动导入会话历史，让你继续之前的对话上下文。
+Если в описании PR есть ссылка на сессию OpenCode (вроде `https://opncd.ai/s/abc123`), команда автоматически импортирует историю сессии — продолжите прошлый контекст диалога.
 
 ### opencode github install
 
-交互式安装 GitHub Agent：
+Интерактивная установка GitHub Agent:
 
 ```bash
 opencode github install
 ```
 
-执行流程：
-1. 检测当前目录的 Git 仓库信息
-2. 引导安装 OpenCode GitHub App
-3. 选择 AI 提供商和模型
-4. 生成 `.github/workflows/opencode.yml` 文件
-5. 提示配置 secrets
+Процесс выполнения:
+1. Определяет информацию Git-репозитория текущего каталога
+2. Ведёт через установку OpenCode GitHub App
+3. Выбор AI-провайдера и модели
+4. Генерация файла `.github/workflows/opencode.yml`
+5. Подсказки по настройке secrets
 
 ### opencode github run
 
-在 GitHub Actions 中运行 Agent（通常不需要手动调用）：
+Запуск Agent в GitHub Actions (вручную вызывать обычно не нужно):
 
 ```bash
 opencode github run
 ```
 
-#### 本地测试
+#### Локальное тестирование
 
-用于开发调试时本地模拟 GitHub Actions 环境：
+Для отладки при разработке — локальная эмуляция окружения GitHub Actions:
 
 ```bash
 MODEL=anthropic/claude-sonnet-4-20250514 \
@@ -468,22 +468,22 @@ MODEL=anthropic/claude-sonnet-4-20250514 \
   GITHUB_RUN_ID=dummy \
   opencode github run \
     --token github_pat_xxxxx \
-    --event '{"eventName":"issue_comment","repo":{"owner":"你的用户名","repo":"仓库名"},"actor":"触发者用户名","payload":{"issue":{"number":1},"comment":{"id":1,"body":"/opencode 解释这个问题"}}}'
+    --event '{"eventName":"issue_comment","repo":{"owner":"ваше-имя","repo":"имя-репо"},"actor":"имя-триггерящего","payload":{"issue":{"number":1},"comment":{"id":1,"body":"/opencode объясни эту проблему"}}}'
 ```
 
-参数说明：
+Описание параметров:
 
-| 环境变量/参数 | 说明 |
+| Переменная окружения/параметр | Описание |
 |--------------|------|
-| `MODEL` | 使用的模型，格式 `provider/model` |
-| `ANTHROPIC_API_KEY` | 模型提供商 API 密钥 |
-| `GITHUB_RUN_ID` | 模拟 GitHub Actions 环境，本地测试可设为 `dummy` |
-| `--token` | GitHub 个人访问令牌，用于验证权限和操作仓库 |
-| `--event` | 模拟的 GitHub 事件 JSON |
+| `MODEL` | Используемая модель, формат `provider/model` |
+| `ANTHROPIC_API_KEY` | API-ключ провайдера моделей |
+| `GITHUB_RUN_ID` | Эмуляция окружения GitHub Actions, для локальных тестов годится `dummy` |
+| `--token` | Персональный токен доступа GitHub для проверки прав и операций с репозиторием |
+| `--event` | Эмулируемый JSON события GitHub |
 
-#### 事件 JSON 模板
+#### Шаблоны JSON событий
 
-**Issue 评论事件：**
+**Событие комментария к Issue:**
 
 ```json
 {
@@ -492,12 +492,12 @@ MODEL=anthropic/claude-sonnet-4-20250514 \
   "actor": "username",
   "payload": {
     "issue": {"number": 42},
-    "comment": {"id": 1, "body": "/opencode 解释这个问题"}
+    "comment": {"id": 1, "body": "/opencode объясни эту проблему"}
   }
 }
 ```
 
-**PR 评论事件：**
+**Событие комментария к PR:**
 
 ```json
 {
@@ -506,12 +506,12 @@ MODEL=anthropic/claude-sonnet-4-20250514 \
   "actor": "username",
   "payload": {
     "issue": {"number": 15, "pull_request": {}},
-    "comment": {"id": 1, "body": "/opencode 优化这段代码"}
+    "comment": {"id": 1, "body": "/opencode оптимизируй этот код"}
   }
 }
 ```
 
-**PR 代码行评论事件：**
+**Событие комментария к строке кода PR:**
 
 ```json
 {
@@ -522,7 +522,7 @@ MODEL=anthropic/claude-sonnet-4-20250514 \
     "pull_request": {"number": 15},
     "comment": {
       "id": 1,
-      "body": "/opencode 添加错误处理",
+      "body": "/opencode добавь обработку ошибок",
       "path": "src/utils/api.ts",
       "diff_hunk": "@@ -10,6 +10,8 @@\n async function fetchData() {\n-  return fetch(url)\n+  const response = await fetch(url)\n+  return response.json()\n }",
       "line": 12,
@@ -535,69 +535,69 @@ MODEL=anthropic/claude-sonnet-4-20250514 \
 }
 ```
 
-## 使用示例
+## Примеры использования
 
-### 解释 Issue
+### Объяснение Issue
 
-在 GitHub Issue 中添加评论：
+Добавьте комментарий в GitHub Issue:
 
 ```
 /opencode explain this issue
 ```
 
-OpenCode 会读取整个线程（包括所有评论）并回复解释。
+OpenCode прочитает всю ветку (включая все комментарии) и ответит объяснением.
 
-### 修复 Issue
+### Исправление Issue
 
-在 GitHub Issue 中：
+В GitHub Issue:
 
 ```
 /opencode fix this
 ```
 
-OpenCode 会创建新分支、实现修改并打开 PR。
+OpenCode создаст ветку, внесёт изменения и откроет PR.
 
-### 审查 PR 并修改
+### Ревью PR с изменениями
 
-在 GitHub PR 中留下评论：
+Оставьте комментарий в GitHub PR:
 
 ```
 Delete the attachment from S3 when the note is removed /oc
 ```
 
-OpenCode 会实现请求的更改并提交到同一 PR。
+OpenCode внесёт запрошенные изменения и закоммитит в тот же PR.
 
-### 审查特定代码行
+### Ревью конкретной строки кода
 
-在 PR 的 "Files" 标签页中直接在代码行上留下评论。OpenCode 会自动检测文件、行号和 diff 上下文：
+На вкладке "Files" в PR оставьте комментарий прямо на строке кода. OpenCode автоматически определит файл, номер строки и diff-контекст:
 
 ```
-[在 Files 标签页的特定行上评论]
+[комментарий на конкретной строке на вкладке Files]
 /oc add error handling here
 ```
 
-在特定行评论时，OpenCode 接收：
-- 正在审查的确切文件
-- 特定的代码行
-- 周围的 diff 上下文
-- 行号信息
+При комментировании конкретных строк OpenCode получает:
+- точный проверяемый файл
+- конкретные строки кода
+- окружающий diff-контекст
+- информацию о номерах строк
 
-这允许更精准的请求，无需手动指定文件路径或行号。
+Это даёт точные запросы без ручного указания путей файлов и номеров строк.
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| 报错 `Could not fetch an OIDC token` | workflow 缺少 `id-token: write` 权限 | 添加 `permissions: id-token: write` |
-| `/opencode` 没有触发 | 评论中的触发短语格式不对（如在 URL 中间） | 确保触发短语在行首或前面有空格 |
-| Fork PR 无法推送更改 | Fork 维护者未允许上游推送 | 联系 Fork 维护者开启 "Allow edits from maintainers" |
-| Schedule 事件没有输出评论 | 定时任务无 Issue/PR 上下文 | 这是预期行为，输出记录到 Actions 日志 |
-| 报错 `User xxx does not have write permissions` | 触发者没有仓库写入权限 | 只有 admin 或 write 权限的协作者才能触发 |
-| 自定义 mentions 不生效 | 多个短语未正确用逗号分隔 | 使用 `mentions: "/ai,/bot"` 格式 |
-| 使用 `use_github_token` 时权限不足 | 未授予必要的 workflow 权限 | 添加 `contents: write`、`pull-requests: write` 等权限 |
+| Ошибка `Could not fetch an OIDC token` | В workflow нет права `id-token: write` | Добавьте `permissions: id-token: write` |
+| `/opencode` не срабатывает | Неверный формат триггерной фразы в комментарии (например, внутри URL) | Триггерная фраза — в начале строки или после пробела |
+| Fork PR не пушит изменения | Мейнтейнер Fork не разрешил пуш апстриму | Попросите мейнтейнера Fork включить "Allow edits from maintainers" |
+| События Schedule без комментариев в выводе | У задач по расписанию нет контекста Issue/PR | Ожидаемо: вывод пишется в лог Actions |
+| Ошибка `User xxx does not have write permissions` | У триггерящего нет прав записи в репозиторий | Триггерить могут только коллабораторы с правами admin или write |
+| Свои mentions не работают | Несколько фраз неверно разделены запятыми | Формат `mentions: "/ai,/bot"` |
+| Недостаточно прав при `use_github_token` | Не выданы нужные права workflow | Добавьте права `contents: write`, `pull-requests: write` и т. д. |
 
-## 相关章节
+## Связанные разделы
 
-- [5.15 GitLab 集成](./15-gitlab) - 如果你使用 GitLab，参考该章节了解配置方式
-- [5.16 分享功能](./16-share) - 了解 OpenCode 会话分享
-- [速查/CLI 参考](../appendix/cli) - 完整 CLI 命令列表
+- [5.15 Интеграция GitLab](./15-gitlab) — если пользуетесь GitLab, настройка там
+- [5.16 Функция шаринга](./16-share) — шаринг сессий OpenCode
+- [Шпаргалка/Справочник CLI](../appendix/cli) — полный список CLI-команд

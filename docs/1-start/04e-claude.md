@@ -65,7 +65,7 @@ Claude — большая языковая модель Anthropic, отличн�
 Процесс настройки поставщика Anthropic Claude:
 
 ```
-获取 API Key → 配置到 OpenCode → 验证连接
+Получение API-ключа → настройка в OpenCode → проверка соединения
 ```
 
 ---
@@ -99,25 +99,25 @@ OpenCode предлагает два способа настройки — вы�
 
 ::: code-group
 
-```bash [macOS/Linux（临时）]
+```bash [macOS/Linux(временно)]
 export ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
 opencode
 ```
 
-```bash [macOS/Linux（永久）]
-# 添加到 ~/.bashrc 或 ~/.zshrc
+```bash [macOS/Linux(навсегда)]
+# Добавить в ~/.bashrc или ~/.zshrc
 echo 'export ANTHROPIC_API_KEY=sk-ant-api03-your-key-here' >> ~/.zshrc
 source ~/.zshrc
 opencode
 ```
 
-```powershell [Windows（临时）]
+```powershell [Windows(временно)]
 $env:ANTHROPIC_API_KEY="sk-ant-api03-your-key-here"
 opencode
 ```
 
-```powershell [Windows（永久）]
-# 添加到系统环境变量
+```powershell [Windows(навсегда)]
+# Добавить в системные переменные окружения
 [System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-api03-your-key-here", "User")
 ```
 
@@ -198,7 +198,7 @@ opencode
 В интерфейсе OpenCode введите первый вопрос:
 
 ```
-帮我写一个简单的 HTTP 服务器
+Напиши простой HTTP-сервер
 ```
 
 **Вы должны увидеть:**

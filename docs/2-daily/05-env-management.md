@@ -24,7 +24,7 @@ prerequisite:
 Краткое изложение ключевых идей урока:
 
 <img src="/images/2-daily/env-management-notes.mini.jpeg" 
-     alt="管理你的 AI 环境学霸笔记" 
+     alt="Управляй своим AI-окружением — шпаргалка" 
      data-zoom-src="/images/2-daily/env-management-notes.jpeg" />
 
 ---
@@ -64,7 +64,7 @@ zhipuai-coding-plan/glm-4.7
 Каждая строка — это **ID модели** (формат `провайдер/имя_модели`). Этот ID можно скопировать и указать при запуске:
 
 ```bash
-# 比如直接用智谱 GLM-5 启动
+# Например, прямой запуск через Zhipu GLM-5
 opencode --model zhipuai-coding-plan/glm-5
 ```
 
@@ -73,10 +73,10 @@ opencode --model zhipuai-coding-plan/glm-5
 Список слишком длинный? Укажите имя провайдера:
 
 ```bash
-# 只看 Anthropic 的模型
+# Только модели Anthropic
 opencode models anthropic
 
-# 只看 DeepSeek 的模型（前提是你已配置）
+# Только модели DeepSeek (если настроены)
 opencode models deepseek
 ```
 
@@ -98,8 +98,8 @@ zhipuai-coding-plan/glm-4.7
   "id": "zhipuai-coding-plan/glm-4.7",
   "name": "GLM 4.7",
   "provider": "zhipuai-coding-plan",
-  "inputCost": 0,    // 0元！
-  "outputCost": 0    // 0元！
+  "inputCost": 0,    // бесплатно!
+  "outputCost": 0    // бесплатно!
 }
 ```
 
@@ -216,7 +216,7 @@ opencode stats
 Находясь в **Git-проекте**, можно посмотреть расходы **только этого проекта**, добавив параметр `--project ""`:
 
 ```bash
-# 只看当前项目的统计
+# Статистика только текущего проекта
 opencode stats --project ""
 ```
 
@@ -258,10 +258,10 @@ OpenCode умнее, чем кажется: **он автоматически п
 Хотите узнать, какая модель обходится дороже всего? Выполните:
 
 ```bash
-# 显示消耗最高的 5 个模型
+# Топ-5 моделей по расходу
 opencode stats --models 5
 
-# 显示所有模型的详细列表
+# Подробный список всех моделей
 opencode stats --models
 ```
 
@@ -301,13 +301,13 @@ opencode stats --models
 Количество дней задаётся параметром `--days`:
 
 ```bash
-# 统计今天零点后更新过的会话
+# Сессии, обновлённые после полуночи
 opencode stats --days 0
 
-# 统计过去 24 小时内更新过的会话
+# Сессии, обновлённые за последние 24 часа
 opencode stats --days 1
 
-# 统计最近 7 天内更新过的会话
+# Сессии, обновлённые за последние 7 дней
 opencode stats --days 7
 ```
 
@@ -320,7 +320,7 @@ opencode stats --days 7
 Совместите «фильтр активных сессий» со «статистикой моделей», чтобы узнать, какие модели в основном использовали обновлённые сегодня сессии:
 
 ```bash
-# 查看今天零点后更新过的会话及其完整模型累计数据
+# Сессии после полуночи с полной статистикой по моделям
 opencode stats --days 0 --models
 ```
 
@@ -331,10 +331,10 @@ opencode stats --days 0 --models
 С помощью `--tools` можно показать только первые N:
 
 ```bash
-# 只看使用最多的 5 个工具
+# Топ-5 самых используемых инструментов
 opencode stats --tools 5
 
-# 组合使用：看最近 7 天的 Top 3 工具
+# Комбо: топ-3 инструмента за 7 дней
 opencode stats --days 7 --tools 3
 ```
 

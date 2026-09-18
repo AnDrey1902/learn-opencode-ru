@@ -145,7 +145,7 @@ And enter code: XXXX-XXXX
 В поле ввода введите:
 
 ```
-你好，请介绍一下你自己
+Привет! Расскажи о себе
 ```
 
 Если вы получили ответ, подключение успешно.
@@ -188,7 +188,7 @@ And enter code: XXXX-XXXX
 
 ```bash
 opencode auth login
-# 选择 GitHub Copilot
+# Выбираем GitHub Copilot
 ```
 
 ---

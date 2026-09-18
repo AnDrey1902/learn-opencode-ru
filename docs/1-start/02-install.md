@@ -24,7 +24,7 @@ prerequisite:
 Краткий конспект основных идей урока:
 
 <img src="/images/1-start/install-notes.mini.jpeg" 
-     alt="安装：5 分钟搞定学霸笔记" 
+     alt="Установка за 5 минут — шпаргалка" 
      data-zoom-src="/images/1-start/install-notes.jpeg" />
 
 ---
@@ -144,12 +144,12 @@ scoop install opencode
 ::: details Не хотите закрывать окно?
 Можно вручную перезагрузить конфигурацию:
 
-**macOS/Linux (zsh)：**
+**macOS/Linux (zsh):**
 ```bash
 source ~/.zshrc
 ```
 
-**macOS/Linux (bash)：**
+**macOS/Linux (bash):**
 ```bash
 source ~/.bashrc
 ```

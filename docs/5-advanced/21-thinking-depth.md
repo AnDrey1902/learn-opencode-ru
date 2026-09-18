@@ -1,88 +1,88 @@
 ---
-title: 5.21 思考深度配置
-subtitle: 给大模型单独设定思考预算
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.21 Настройка глубины мышления
+subtitle: Отдельный бюджет мышления для больших моделей
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.21"
-duration: 18 分钟
-practice: 12 分钟
-level: 进阶
-description: 学会用 opencode.json 为单个模型设定思考预算，并用 Ctrl+T 快捷键在不同深度间切换。
+duration: 18 минут
+practice: 12 минут
+level: Продвинутый
+description: Научитесь задавать бюджет мышления отдельным моделям через opencode.json и переключаться между глубинами горячими клавишами Ctrl+T.
 tags:
-  - 配置
-  - 模型
-  - 思考
-  - 快捷键
+  - Конфигурация
+  - Модели
+  - Мышление
+  - Горячие клавиши
 prerequisite:
-  - 5.1 配置全解
+  - 5.1 Всё о конфигурации
 ---
 
-# 5.21 思考深度配置
+# 5.21 Настройка глубины мышления
 
-> 把“思考深度”当成挡位：想快就浅，想稳就深。
+> Относитесь к «глубине мышления» как к передачам: нужна скорость — мелко, нужна надёжность — глубоко.
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 给某个模型单独设置思考预算（thinking budget）
-- 理解“变体”机制如何控制思考深度
-- 使用 <kbd>Ctrl</kbd>+<kbd>T</kbd> 在不同思考深度间切换
-
----
-
-## 你现在的困境
-
-- 同一个模型，有时想快、有时想深，但不知道怎么切
-- 配置写进 `opencode.json` 后，不确定有没有生效
-- 用中转站模型时，不确定是否还能控制思考深度
+- Задавать отдельным моделям бюджет мышления (thinking budget)
+- Понимать, как механизм «вариантов» управляет глубиной мышления
+- Переключаться между глубинами мышления через <kbd>Ctrl</kbd>+<kbd>T</kbd>
 
 ---
 
-## 什么时候用这一招
+## С какими трудностями вы столкнулись
 
-- 当你需要：把“思考深度”做成可切换的档位
-- 而且不想：每次换模型或改配置
-
----
-
-## 🎒 开始前的准备
-
-- [ ] 完成了 [5.1 配置全解](./01a-config-basics)
-- [ ] 已能正常启动 OpenCode
+- Одна и та же модель: иногда нужна скорость, иногда глубина — а как переключать, непонятно
+- Записали конфигурацию в `opencode.json`, но не уверены, что применилась
+- На моделях через транзит не уверены, управляется ли глубина мышления
 
 ---
 
-## 核心思路
+## Когда это пригодится
 
-1. OpenCode 用 **模型变体（variants）** 保存不同思考深度
-2. 变体是模型级配置，优先级高于默认值
-3. <kbd>Ctrl</kbd>+<kbd>T</kbd> 会在变体之间循环切换
+- Когда нужно: сделать «глубину мышления» переключаемыми передачами
+- И не хочется: каждый раз менять модель или править конфигурацию
 
-::: info ℹ️ 什么是“思考深度”？
-它指的是模型的“可用思考预算”，例如 Anthropic 的 `thinking.budgetTokens`。
-数值越大，模型可用于推理的 token 越多，但响应更慢、成本更高。
+---
+
+## 🎒 Перед началом
+
+- [ ] Пройден урок [5.1 Всё о конфигурации](./01a-config-basics)
+- [ ] OpenCode нормально стартует
+
+---
+
+## Главная идея
+
+1. OpenCode хранит разные глубины мышления **вариантами моделей (variants)**
+2. Варианты — конфигурация уровня модели с приоритетом выше умолчаний
+3. <kbd>Ctrl</kbd>+<kbd>T</kbd> циклично переключает варианты
+
+::: info ℹ️ Что такое «глубина мышления»?
+Это «доступный бюджет мышления» модели — например, `thinking.budgetTokens` у Anthropic.
+Чем больше число, тем больше токенов модель тратит на рассуждения, но тем медленнее ответы и выше цена.
 :::
 
 ---
 
-## 跟我做
+## Повторите за мной
 
-### 第 1 步：确认模型是否支持思考变体
+### Шаг 1: проверьте, поддерживает ли модель варианты мышления
 
-**为什么**  不是所有模型都有变体，OpenCode 会先检查 `capabilities.reasoning`。
+**Зачем**  Варианты есть не у всех моделей — OpenCode сначала проверяет `capabilities.reasoning`.
 
-**怎么做**  选用支持 reasoning 的模型（如 Anthropic / Gemini 3 / OpenAI）。
+**Как**  Выбирайте модели с поддержкой reasoning (вроде Anthropic, Gemini 3 и OpenAI).
 
-**你应该看到**  模型列表中能出现 `high` / `max` 等变体。
+**Вы должны увидеть**  В списке моделей появляются варианты `high` и `max`.
 
 ---
 
-### 第 2 步：在 opencode.json 里为单个模型设置思考预算
+### Шаг 2: задайте бюджет мышления отдельной модели в opencode.json
 
-**为什么**  变体配置在 `provider.models.[modelID].variants` 下，可以覆盖默认值。
+**Зачем**  Конфигурация вариантов живёт в `provider.models.[modelID].variants` и перекрывает значения по умолчанию.
 
-**怎么做**  按你使用的 Provider 填入对应字段：
+**Как**  Впишите нужные поля под вашего провайдера:
 
-**Anthropic 示例**（thinking.budgetTokens）
+**Пример Anthropic** (thinking.budgetTokens)
 
 ```jsonc
 {
@@ -106,7 +106,7 @@ prerequisite:
 }
 ```
 
-**Gemini 3 示例**（thinkingConfig.thinkingBudget）
+**Пример Gemini 3** (thinkingConfig.thinkingBudget)
 
 ```jsonc
 {
@@ -130,29 +130,29 @@ prerequisite:
 }
 ```
 
-**你应该看到**  重启后模型变体的数值生效。
+**Вы должны увидеть**  После перезапуска числовые значения вариантов моделей применяются.
 
 ---
 
-### 第 3 步：用 Ctrl+T 在思考深度间切换
+### Шаг 3: переключайте глубину мышления через Ctrl+T
 
-**为什么**  变体配置写好后，用快捷键快速切换更顺手。
+**Зачем**  Когда варианты настроены, горячими клавишами переключаться удобнее.
 
-**怎么做**  在对话输入框按 <kbd>Ctrl</kbd>+<kbd>T</kbd> 循环切换：
+**Как**  В поле ввода диалога нажимайте <kbd>Ctrl</kbd>+<kbd>T</kbd> для циклического переключения:
 
 ```
-(无) → high → max → (无) → high → ...
+(нет) → high → max → (нет) → high → ...
 ```
 
-**你应该看到**  状态栏显示当前变体名称（例如 `high`）。
+**Вы должны увидеть**  В строке состояния — имя текущего варианта (например, `high`).
 
 ---
 
-### 第 4 步：自定义变体名字（可选）
+### Шаг 4: свои имена вариантов (необязательно)
 
-**为什么**  变体名称不是固定的，你可以改成“深度思考/极速”等。
+**Зачем**  Имена вариантов не фиксированы — переименуйте хоть в «глубокое мышление» и «максимальная скорость».
 
-**怎么做**  在 `variants` 里使用自定义 key：
+**Как**  Используйте свои ключи в `variants`:
 
 ```jsonc
 {
@@ -161,8 +161,8 @@ prerequisite:
       "models": {
         "claude-sonnet-4-5": {
           "variants": {
-            "极速": { "thinking": { "type": "enabled", "budgetTokens": 8000 } },
-            "深度": { "thinking": { "type": "enabled", "budgetTokens": 32000 } }
+            "быстро": { "thinking": { "type": "enabled", "budgetTokens": 8000 } },
+            "глубоко": { "thinking": { "type": "enabled", "budgetTokens": 32000 } }
           }
         }
       }
@@ -171,11 +171,11 @@ prerequisite:
 }
 ```
 
-**你应该看到**  <kbd>Ctrl</kbd>+<kbd>T</kbd> 在“极速/深度”之间切换。
+**Вы должны увидеть**  <kbd>Ctrl</kbd>+<kbd>T</kbd> переключает «быстро» и «глубоко».
 
-::: info ℹ️ 自定义变体是“增加”，不是“替换”
-OpenCode 会把你在 `opencode.json` 里写的变体**合并**到默认变体中。
-如果你只想保留自定义的变体，把默认的 `high`/`max` 显式禁用即可：
+::: info ℹ️ Свои варианты «добавляются», а не «заменяют»
+OpenCode **сливает** написанные вами в `opencode.json` варианты с вариантами по умолчанию.
+Чтобы оставить только свои, явно отключите умолчательные `high` и `max`:
 
 ```jsonc
 {
@@ -186,8 +186,8 @@ OpenCode 会把你在 `opencode.json` 里写的变体**合并**到默认变体�
           "variants": {
             "high": { "disabled": true },
             "max": { "disabled": true },
-            "极速": { "thinking": { "type": "enabled", "budgetTokens": 8000 } },
-            "深度": { "thinking": { "type": "enabled", "budgetTokens": 32000 } }
+            "быстро": { "thinking": { "type": "enabled", "budgetTokens": 8000 } },
+            "глубоко": { "thinking": { "type": "enabled", "budgetTokens": 32000 } }
           }
         }
       }
@@ -197,9 +197,9 @@ OpenCode 会把你在 `opencode.json` 里写的变体**合并**到默认变体�
 ```
 :::
 
-**第三方中转站怎么配**
+**Как настроен транзит**
 
-如果你的中转站是 `openai-compatible`，默认使用 `reasoningEffort`。示例：
+Если ваш транзит — `openai-compatible`, по умолчанию используется `reasoningEffort`. Пример:
 
 ```jsonc
 {
@@ -222,7 +222,7 @@ OpenCode 会把你在 `opencode.json` 里写的变体**合并**到默认变体�
 }
 ```
 
-如果中转站其实转发的是 Anthropic 接口（仍走 `openai-compatible` SDK），可以直接写 Anthropic 字段覆盖：
+Если транзит на самом деле проксирует интерфейс Anthropic (но едет через SDK `openai-compatible`), прямо перекрывайте полями Anthropic:
 
 ```jsonc
 {
@@ -249,74 +249,74 @@ OpenCode 会把你在 `opencode.json` 里写的变体**合并**到默认变体�
 }
 ```
 
-前提是：你的中转站服务端会把 `thinking` 字段原样转发到 Anthropic。
+Условие: серверная сторона вашего транзита пробрасывает поле `thinking` в Anthropic как есть.
 
 ---
 
-## 检查点 ✅
+## Контрольные пункты ✅
 
-- [ ] `opencode.json` 中包含 `provider.models.[modelID].variants`
-- [ ] 启动后可看到变体名称显示在状态栏
-- [ ] <kbd>Ctrl</kbd>+<kbd>T</kbd> 能轮换变体
-
----
-
-## 踩坑提醒
-
-| 现象 | 原因 | 解决 |
-|-----|------|------|
-| 按 <kbd>Ctrl</kbd>+<kbd>T</kbd> 没反应 | 当前模型没有变体 | 换支持 reasoning 的模型或添加 variants | 
-| 变体有但不显示 | 还未切换到某个变体 | 按一次 <kbd>Ctrl</kbd>+<kbd>T</kbd> | 
-| 配置不生效 | 模型 ID 写错 | 从模型列表复制完整 ID | 
-| 中转站没变化 | 用的是 `openai-compatible`，只支持 reasoningEffort | 在 variants 里手动覆盖参数 | 
+- [ ] В `opencode.json` есть `provider.models.[modelID].variants`
+- [ ] После старта имена вариантов видны в строке состояния
+- [ ] <kbd>Ctrl</kbd>+<kbd>T</kbd> циклично переключает варианты
 
 ---
 
-## 本课小结
+## Типичные проблемы
 
-你学会了：
-
-1. 变体是“思考深度档位”，在 `provider.models.[modelID].variants` 配置
-2. 默认变体由 ProviderTransform 自动生成，可被配置覆盖
-3. <kbd>Ctrl</kbd>+<kbd>T</kbd> 用于循环切换变体
+| Симптом | Причина | Решение |
+|-----|-----|-----|
+| <kbd>Ctrl</kbd>+<kbd>T</kbd> не реагирует | У текущей модели нет вариантов | Смените модель на поддерживающую reasoning или добавьте variants |
+| Варианты есть, но не видны | Ещё не переключились ни на один вариант | Нажмите <kbd>Ctrl</kbd>+<kbd>T</kbd> раз |
+| Конфигурация не применяется | Неверный ID модели | Скопируйте полный ID из списка моделей |
+| Транзит без изменений | Используется `openai-compatible` с одним reasoningEffort | Вручную перекройте параметры во variants |
 
 ---
 
-## 下一课预告
+## Итоги урока
 
-> 下一课我们学习 **[调试与诊断工具](./22-debugging)**。
+Вы научились:
+
+1. Варианты — это «передачи глубины мышления», настраиваются в `provider.models.[modelID].variants`
+2. Варианты по умолчанию автогенерирует ProviderTransform, конфигурация их перекрывает
+3. <kbd>Ctrl</kbd>+<kbd>T</kbd> циклично переключает варианты
+
+---
+
+## Анонс следующего урока
+
+> В следующем уроке изучим **[инструменты отладки и диагностики](./22-debugging)**.
 >
-> 你会学到：
-> - 如何使用 `opencode debug` 系列命令
-> - 诊断 LSP、配置和搜索问题
-> - 像开发者一样剖析 OpenCode
+> Вы узнаете:
+> - Как пользоваться командами серии `opencode debug`
+> - Диагностику проблем LSP, конфигурации и поиска
+> - Как разбирать OpenCode словно разработчик
 
 ---
 
-## 附录：源码参考
+## Приложение: ссылки на исходники
 
 <details>
-<summary><strong>点击展开查看源码位置</strong></summary>
+<summary><strong>Нажмите, чтобы раскрыть расположение исходников</strong></summary>
 
-> 更新时间：2026-01-16
+> Дата обновления: 2026-01-16
 
-| 功能 | 文件路径 | 行号 |
+| Функция | Путь к файлу | Строки |
 |-----|---------|------|
-| 变体生成入口 | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L297-L477) | 297-477 |
-| reasoning 过滤与排除 | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L298-L301) | 298-301 |
-| Anthropic 思考预算默认值 | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L371-L385) | 371-385 |
-| Gemini 3 思考预算默认值 | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L421-L439) | 421-439 |
-| 变体配置 Schema | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L818-L833) | 818-833 |
-| 变体配置合并 | [`src/provider/provider.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/provider.ts#L929-L936) | 929-936 |
-| Ctrl+T 默认快捷键 | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L632-L688) | 632-688 |
-| Ctrl+T 命令绑定 | [`src/cli/cmd/tui/app.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/app.tsx#L393-L399) | 393-399 |
-| 变体循环逻辑 | [`src/cli/cmd/tui/context/local.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/context/local.tsx#L310-L346) | 310-346 |
-| 变体显示逻辑 | [`src/cli/cmd/tui/component/prompt/index.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/component/prompt/index.tsx#L696-L700) | 696-700 |
-| 变体名称渲染 | [`src/cli/cmd/tui/component/prompt/index.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/component/prompt/index.tsx#L946-L950) | 946-950 |
-| 变体应用到 LLM 参数 | [`src/session/llm.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/session/llm.ts#L96-L109) | 96-109 |
-| 变体 keybind 配置 | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L632-L688) | 632-688 |
+| Точка входа генерации вариантов | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L297-L477) | 297-477 |
+| Фильтрация и исключения reasoning | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L298-L301) | 298-301 |
+| Умолчания бюджета мышления Anthropic | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L371-L385) | 371-385 |
+| Умолчания бюджета мышления Gemini 3 | [`src/provider/transform.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts#L421-L439) | 421-439 |
+| Schema конфигурации вариантов | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L818-L833) | 818-833 |
+| Слияние конфигурации вариантов | [`src/provider/provider.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/provider.ts#L929-L936) | 929-936 |
+| Горячие клавиши Ctrl+T по умолчанию | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L632-L688) | 632-688 |
+| Привязка команды Ctrl+T | [`src/cli/cmd/tui/app.tsx`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/cli/cmd/tui/app.tsx#L393-L399) | 393-399 |
+| Логика цикла вариантов | [`src/cli/cmd/tui/context/local.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/context/local.tsx#L310-L346) | 310-346 |
+| Логика отображения вариантов | [`src/cli/cmd/tui/component/prompt/index.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/component/prompt/index.tsx#L696-L700) | 696-700 |
+| Рендер имён вариантов | [`src/cli/cmd/tui/component/prompt/index.tsx`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/cli/cmd/tui/component/prompt/index.tsx#L946-L950) | 946-950 |
+| Применение вариантов к параметрам LLM | [`src/session/llm.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/session/llm.ts#L96-L109) | 96-109 |
+| Конфигурация keybind вариантов | [`src/config/config.ts`](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/config/config.ts#L632-L688) | 632-688 |
 
-**关键常量**：
+**Ключевые константы**:
 - `WIDELY_SUPPORTED_EFFORTS = ["low", "medium", "high"]`
 - `OPENAI_EFFORTS = ["none", "minimal", "low", "medium", "high", "xhigh"]`
 

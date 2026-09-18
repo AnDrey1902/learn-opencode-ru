@@ -1,97 +1,97 @@
 ---
-title: 生态系统
-description: OpenCode 社区插件、项目和资源
+title: Экосистема
+description: Плагины, проекты и ресурсы сообщества OpenCode
 ---
 
 ---
-title: 生态系统
-description: OpenCode 社区插件、项目和资源
+title: Экосистема
+description: Плагины, проекты и ресурсы сообщества OpenCode
 ---
 
-# 生态系统
+# Экосистема
 
-> 社区贡献的插件、项目和资源
+> Плагины, проекты и ресурсы от сообщества
 
 ---
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/appendix/ecosystem-notes.mini.jpeg"
-     alt="生态系统学霸笔记"
+     alt="Шпаргалка: экосистема"
      data-zoom-src="/images/appendix/ecosystem-notes.jpeg" />
 
 ---
 
-## 社区资源
+## Ресурсы сообщества
 
-想把你的项目添加到这个列表？[提交 PR](https://github.com/anomalyco/opencode)。
+Хотите добавить свой проект в список? [Создайте PR](https://github.com/anomalyco/opencode).
 
-更多资源：
-- [awesome-opencode](https://github.com/awesome-opencode/awesome-opencode) - 社区精选资源列表
-- [opencode.cafe](https://opencode.cafe) - 社区聚合网站
+Больше ресурсов:
+- [awesome-opencode](https://github.com/awesome-opencode/awesome-opencode) — отобранный список ресурсов сообщества
+- [opencode.cafe](https://opencode.cafe) — агрегатор сообщества
 
 ---
 
-## 插件
+## Плагины
 
 <AdInArticle />
 
-| 插件 | 说明 |
+| Плагин | Описание |
 |------|------|
-| [opencode-helicone-session](https://github.com/H2Shami/opencode-helicone-session) | 自动注入 Helicone 会话头，用于请求分组 |
-| [opencode-type-inject](https://github.com/nick-vi/opencode-type-inject) | 自动注入 TypeScript/Svelte 类型到文件读取 |
-| [opencode-openai-codex-auth](https://github.com/numman-ali/opencode-openai-codex-auth) | 使用 ChatGPT Plus/Pro 订阅替代 API 额度 |
-| [opencode-gemini-auth](https://github.com/jenslys/opencode-gemini-auth) | 使用现有 Gemini 计划替代 API 计费 |
-| [opencode-antigravity-auth](https://github.com/NoeFabris/opencode-antigravity-auth) | 使用 Antigravity 免费模型 |
-| [opencode-devcontainers](https://github.com/athal7/opencode-devcontainers) | 多分支 devcontainer 隔离，浅克隆和自动端口分配 |
-| [opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth) | Google Antigravity OAuth 插件，支持 Google 搜索 |
-| [opencode-dynamic-context-pruning](https://github.com/Tarquinen/opencode-dynamic-context-pruning) | 通过裁剪过时工具输出来优化 Token 使用 |
-| [opencode-websearch-cited](https://github.com/ghoulr/opencode-websearch-cited) | 为支持的提供商添加原生网页搜索 |
-| [opencode-pty](https://github.com/shekohex/opencode-pty) | 允许 AI 代理在 PTY 中运行后台进程并发送交互输入 |
-| [opencode-shell-strategy](https://github.com/JRedeker/opencode-shell-strategy) | 非交互式 shell 命令指令，防止 TTY 操作挂起 |
-| [opencode-wakatime](https://github.com/angristan/opencode-wakatime) | 使用 WakaTime 追踪 OpenCode 使用时间 |
-| [opencode-md-table-formatter](https://github.com/franlol/opencode-md-table-formatter) | 清理 LLM 生成的 Markdown 表格 |
-| [opencode-morph-fast-apply](https://github.com/JRedeker/opencode-morph-fast-apply) | 使用 Morph Fast Apply API 实现 10 倍速代码编辑 |
-| [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) | 后台代理、预构建 LSP/AST/MCP 工具、精选代理 |
-| [opencode-notificator](https://github.com/panta82/opencode-notificator) | OpenCode 会话的桌面通知和声音提醒 |
-| [opencode-notifier](https://github.com/mohak34/opencode-notifier) | 权限、完成和错误事件的桌面通知 |
-| [opencode-zellij-namer](https://github.com/24601/opencode-zellij-namer) | 基于 OpenCode 上下文的 AI 自动 Zellij 会话命名 |
-| [opencode-skillful](https://github.com/zenobi-us/opencode-skillful) | 允许 OpenCode 代理按需延迟加载提示词 |
-| [opencode-supermemory](https://github.com/supermemoryai/opencode-supermemory) | 使用 Supermemory 实现跨会话持久记忆 |
-| [@plannotator/opencode](https://github.com/backnotprop/plannotator) | 交互式计划审查，支持可视化注释和私有/离线分享 |
-| [@openspoon/subtask2](https://github.com/spoons-and-mirrors/subtask2) | 将 /commands 扩展为强大的编排系统 |
-| [opencode-scheduler](https://github.com/different-ai/opencode-scheduler) | 使用 launchd (Mac) 或 systemd (Linux) 调度定时任务 |
+| [opencode-helicone-session](https://github.com/H2Shami/opencode-helicone-session) | Автоинжект заголовков сессий Helicone для группировки запросов |
+| [opencode-type-inject](https://github.com/nick-vi/opencode-type-inject) | Автоинжект типов TypeScript и Svelte при чтении файлов |
+| [opencode-openai-codex-auth](https://github.com/numman-ali/opencode-openai-codex-auth) | Подписка ChatGPT Plus и Pro вместо квот API |
+| [opencode-gemini-auth](https://github.com/jenslys/opencode-gemini-auth) | Существующий план Gemini вместо биллинга API |
+| [opencode-antigravity-auth](https://github.com/NoeFabris/opencode-antigravity-auth) | Бесплатные модели Antigravity |
+| [opencode-devcontainers](https://github.com/athal7/opencode-devcontainers) | Изоляция devcontainer между ветками, мелкие клоны и автораспределение портов |
+| [opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth) | OAuth-плагин Google Antigravity с поддержкой поиска Google |
+| [opencode-dynamic-context-pruning](https://github.com/Tarquinen/opencode-dynamic-context-pruning) | Экономия токенов обрезкой устаревших выводов инструментов |
+| [opencode-websearch-cited](https://github.com/ghoulr/opencode-websearch-cited) | Нативный веб-поиск для поддерживаемых провайдеров |
+| [opencode-pty](https://github.com/shekohex/opencode-pty) | Фоновые процессы AI-агентов в PTY с интерактивным вводом |
+| [opencode-shell-strategy](https://github.com/JRedeker/opencode-shell-strategy) | Неинтерактивные инструкции shell-команд против подвисаний TTY-операций |
+| [opencode-wakatime](https://github.com/angristan/opencode-wakatime) | Трекинг времени работы в OpenCode через WakaTime |
+| [opencode-md-table-formatter](https://github.com/franlol/opencode-md-table-formatter) | Чистка Markdown-таблиц, созданных LLM |
+| [opencode-morph-fast-apply](https://github.com/JRedeker/opencode-morph-fast-apply) | Правки кода в 10 раз быстрее через Morph Fast Apply API |
+| [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) | Фоновые агенты, пребилдовые LSP, AST и MCP-инструменты, отобранные агенты |
+| [opencode-notificator](https://github.com/panta82/opencode-notificator) | Десктопные уведомления и звуковые оповещения сессий OpenCode |
+| [opencode-notifier](https://github.com/mohak34/opencode-notifier) | Десктопные уведомления событий прав, завершений и ошибок |
+| [opencode-zellij-namer](https://github.com/24601/opencode-zellij-namer) | AI-именование сессий Zellij по контексту OpenCode |
+| [opencode-skillful](https://github.com/zenobi-us/opencode-skillful) | Ленивая подгрузка промптов агентами OpenCode по требованию |
+| [opencode-supermemory](https://github.com/supermemoryai/opencode-supermemory) | Сквозная память сессий через Supermemory |
+| [@plannotator/opencode](https://github.com/backnotprop/plannotator) | Интерактивное ревью планов с визуальными комментариями и приватным и офлайн-шарингом |
+| [@openspoon/subtask2](https://github.com/spoons-and-mirrors/subtask2) | Расширение /commands в мощную систему оркестрации |
+| [opencode-scheduler](https://github.com/different-ai/opencode-scheduler) | Планировщик задач через launchd (Mac) и systemd (Linux) |
 
 ---
 
-## 项目
+## Проекты
 
-| 项目 | 说明 |
+| Проект | Описание |
 |------|------|
-| [kimaki](https://github.com/remorses/kimaki) | 控制 OpenCode 会话的 Discord Bot，基于 SDK 构建 |
-| [opencode.nvim](https://github.com/NickvanDyke/opencode.nvim) | Neovim 插件，支持编辑器感知提示，基于 API 构建 |
-| [portal](https://github.com/hosenur/portal) | 移动优先的 Web UI，支持 Tailscale/VPN 访问 |
-| [opencode plugin template](https://github.com/zenobi-us/opencode-plugin-template/) | OpenCode 插件开发模板 |
-| [opencode.nvim](https://github.com/sudo-tee/opencode.nvim) | 另一个 Neovim 前端 |
-| [ai-sdk-provider-opencode-sdk](https://github.com/ben-vargas/ai-sdk-provider-opencode-sdk) | Vercel AI SDK 提供商，通过 @opencode-ai/sdk 使用 |
-| [OpenChamber](https://github.com/btriapitsyn/openchamber) | Web/桌面应用和 VS Code 扩展 |
-| [OpenCode-Obsidian](https://github.com/mtymek/opencode-obsidian) | 将 OpenCode 嵌入 Obsidian UI 的插件 |
+| [kimaki](https://github.com/remorses/kimaki) | Discord-бот управления сессиями OpenCode на SDK |
+| [opencode.nvim](https://github.com/NickvanDyke/opencode.nvim) | Плагин Neovim с промптами, знающими редактор, на API |
+| [portal](https://github.com/hosenur/portal) | Мобильный Web UI с доступом через Tailscale и VPN |
+| [opencode plugin template](https://github.com/zenobi-us/opencode-plugin-template/) | Шаблон разработки плагинов OpenCode |
+| [opencode.nvim](https://github.com/sudo-tee/opencode.nvim) | Другой фронтенд Neovim |
+| [ai-sdk-provider-opencode-sdk](https://github.com/ben-vargas/ai-sdk-provider-opencode-sdk) | Провайдер Vercel AI SDK через @opencode-ai/sdk |
+| [OpenChamber](https://github.com/btriapitsyn/openchamber) | Веб- и десктоп-приложение плюс расширение VS Code |
+| [OpenCode-Obsidian](https://github.com/mtymek/opencode-obsidian) | Плагин встраивания OpenCode в интерфейс Obsidian |
 
 ---
 
 ## Agents
 
-| 项目 | 说明 |
+| Проект | Описание |
 |------|------|
-| [Agentic](https://github.com/Cluster444/agentic) | 模块化 AI 代理和命令，用于结构化开发 |
-| [opencode-agents](https://github.com/darrenhinde/opencode-agents) | 增强工作流的配置、提示词、代理和插件集合 |
+| [Agentic](https://github.com/Cluster444/agentic) | Модульные AI-агенты и команды для структурной разработки |
+| [opencode-agents](https://github.com/darrenhinde/opencode-agents) | Коллекция конфигов, промптов, агентов и плагинов для сильных процессов |
 
 ---
 
-## 相关资源
+## Связанные материалы
 
-- [插件开发](../5-advanced/12a-plugins-basics) - 开发 OpenCode 插件
-- [自定义 Agent](../5-advanced/02a-agent-quickstart) - 创建自定义代理
-- [Skill 系统](../5-advanced/03a-skills-basics) - 开发 Skill
+- [Разработка плагинов](../5-advanced/12a-plugins-basics) — разработка плагинов OpenCode
+- [Свои Agent](../5-advanced/02a-agent-quickstart) — создание своих агентов
+- [Система Skill](../5-advanced/03a-skills-basics) — разработка Skill

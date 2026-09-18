@@ -1,315 +1,317 @@
 ---
-title: "CLI 自动化：让 OpenCode 跑在脚本里 | OpenCode 教程"
-subtitle: "CLI 自动化"
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: "Автоматизация CLI: OpenCode в скриптах"
+subtitle: "Автоматизация CLI"
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.24"
-duration: 25 分钟
-practice: 30 分钟
-level: 进阶
-description: 学习用命令行自动化 OpenCode，包括非交互模式、远程服务器、CI/CD 集成，让你的工作流全自动运转。
+duration: 25 минут
+practice: 30 минут
+level: Продвинутый
+description: "Научитесь автоматизировать OpenCode из командной строки: неинтерактивный режим, удалённый сервер, интеграция CI/CD — полный автопилот процессов."
 tags:
   - CLI
-  - 自动化
+  - Автоматизация
   - CI/CD
-  - 远程访问
+  - Удалённый доступ
 prerequisite:
-  - 5.1a 配置基础
-  - 2.2 管理对话
+  - 5.1a Основы конфигурации
+  - 2.2 Управление сессиями
 ---
 
-# CLI 自动化：让 OpenCode 跑在脚本里
+# Автоматизация CLI: OpenCode в скриптах
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/5-advanced/24-cli-automation-notes.mini.jpeg"
-     alt="CLI 自动化学霸笔记"
+     alt="Шпаргалка урока: автоматизация CLI"
      data-zoom-src="/images/5-advanced/24-cli-automation-notes.jpeg" />
 
 ---
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 在脚本里调用 OpenCode，无需人工干预
-- 启动远程服务器，让团队成员共享同一个 AI 会话
-- 把 OpenCode 嵌入 CI/CD 流水线，自动审查代码
-- 一键拉取 PR 并启动对应的 OpenCode 会话
-
----
-
-## 你现在的困境
-
-- 每次都要打开 TUI 手动输入命令，重复劳动太多
-- 想在服务器上跑 OpenCode，但没有图形界面
-- CI/CD 里想自动让 AI 检查代码，不知道怎么集成
-- 团队协作时，想让大家连到同一个 OpenCode 实例
+- Вызывать OpenCode в скриптах без участия человека
+- Поднимать удалённый сервер для общих AI-сессий команды
+- Встраивать OpenCode в CI/CD-конвейеры для авторевью кода
+- Одной командой забирать PR и стартовать нужную сессию OpenCode
 
 ---
 
-## 什么时候用这一招
+## С какими трудностями вы столкнулись
 
-- **脚本自动化**：批量处理多个项目、定时任务
-- **CI/CD 集成**：代码审查、自动修复、生成文档
-- **远程开发**：在服务器上运行，本地终端连接
-- **团队协作**：共享 OpenCode 实例，协同编辑
-
----
-
-## 🎒 开始前的准备
-
-- [ ] 完成了 [5.1a 配置基础](./01a-config-basics)
-- [ ] 能在终端里运行 `opencode` 启动 TUI
-- [ ] 了解基本的 Shell 命令（`cd`、`echo`、管道）
+- Каждый раз открывать TUI и вручную вводить команды — сплошная рутина
+- Хочется гонять OpenCode на сервере, а графического интерфейса нет
+- В CI/CD хочется автоматической AI-проверки кода, а как встроить — неясно
+- В командной работе хочется всем подключаться к одному инстансу OpenCode
 
 ---
 
-## 核心思路
+## Когда это пригодится
 
-OpenCode 提供了四类终端使用方式：
+- **Автоматизация скриптами**: пакетная обработка нескольких проектов, задачи по расписанию
+- **Интеграция CI/CD**: ревью кода, автоисправления, генерация документации
+- **Удалённая разработка**: запуск на сервере, подключение с локального терминала
+- **Командная работа**: общий инстанс OpenCode, совместное редактирование
+
+---
+
+## 🎒 Перед началом
+
+- [ ] Пройден урок [5.1a Основы конфигурации](./01a-config-basics)
+- [ ] Умеете запускать `opencode` в терминале для старта TUI
+- [ ] Знакомы с базовыми shell-командами (`cd`, `echo`, конвейеры)
+
+---
+
+## Главная идея
+
+У OpenCode четыре терминальных режима работы:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        OpenCode 使用方式                                  │
+│                        Режимы работы OpenCode                            │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │   ┌─────────────────┐              ┌─────────────────┐                  │
-│   │   交互模式 TUI   │              │  非交互模式 CLI  │                  │
+│   │  Интерактив TUI  │              │ Неинтерактив CLI │                  │
 │   │                 │              │                 │                  │
 │   │  opencode       │              │  opencode run   │                  │
 │   │                 │              │                 │                  │
-│   │  • 适合日常开发  │              │  • 适合脚本     │                  │
-│   │  • 实时对话     │              │  • 适合 CI/CD   │                  │
-│   │  • 人工决策     │              │  • 自动化流程   │                  │
+│   │  • Повседневная │              │  • Для скриптов │                  │
+│   │    разработка   │              │  • Для CI/CD    │                  │
+│   │  • Живой диалог │              │  • Автопроцессы │                  │
+│   │  • Решения      │              │                 │                  │
+│   │    человека     │              │                 │                  │
 │   └─────────────────┘              └─────────────────┘                  │
 │                                                                          │
 │   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │                      精简交互模式                                 │   │
+│   │                    Компактный интерактив                          │   │
 │   │                                                                   │   │
-│   │  opencode --mini   →  精简界面，适合连续对话与 Shell 操作         │   │
-│   │                                                                   │   │
+│   │  opencode --mini   →  сжатый интерфейс для связного диалога       │   │
+│   │                        и shell-операций                           │   │
 │   └─────────────────────────────────────────────────────────────────┘   │
 │                                                                          │
 │   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │                      服务器模式                                   │   │
+│   │                      Режим сервера                                │   │
 │   │                                                                   │   │
-│   │  opencode serve    →  启动无头服务器（只有 API）                   │   │
-│   │  opencode web      →  启动 Web 界面服务器                         │   │
-│   │  opencode attach   →  连接远程服务器                              │   │
+│   │  opencode serve    →  headless-сервер (только API)                 │   │
+│   │  opencode web      →  сервер с веб-интерфейсом                    │   │
+│   │  opencode attach   →  подключение к удалённому серверу            │   │
 │   │                                                                   │   │
 │   └─────────────────────────────────────────────────────────────────┘   │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-**关键区别**：
+**Главные различия**:
 
-| 模式 | 命令 | 特点 |
+| Режим | Команда | Особенности |
 |------|------|------|
-| TUI | `opencode` | 交互式，适合人工操作 |
-| Mini | `opencode --mini` | 精简交互界面，保留连续输入与会话回放 |
-| Run | `opencode run` | 非交互式，执行完退出 |
-| Serve | `opencode serve` | 无头服务器，只暴露 API |
-| Web | `opencode web` | 带 Web 界面的服务器 |
+| TUI | `opencode` | Интерактив, для работы руками |
+| Mini | `opencode --mini` | Сжатый интерактив, связный ввод с replay сессий |
+| Run | `opencode run` | Неинтерактив, выполнил и вышел |
+| Serve | `opencode serve` | Headless-сервер, только API |
+| Web | `opencode web` | Сервер с веб-интерфейсом |
 
-### 精简交互模式：opencode --mini
+### Компактный интерактив: opencode --mini
 
-`opencode --mini` 是精简交互界面的公开入口。不要写成 `opencode run --mini`；`opencode run` 默认仍是执行一次任务后退出的非交互命令。
+`opencode --mini` — открытый вход в сжатый интерактив. Не пишите `opencode run --mini`; команда `opencode run` по умолчанию так и остаётся неинтерактивной «выполнил задачу и вышел».
 
 ```bash
-# 启动精简交互界面
+# Старт сжатого интерактива
 opencode --mini
 
-# 继续最近会话；默认回放会话历史，并在终端缩放后重新回放
+# Продолжить свежую сессию; по умолчанию replay истории сессии, при ресайзе терминала replay повторяется
 opencode --mini --continue
 
-# 继续会话，但关闭历史回放
+# Продолжить сессию без replay истории
 opencode --mini --continue --no-replay
 ```
 
-在 Mini 输入框开头输入 `!` 会进入 **Shell mode**。继续输入命令并提交即可执行；按 <kbd>Esc</kbd> 可直接退出，或在光标位于输入开头时按 <kbd>Backspace</kbd> 退出。
+В поле ввода Mini восклицательный знак `!` в начале включает **режим Shell**. Продолжайте вводить команду и отправляйте на выполнение; выход сразу по <kbd>Esc</kbd> либо клавишей <kbd>Backspace</kbd> при курсоре в начале ввода.
 
 ---
 
-## 第一部分：非交互模式 opencode run
+## Часть 1: неинтерактив opencode run
 
-### 1.1 基本用法
+### 1.1 Базовое использование
 
-`opencode run` 是最常用的 CLI 命令。即使从终端直接运行，它默认也不会进入交互界面，而是执行完任务后自动退出。
+`opencode run` — самая частая CLI-команда. Даже запущенная прямо из терминала, она по умолчанию не уходит в интерактив, а выполняет задачу и автоматически выходит.
 
 ```bash
-# 最简单的用法
-opencode run "列出这个项目里所有的 TypeScript 文件"
+# Простейшее использование
+opencode run "Перечисли все TypeScript-файлы этого проекта"
 
-# 你会看到：
+# Вы увидите:
 # > opencode · anthropic/claude-sonnet-4-5
-# 
+#
 # ✱ Glob "**/*.ts" in . · 12 matches
-# 
-# 这个项目中有 12 个 TypeScript 文件：
+#
+# В этом проекте 12 TypeScript-файлов:
 # - src/index.ts
 # - src/utils.ts
 # ...
 ```
 
-### 1.2 常用选项
+### 1.2 Частые опции
 
-| 选项 | 说明 | 示例 |
+| Опция | Описание | Пример |
 |------|------|------|
-| `-m, --model` | 指定模型 | `-m anthropic/claude-opus-4-5` |
-| `--agent` | 指定 Agent | `--agent code-reviewer` |
-| `-f, --file` | 附加文件 | `-f src/main.ts -f package.json` |
-| `-c, --continue` | 继续上次会话 | `-c` |
-| `-s, --session` | 指定会话 ID | `-s session_abc123` |
-| `--format json` | JSON 格式输出 | `--format json` |
-| `--share` | 自动分享会话 | `--share` |
-| `--title` | 设置会话标题 | `--title "修复登录 Bug"` |
+| `-m, --model` | Указать модель | `-m anthropic/claude-opus-4-5` |
+| `--agent` | Указать Agent | `--agent code-reviewer` |
+| `-f, --file` | Приложить файлы | `-f src/main.ts -f package.json` |
+| `-c, --continue` | Продолжить прошлую сессию | `-c` |
+| `-s, --session` | Указать ID сессии | `-s session_abc123` |
+| `--format json` | Вывод в JSON | `--format json` |
+| `--share` | Автошаринг сессии | `--share` |
+| `--title` | Заголовок сессии | `--title "Чиним баг входа"` |
 
-### 1.3 实战示例
+### 1.3 Боевые примеры
 
-#### 示例 1：代码审查脚本
+#### Пример 1: скрипт ревью кода
 
 ```bash
 #!/bin/bash
-# code-review.sh - 自动审查当前分支的变更
+# code-review.sh - авторевью изменений текущей ветки
 
-# 获取变更的文件列表
+# Список изменённых файлов
 CHANGED_FILES=$(git diff --name-only main)
 
-# 如果没有变更，退出
+# Нет изменений — выходим
 if [ -z "$CHANGED_FILES" ]; then
-  echo "没有发现变更"
+  echo "Изменений не найдено"
   exit 0
 fi
 
-# 对每个文件进行审查
+# Ревью каждого файла
 for file in $CHANGED_FILES; do
-  echo "审查: $file"
-  opencode run -f "$file" "请审查这个文件的代码质量，重点关注：1) 潜在 Bug 2) 性能问题 3) 代码风格"
+  echo "Ревью: $file"
+  opencode run -f "$file" "Проверь качество кода этого файла, фокус: 1) потенциальные баги 2) производительность 3) стиль кода"
 done
 ```
 
-#### 示例 2：从 stdin 读取
+#### Пример 2: чтение из stdin
 
 ```bash
-# 管道输入
-cat error.log | opencode run "分析这个错误日志，找出根本原因"
+# Конвейерный ввод
+cat error.log | opencode run "Разбери этот лог ошибок, найди первопричину"
 
-# 结合 git diff
-git diff main | opencode run "检查这些变更是否有问题"
+# В связке с git diff
+git diff main | opencode run "Проверь, есть ли проблемы в этих изменениях"
 ```
 
-#### 示例 3：JSON 格式输出（适合脚本解析）
+#### Пример 3: вывод в JSON (удобно скриптам)
 
 ```bash
-# 获取 JSON 格式的输出
-opencode run --format json "列出所有 TODO 注释" > todos.json
+# JSON-вывод
+opencode run --format json "Перечисли все комментарии TODO" > todos.json
 
-# JSON 输出格式示例：
-# {"type":"text","timestamp":1705316400000,"sessionID":"xxx","part":{"text":"找到 5 个 TODO..."}}
+# Пример JSON-вывода:
+# {"type":"text","timestamp":1705316400000,"sessionID":"xxx","part":{"text":"Нашёл 5 TODO..."}}
 ```
 
 ---
 
-## 第二部分：服务器模式
+## Часть 2: режим сервера
 
-### 2.1 启动远程服务器
+### 2.1 Запуск удалённого сервера
 
-::: info 🤔 什么时候需要远程服务器？
-- **共享会话**：团队成员连接同一个 OpenCode 实例
-- **服务器开发**：在远程服务器上运行，本地终端连接
-- **避免冷启动**：保持 MCP 服务器常驻，`opencode run --attach` 直接连入
+::: info 🤔 Когда нужен удалённый сервер?
+- **Общие сессии**: участники команды подключаются к одному инстансу OpenCode
+- **Разработка на сервере**: запуск на удалённом сервере, подключение с локального терминала
+- **Без холодного старта**: MCP-серверы всегда resident — нет, всегда наготове, `opencode run --attach` подключается напрямую
 :::
 
-#### opencode serve（无头模式）
+#### opencode serve (headless-режим)
 
 ```bash
-# 启动无头服务器（只有 API，没有界面）
+# Старт headless-сервера (только API, без интерфейса)
 opencode serve
 
-# 你会看到：
+# Вы увидите:
 # Warning: OPENCODE_SERVER_PASSWORD is not set; server is unsecured.
 # opencode server listening on http://localhost:4096
 ```
 
-::: warning ⚠️ 安全警告
-默认情况下，`opencode serve` **没有认证保护**。
+::: warning ⚠️ Предупреждение безопасности
+По умолчанию `opencode serve` **без защиты аутентификацией**.
 
-但默认只监听 `127.0.0.1`（localhost），外部网络无法直接访问。只有当你：
-- 使用 `--hostname 0.0.0.0` 开放所有网络接口
-- 服务器有公网 IP 且防火墙开放端口
+Но по умолчанию слушается только `127.0.0.1` (localhost) — снаружи по сети напрямую не достучаться. Только когда вы:
+- открываете все сетевые интерфейсы через `--hostname 0.0.0.0`
+- у сервера белый IP и порт открыт в файрволе
 
-...才会面临安全风险。
+...возникают риски безопасности.
 
-**开放外网访问时必须设置密码**：
+**При открытии доступа наружу пароль обязателен**:
 ```bash
-# 设置服务器密码
+# Задать пароль сервера
 export OPENCODE_SERVER_PASSWORD=your-secure-password
 
-# 然后启动
+# Затем стартовать
 opencode serve
-# 现在访问需要认证了
+# Теперь доступ с аутентификацией
 ```
 :::
 
-#### opencode web（Web 界面模式）
+#### opencode web (режим с веб-интерфейсом)
 
 ```bash
-# 启动带 Web 界面的服务器
+# Старт сервера с веб-интерфейсом
 opencode web
 
-# 你会看到：
+# Вы увидите:
 # Warning: OPENCODE_SERVER_PASSWORD is not set; server is unsecured.
-# 
+#
 #   Local access:      http://localhost:4096
 #   Network access:    http://192.168.1.100:4096
 ```
 
-### 2.2 服务器选项
+### 2.2 Опции сервера
 
-| 选项 | 说明 | 默认值 |
+| Опция | Описание | По умолчанию |
 |------|------|--------|
-| `--port` | 监听端口 | 自动（优先 4096） |
-| `--hostname` | 监听地址 | 127.0.0.1 |
-| `--mdns` | 启用 mDNS 服务发现 | false |
-| `--mdns-domain` | mDNS 域名 | opencode.local |
-| `--cors` | CORS 白名单域名 | - |
+| `--port` | Порт прослушивания | Авто (в приоритете 4096) |
+| `--hostname` | Адрес прослушивания | 127.0.0.1 |
+| `--mdns` | Включить обнаружение сервисов mDNS | false |
+| `--mdns-domain` | Домен mDNS | opencode.local |
+| `--cors` | Домены белого списка CORS | - |
 
 ```bash
-# 监听所有网络接口（允许局域网访问）
+# Слушать все сетевые интерфейсы (доступ по локальной сети)
 opencode serve --hostname 0.0.0.0
 
-# 指定端口
+# Указать порт
 opencode serve --port 8080
 
-# 启用 mDNS 发现（局域网内可通过 opencode.local 访问）
+# Включить обнаружение mDNS (в локальной сети доступен как opencode.local)
 opencode serve --hostname 0.0.0.0 --mdns
 ```
 
-### 2.3 安全配置
+### 2.3 Настройка безопасности
 
-**环境变量**：
+**Переменные окружения**:
 
-| 变量 | 说明 |
+| Переменная | Описание |
 |------|------|
-| `OPENCODE_SERVER_PASSWORD` | 服务器密码 |
-| `OPENCODE_SERVER_USERNAME` | 用户名（默认 opencode） |
+| `OPENCODE_SERVER_PASSWORD` | Пароль сервера |
+| `OPENCODE_SERVER_USERNAME` | Имя пользователя (по умолчанию opencode) |
 
 ```bash
-# 设置密码和用户名
+# Задать пароль и имя пользователя
 export OPENCODE_SERVER_USERNAME=admin
 export OPENCODE_SERVER_PASSWORD=MySecurePassword123!
 
 opencode serve --hostname 0.0.0.0
 ```
 
-::: info 💡 为什么只能用环境变量？
-密码相关的配置**不支持放在 `opencode.json` 配置文件中**，只能通过环境变量设置。
+::: info 💡 Почему только переменные окружения?
+Настройки с паролями **не поддерживаются в файле конфигурации `opencode.json`** — только через переменные окружения.
 
-这是出于安全考虑——避免密码被意外提交到 Git 仓库。
+Это ради безопасности — чтобы пароли случайно не уехали в Git-репозиторий.
 
-全局配置文件 `~/.config/opencode/opencode.json` 只支持以下服务器选项：
+Глобальный конфиг `~/.config/opencode/opencode.json` поддерживает лишь серверные опции без секретов:
 ```json
 {
   "server": {
@@ -323,33 +325,33 @@ opencode serve --hostname 0.0.0.0
 ```
 :::
 
-### 2.4 连接远程服务器
+### 2.4 Подключение к удалённому серверу
 
-#### 用 attach 连接
+#### Подключение через attach
 
 ```bash
-# 在本地连接远程服务器
+# Подключиться к удалённому серверу локально
 opencode attach http://192.168.1.100:4096
 
-# 指定工作目录
+# Указать рабочий каталог
 opencode attach http://192.168.1.100:4096 --dir /projects/myapp
 ```
 
-#### 用 run 连接
+#### Подключение через run
 
 ```bash
-# 先在服务器上启动
+# Сначала стартовать на сервере
 opencode serve --hostname 0.0.0.0
 
-# 在另一台机器上连接并执行
-opencode run --attach http://192.168.1.100:4096 "分析这个项目的架构"
+# На другой машине подключиться и выполнить
+opencode run --attach http://192.168.1.100:4096 "Разбери архитектуру этого проекта"
 ```
 
 ---
 
-## 第三部分：CI/CD 集成
+## Часть 3: интеграция CI/CD
 
-### 3.1 GitHub Actions 示例
+### 3.1 Пример GitHub Actions
 
 ```yaml
 # .github/workflows/ai-review.yml
@@ -364,35 +366,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup OpenCode
         run: |
           curl -fsSL https://raw.githubusercontent.com/anomalyco/opencode/main/install | bash
           echo "$HOME/.opencode/bin" >> $GITHUB_PATH
-      
+
       - name: AI Review
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          # 获取变更的文件
+          # Забрать изменённые файлы
           FILES=$(git diff --name-only origin/main...HEAD | head -10)
-          
+
           for file in $FILES; do
-            echo "审查: $file"
+            echo "Ревью: $file"
             opencode run -f "$file" --title "AI Review: $file" \
-              "作为代码审查员，审查这个文件的变更。关注：
-              1. 潜在的 Bug 或安全问题
-              2. 代码可读性和维护性
-              3. 是否符合最佳实践
-              
-              输出格式：
-              - 🟢 通过
-              - 🟡 建议改进
-              - 🔴 必须修复"
+              "Как ревьюер кода проверь изменения этого файла. Смотри:
+              1. Потенциальные баги и проблемы безопасности
+              2. Читаемость и поддерживаемость кода
+              3. Соответствие лучшим практикам
+
+              Формат вывода:
+              - 🟢 Принято
+              - 🟡 Желательно улучшить
+              - 🔴 Чинить обязательно"
           done
 ```
 
-### 3.2 GitLab CI 示例
+### 3.2 Пример GitLab CI
 
 ```yaml
 # .gitlab-ci.yml
@@ -404,85 +406,85 @@ ai-review:
     - export PATH="$HOME/.opencode/bin:$PATH"
     - |
       git diff --name-only origin/main...$CI_COMMIT_SHA | while read file; do
-        opencode run -f "$file" "审查代码：$file"
+        opencode run -f "$file" "Ревью кода: $file"
       done
   only:
     - merge_requests
 ```
 
-### 3.3 自动化脚本模板
+### 3.3 Шаблон скрипта автоматизации
 
 ```bash
 #!/bin/bash
-# auto-fix.sh - 自动修复代码风格问题
+# auto-fix.sh - автоисправление проблем стиля кода
 
 set -e
 
-# 检查是否有未提交的变更
+# Проверить незакоммиченные изменения
 if ! git diff --quiet; then
-  echo "错误：有未提交的变更，请先提交或暂存"
+  echo "Ошибка: есть незакоммиченные изменения — сначала закоммитьте или отложите"
   exit 1
 fi
 
-# 获取所有需要检查的文件
+# Забрать все проверяемые файлы
 FILES=$(find src -name "*.ts" -o -name "*.tsx")
 
 for file in $FILES; do
-  echo "处理: $file"
-  
+  echo "Обработка: $file"
+
   opencode run -f "$file" \
-    "请修复这个文件的代码风格问题，但不要改变功能逻辑。重点关注：
-    1. 变量命名规范
-    2. 代码缩进和格式
-    3. 移除未使用的导入
-    4. 添加必要的注释"
+    "Исправь проблемы стиля кода этого файла, не меняя логику работы. Фокус:
+    1. Конвенции именования переменных
+    2. Отступы и форматирование кода
+    3. Удали неиспользуемые импорты
+    4. Добавь нужные комментарии"
 done
 
-echo "所有文件处理完成"
+echo "Все файлы обработаны"
 ```
 
 ---
 
-## 第四部分：opencode pr 命令
+## Часть 4: команда opencode pr
 
-### 4.1 功能介绍
+### 4.1 Что за функция
 
-`opencode pr` 是一个专门处理 GitHub PR 的命令，它会：
+`opencode pr` — команда специально для работы с GitHub PR. Она:
 
-1. 拉取指定的 PR 到本地
-2. 自动创建分支 `pr/<PR号>`
-3. 如果 PR 描述里有 OpenCode 会话链接，自动导入
+1. Забирает указанный PR локально
+2. Автоматически создаёт ветку `pr/<номер-PR>`
+3. Если в описании PR есть ссылка на сессию OpenCode — импортирует её
 
 ```bash
-# 拉取 PR 并启动 OpenCode
+# Забрать PR и стартовать OpenCode
 opencode pr 123
 
-# 你会看到：
+# Вы увидите:
 # Fetching and checking out PR #123...
 # Successfully checked out PR #123 as branch 'pr/123'
-# 
+#
 # Starting opencode...
 ```
 
-### 4.2 使用场景
+### 4.2 Сценарии использования
 
-| 场景 | 说明 |
+| Сценарий | Описание |
 |------|------|
-| 审查别人的 PR | 一键拉取，直接在 OpenCode 里审查 |
-| 继续之前的会话 | PR 作者分享了会话链接，你可以恢复上下文 |
-| 处理 Fork PR | 自动添加 Fork 远程仓库，正确设置上游 |
+| Ревью чужих PR | Забрать одним действием, ревьюить прямо в OpenCode |
+| Продолжение прошлой сессии | Автор PR поделился ссылкой на сессию — восстанавливаете контекст |
+| Обработка Fork PR | Автоматически добавляет Fork remote, верно настраивает апстрим |
 
-### 4.3 前置条件
+### 4.3 Предусловия
 
 ```bash
-# 确保已安装 gh CLI
+# Убедитесь, что установлен gh CLI
 gh --version
 
-# 确保已认证
+# Убедитесь, что прошли аутентификацию
 gh auth status
 ```
 
-::: details 如何安装 gh CLI
+::: details Как установить gh CLI
 ```bash
 # macOS
 brew install gh
@@ -497,170 +499,170 @@ winget install GitHub.cli
 
 ---
 
-## 第五部分：会话管理 CLI
+## Часть 5: управление сессиями через CLI
 
-### 5.1 列出会话
+### 5.1 Список сессий
 
 ```bash
-# 列出所有会话
+# Список всех сессий
 opencode session list
 
-# 你会看到：
+# Вы увидите:
 # Session ID              Title                      Updated
 # ─────────────────────────────────────────────────────────────
 # session_abc123          Fix login bug              Today 14:30
 # session_def456          Add user profile           Yesterday
 
-# 限制数量
+# Ограничить число
 opencode session list -n 10
 
-# JSON 格式（适合脚本）
+# Формат JSON (удобно скриптам)
 opencode session list --format json
 ```
 
-### 5.2 导出会话
+### 5.2 Экспорт сессий
 
 ```bash
-# 导出指定会话
+# Экспорт указанной сессии
 opencode export session_abc123 > backup.json
 
-# 不指定 ID 会交互式选择
+# Без ID — интерактивный выбор
 opencode export > backup.json
 ```
 
-### 5.3 导入会话
+### 5.3 Импорт сессий
 
 ```bash
-# 从文件导入
+# Импорт из файла
 opencode import backup.json
 
-# 从分享链接导入
+# Импорт по ссылке шаринга
 opencode import https://opncd.ai/share/abc123
 ```
 
 ---
 
-## 第六部分：其他实用命令
+## Часть 6: другие полезные команды
 
 ### 6.1 opencode models
 
 ```bash
-# 列出所有可用模型
+# Список всех доступных моделей
 opencode models
 
-# 列出特定提供商的模型
+# Список моделей конкретного провайдера
 opencode models anthropic
 
-# 显示详细信息（包括价格）
+# Подробности (включая цены)
 opencode models --verbose
 
-# 刷新模型缓存
+# Обновить кэш моделей
 opencode models --refresh
 ```
 
 ### 6.2 opencode stats
 
 ```bash
-# 查看使用统计
+# Статистика использования
 opencode stats
 
-# 查看最近 7 天
+# Последние 7 дней
 opencode stats --days 7
 
-# 查看模型使用明细
+# Детализация по моделям
 opencode stats --models
 
-# 只看当前项目
+# Только текущий проект
 opencode stats --project ""
 ```
 
-### 6.3 opencode upgrade / uninstall
+### 6.3 opencode upgrade и uninstall
 
 ```bash
-# 升级到最新版本
+# Обновить до свежей версии
 opencode upgrade
 
-# 升级到指定版本
+# Обновить до указанной версии
 opencode upgrade 0.1.50
 
-# 使用指定方式安装
+# Установка указанным способом
 opencode upgrade --method npm
 
-# 卸载（保留配置）
+# Деинсталляция (с сохранением конфигурации)
 opencode uninstall --keep-config
 
-# 预览将删除的内容
+# Предпросмотр удаляемого
 opencode uninstall --dry-run
 ```
 
 ---
 
-## 检查点 ✅
+## Контрольные пункты ✅
 
-- [ ] 能用 `opencode run` 执行一次性任务
-- [ ] 能用 `opencode serve` 启动远程服务器并设置密码
-- [ ] 能用 `opencode attach` 连接远程服务器
-- [ ] 能用 `opencode pr` 拉取并处理 GitHub PR
-- [ ] 能用 `opencode session list` 查看会话历史
-- [ ] 能用 `opencode export/import` 备份恢复会话
-
----
-
-## 踩坑提醒
-
-| 现象 | 原因 | 解决 |
-|------|------|------|
-| `opencode serve` 报错 "address already in use" | 端口被占用 | 换个端口：`--port 8080` |
-| 远程连接被拒绝 | 防火墙或 hostname 设置 | 确认 `--hostname 0.0.0.0`，检查防火墙 |
-| `opencode pr` 报错 "gh CLI not found" | 未安装 GitHub CLI | 先安装 gh 并认证 |
-| `opencode run` 一直等待 | AI 在执行长时间任务 | 脚本里加超时：`timeout 60 opencode run ...` |
-| JSON 输出解析失败 | 输出包含多行 JSON | 按换行分割，每行是一个 JSON 对象 |
-| 服务器无认证警告 | 没有设置密码 | `export OPENCODE_SERVER_PASSWORD=xxx` |
+- [ ] Умеете выполнять разовые задачи через `opencode run`
+- [ ] Умеете стартовать удалённый сервер через `opencode serve` и задавать пароль
+- [ ] Умеете подключаться к удалённому серверу через `opencode attach`
+- [ ] Умеете забирать и обрабатывать GitHub PR через `opencode pr`
+- [ ] Умеете смотреть историю сессий через `opencode session list`
+- [ ] Умеете бэкапить и восстанавливать сессии через `opencode export/import`
 
 ---
 
-## 本课小结
+## Типичные проблемы
 
-你学会了：
-
-1. **非交互模式**：用 `opencode run` 在脚本里调用 OpenCode
-2. **服务器模式**：用 `opencode serve/web` 启动远程服务
-3. **安全配置**：设置 `OPENCODE_SERVER_PASSWORD` 保护服务器
-4. **CI/CD 集成**：把 OpenCode 嵌入自动化流程
-5. **PR 处理**：用 `opencode pr` 一键拉取并处理 PR
-6. **会话管理**：用 CLI 命令列出、导出、导入会话
-
----
-
-## 下一课预告
-
-> 本课是进阶手册的最后一课。接下来你可以：
-> - 回顾 [速查手册](/appendix/) 中的 CLI 命令参考
-> - 尝试 [场景实战](/4-scenarios/) 中的 CI/CD 集成案例
-> - 深入学习 [SDK 开发](/5-advanced/10a-sdk-basics) 编写自己的集成工具
+| Симптом | Причина | Решение |
+|-----|-----|-----|
+| `opencode serve` ругается "address already in use" | Порт занят | Смените порт: `--port 8080` |
+| Удалённое подключение отклонено | Файрвол или настройка hostname | Проверьте `--hostname 0.0.0.0` и файрвол |
+| `opencode pr` ругается "gh CLI not found" | Не установлен GitHub CLI | Сначала установите gh и пройдите аутентификацию |
+| `opencode run` вечно ждёт | AI выполняет долгую задачу | В скриптах добавляйте тайм-аут: `timeout 60 opencode run ...` |
+| Не парсится JSON-вывод | Вывод содержит несколько строк JSON | Делите по переводам строк — каждая строка отдельный JSON-объект |
+| Предупреждение про сервер без аутентификации | Пароль не задан | `export OPENCODE_SERVER_PASSWORD=xxx` |
 
 ---
 
-## 附录：源码参考
+## Итоги урока
+
+Вы научились:
+
+1. **Неинтерактивному режиму**: вызову OpenCode в скриптах через `opencode run`
+2. **Режиму сервера**: удалённым сервисам через `opencode serve` и `web`
+3. **Настройке безопасности**: защите сервера через `OPENCODE_SERVER_PASSWORD`
+4. **Интеграции CI/CD**: встраиванию OpenCode в автопроцессы
+5. **Обработке PR**: забору и обработке PR одной командой `opencode pr`
+6. **Управлению сессиями**: спискам, экспорту и импорту сессий через CLI-команды
+
+---
+
+## Анонс следующего урока
+
+> Этот урок — последний в продвинутом руководстве. Дальше можете:
+> - Заглянуть в [шпаргалку](/appendix/) за справочником CLI-команд
+> - Попробовать кейсы [сценарной практики](/4-scenarios/) по интеграции CI/CD
+> - Углубиться в [разработку на SDK](/5-advanced/10a-sdk-basics) и писать свои инструменты интеграции
+
+---
+
+## Приложение: ссылки на исходники
 
 <details>
-<summary><strong>点击展开查看源码位置</strong></summary>
+<summary><strong>Нажмите, чтобы раскрыть расположение исходников</strong></summary>
 
-> 版本基准：[`v1.18.22`](https://github.com/anomalyco/opencode/tree/v1.18.22)
+> База версий: [`v1.18.22`](https://github.com/anomalyco/opencode/tree/v1.18.22)
 
-| 功能 | 文件路径 | 行号 |
+| Функция | Путь к файлу | Строки |
 |-----|---------|------|
-| `run` 默认非交互与 Mini 入口 | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L3-L15) | 3-15 |
-| `--mini`、`--no-replay` 参数与入口转发 | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L123-L175) | 123-175 |
-| Mini Shell mode | [`packages/opencode/src/cli/cmd/run/footer.prompt.tsx`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run/footer.prompt.tsx#L1055-L1094) | 1055-1094 |
-| `opencode serve` 命令实现 | [`packages/opencode/src/cli/cmd/serve.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/serve.ts#L6-L24) | 6-24 |
-| `opencode web` 命令实现 | [`packages/opencode/src/cli/cmd/web.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/web.ts#L31-L84) | 31-84 |
-| `opencode pr` 命令实现 | [`packages/opencode/src/cli/cmd/pr.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/pr.ts#L8-L115) | 8-115 |
-| 服务器认证环境变量 | [`packages/core/src/flag/flag.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/flag/flag.ts#L32-L33) | 32-33 |
-| 服务器认证逻辑 | [`packages/opencode/src/server/auth.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/server/auth.ts#L17-L47) | 17-47 |
+| Неинтерактив `run` по умолчанию и вход Mini | [`packages/opencode/src/cli/cmd/run.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run.ts#L3-L15) | 3-15 |
+| Параметры `--mini`, `--no-replay` и проброс входов | [`packages/opencode/src/cli/cmd/tui.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/tui.ts#L123-L175) | 123-175 |
+| Режим Mini Shell | [`packages/opencode/src/cli/cmd/run/footer.prompt.tsx`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/run/footer.prompt.tsx#L1055-L1094) | 1055-1094 |
+| Реализация команды `opencode serve` | [`packages/opencode/src/cli/cmd/serve.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/serve.ts#L6-L24) | 6-24 |
+| Реализация команды `opencode web` | [`packages/opencode/src/cli/cmd/web.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/web.ts#L31-L84) | 31-84 |
+| Реализация команды `opencode pr` | [`packages/opencode/src/cli/cmd/pr.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/cli/cmd/pr.ts#L8-L115) | 8-115 |
+| Переменные окружения аутентификации сервера | [`packages/core/src/flag/flag.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/flag/flag.ts#L32-L33) | 32-33 |
+| Логика аутентификации сервера | [`packages/opencode/src/server/auth.ts`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/server/auth.ts#L17-L47) | 17-47 |
 
-**关键环境变量**：
-- `OPENCODE_SERVER_PASSWORD`：服务器密码
-- `OPENCODE_SERVER_USERNAME`：服务器用户名（默认 opencode）
+**Ключевые переменные окружения**:
+- `OPENCODE_SERVER_PASSWORD`: пароль сервера
+- `OPENCODE_SERVER_USERNAME`: имя пользователя сервера (по умолчанию opencode)
 
 </details>

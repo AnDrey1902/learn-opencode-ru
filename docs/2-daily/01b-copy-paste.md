@@ -25,7 +25,7 @@ prerequisite:
 
 Краткое изложение ключевых идей урока:
 
-<img src="/images/2-daily/01b-copy-paste-notes.mini.jpeg" alt="复制操作学霸笔记" data-zoom-src="/images/2-daily/01b-copy-paste-notes.jpeg" />
+<img src="/images/2-daily/01b-copy-paste-notes.mini.jpeg" alt="Операции копирования — шпаргалка" data-zoom-src="/images/2-daily/01b-copy-paste-notes.jpeg" />
 
 ---
 
@@ -221,16 +221,16 @@ grep -rn "windows\|win32\|selection" packages/opencode/src/
 
 **Ключевой фрагмент кода (`app.tsx`):**
 ```typescript
-// 当鼠标松开时
+// Когда кнопку мыши отпустили
 onMouseUp={async () => {
-  // 1. 获取选中的文本
+  // 1. Забираем выделенный текст
   const text = renderer.getSelection()?.getSelectedText()
   if (text && text.length > 0) {
-    // 2. 调用剪贴板 API 复制
+    // 2. Копируем через Clipboard API
     await Clipboard.copy(text)
-    // 3. 提示用户
+    // 3. Показываем подсказку
     toast.show({ message: "Copied to clipboard" })
-    // 4. 清除选中状态
+    // 4. Снимаем выделение
     renderer.clearSelection()
   }
 }}

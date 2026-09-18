@@ -1,66 +1,66 @@
 ---
-title: 5.1b 配置进阶
-subtitle: opencode.json 完整参考
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.1b Продвинутая конфигурация
+subtitle: Полный справочник opencode.json
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.1b"
-duration: 20 分钟
-level: 进阶
-description: 掌握 OpenCode 的全部配置项，打造完全定制化的开发环境和 AI 工具。
+duration: 20 минут
+level: Продвинутый
+description: Освойте все опции конфигурации OpenCode и создайте полностью настроенные окружение разработки и AI-инструмент.
 tags:
-  - 配置
+  - Конфигурация
   - JSON
-  - 进阶
+  - Продвинутый уровень
 prerequisite:
-  - 5.1a 配置基础
+  - 5.1a Основы конфигурации
 ---
 
-# 5.1b 配置进阶
+# 5.1b Продвинутая конфигурация
 
-> 掌握 OpenCode 的全部配置项，打造完全定制化的开发环境。
+> Освойте все опции конфигурации OpenCode и создайте полностью настроенные окружение разработки.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
-<img src="/images/5-advanced/config-advanced-notes.mini.jpeg" alt="配置进阶学霸笔记" data-zoom-src="/images/5-advanced/config-advanced-notes.jpeg" />
-
----
-
-## 学完你能做什么
-
-- 配置界面（TUI、快捷键、服务器）
-- 配置行为（分享、压缩、监视器）
-- 配置功能（Provider、工具、权限、Agent、命令、MCP 等）
-- 使用实验性功能
-- 为模型配置自定义 API URL
+<img src="/images/5-advanced/config-advanced-notes.mini.jpeg" alt="Шпаргалка урока: продвинутая конфигурация" data-zoom-src="/images/5-advanced/config-advanced-notes.jpeg" />
 
 ---
 
-## 你现在的困境
+## Что вы сможете после урока
 
-- 想自定义快捷键
-- 想控制 AI 能用哪些工具
-- 想批量禁用某些 MCP 工具
-- 想为模型配置私有部署的 API
-- 想知道还有什么隐藏配置
-
----
-
-## 什么时候用这一招
-
-- 当你需要：完全掌控 OpenCode 的行为
-- 而且不想：被默认配置限制
+- Настраивать интерфейс (TUI, горячие клавиши, сервер)
+- Настраивать поведение (шаринг, сжатие, монитор)
+- Настраивать функции (провайдеры, инструменты, права, Agent, команды, MCP и др.)
+- Использовать экспериментальные функции
+- Задавать моделям свои API URL
 
 ---
 
-## 界面配置
+## С какими трудностями вы столкнулись
+
+- Хотите настроить свои горячие клавиши
+- Хотите управлять доступными AI инструментами
+- Хотите пакетно отключить отдельные MCP-инструменты
+- Хотите задать моделям приватно задеплоенный API
+- Интересно, какие есть скрытые настройки
+
+---
+
+## Когда это пригодится
+
+- Когда нужно: полностью управлять поведением OpenCode
+- И не хочется: упираться в ограничения умолчаний
+
+---
+
+## Настройки интерфейса
 
 <AdInArticle />
 
-### TUI 配置
+### Настройки TUI
 
-TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层：
+Настройки TUI живут в отдельном `tui.json` или `tui.jsonc`, поля пишутся прямо в корне:
 
 ```jsonc
 {
@@ -77,27 +77,27 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 | 默认值 |
+| Поле | Описание | По умолчанию |
 |-----|------|-------|
-| `scroll_speed` | 滚动速度倍数（最小 0.001） | 3 |
-| `scroll_acceleration.enabled` | 启用 macOS 风格加速滚动 | false |
-| `diff_style` | 差异显示样式 | `"auto"` |
-| `cursor.style` | 光标形状：`block`、`underline`、`line` 或 `default` | 配置了 `cursor` 时为 `"block"` |
-| `cursor.blinking` | 光标是否闪烁；`style` 为 `default` 时无效 | 配置了 `cursor` 时为 true |
+| `scroll_speed` | Множитель скорости прокрутки (минимум 0.001) | 3 |
+| `scroll_acceleration.enabled` | Ускорение прокрутки в стиле macOS | false |
+| `diff_style` | Стиль показа различий | `"auto"` |
+| `cursor.style` | Форма курсора: `block`, `underline`, `line` или `default` | При заданном `cursor` — `"block"` |
+| `cursor.blinking` | Мигает ли курсор; при `style` в `default` не действует | При заданном `cursor` — true |
 
-> `scroll_acceleration.enabled` 优先于 `scroll_speed`。启用后会忽略 scroll_speed。
+> `scroll_acceleration.enabled` приоритетнее `scroll_speed`. После включения scroll_speed игнорируется.
 
-主配置加载器会移除旧的 `theme`、`keybinds` 和 `tui` 字段。启动 TUI 时，迁移器才会检查旧主配置：同目录已有 `tui.json` 就跳过，否则写入新的 `tui.json`，创建或复用 `<原文件>.tui-migration.bak` 后，再从旧主配置删除这三个字段。只有 `tui.jsonc` 不会阻止迁移。
+Главный загрузчик конфигурации удаляет старые поля `theme`, `keybinds` и `tui`. При старте TUI мигратор проверяет старые главные конфиги: в том же каталоге уже есть `tui.json` — пропускает, иначе пишет новый `tui.json`, создаёт или переиспользует `<исходный-файл>.tui-migration.bak`, и лишь затем удаляет эти три поля из старого главного конфига. Одинокий `tui.jsonc` миграции не мешает.
 
-独立 TUI 配置按全局配置、`OPENCODE_TUI_CONFIG`、普通项目配置、沿途 `.opencode`、`OPENCODE_CONFIG_DIR` 的顺序合并，后加载者优先。普通项目文件按根侧到当前目录应用，越近当前目录越优先；多个 `.opencode` 目录按当前侧到根侧合并，因此冲突时更靠根侧者后加载并取胜。`OPENCODE_CONFIG_DIR` 最后加载。
+Отдельная TUI-конфигурация сливается в порядке: глобальная конфигурация, `OPENCODE_TUI_CONFIG`, обычные конфиги проектов, встречные `.opencode`, `OPENCODE_CONFIG_DIR` — позже загруженное приоритетнее. Обычные файлы проектов применяются от корневой стороны к текущему каталогу, чем ближе к текущему — тем приоритетнее; несколько каталогов `.opencode` сливаются от текущей стороны к корневой, поэтому при конфликтах побеждает более корневой, загруженный позже. `OPENCODE_CONFIG_DIR` грузится последним.
 
-`diff_style` 选项：
-- `"auto"` - 根据终端宽度自适应
-- `"stacked"` - 始终单列显示
+Опции `diff_style`:
+- `"auto"` — адаптация под ширину терминала
+- `"stacked"` — всегда одноколоночный вид
 
-### Keybinds 配置
+### Настройка Keybinds
 
-自定义快捷键：
+Свои горячие клавиши:
 
 ```jsonc
 {
@@ -113,11 +113,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-> 注意：配置键是 `keybinds`（**复数**），位于 `tui.json` 顶层。这与主配置中的 permission/agent 用单数不同。
+> Обратите внимание: ключ конфигурации — `keybinds` (**множественное число**) в корне `tui.json`. Этим он отличается от permission и agent главной конфигурации в единственном числе.
 
-#### Leader 键
+#### Клавиша Leader
 
-大多数快捷键使用 `leader` 键前缀，避免与终端冲突：
+Большинство горячих клавиш используют префикс клавиши `leader` против конфликтов с терминалом:
 
 ```jsonc
 {
@@ -128,11 +128,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-默认 `ctrl+x`。按下 leader 键后再按快捷键，如 `ctrl+x` 然后 `n` 创建新会话。
+По умолчанию `ctrl+x`. Нажмите клавишу leader, затем горячую клавишу: например, `ctrl+x`, затем `n` — новая сессия.
 
-#### 禁用快捷键
+#### Отключение горячих клавиш
 
-将值设为 `"none"` 或 `false` 禁用：
+Значения `"none"` или `false` отключают:
 
 ```jsonc
 {
@@ -143,32 +143,32 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-#### 常用快捷键
+#### Частые горячие клавиши
 
-| 配置键 | 默认值 | 说明 |
+| Ключ конфигурации | Значение по умолчанию | Описание |
 |--------|--------|------|
-| `app_exit` | `ctrl+c,ctrl+d,<leader>q` | 退出应用 |
-| `session_new` | `<leader>n` | 新建会话 |
-| `session_list` | `<leader>l` | 会话列表 |
-| `session_interrupt` | `escape` | 中断当前操作 |
-| `session_compact` | `<leader>c` | 压缩会话 |
-| `session_background` | `ctrl+b` | 将同步子 Agent 转到后台 |
-| `model_list` | `<leader>m` | 模型列表 |
-| `agent_list` | `<leader>a` | Agent 列表 |
-| `agent_cycle` | `tab` | 切换 Agent |
-| `command_list` | `ctrl+p` | 命令列表 |
-| `messages_undo` | `<leader>u` | 撤销消息 |
-| `messages_redo` | `<leader>r` | 重做消息 |
-| `diff_open` | `none` | 打开 Diff 查看器（默认未绑定） |
-| `prompt_skills` | `none` | 打开 Skill 选择器（默认未绑定） |
+| `app_exit` | `ctrl+c,ctrl+d,<leader>q` | Выход из приложения |
+| `session_new` | `<leader>n` | Новая сессия |
+| `session_list` | `<leader>l` | Список сессий |
+| `session_interrupt` | `escape` | Прервать текущую операцию |
+| `session_compact` | `<leader>c` | Сжать сессию |
+| `session_background` | `ctrl+b` | Увести синхронный под-агент в фон |
+| `model_list` | `<leader>m` | Список моделей |
+| `agent_list` | `<leader>a` | Список Agent |
+| `agent_cycle` | `tab` | Переключить Agent |
+| `command_list` | `ctrl+p` | Список команд |
+| `messages_undo` | `<leader>u` | Отменить сообщение |
+| `messages_redo` | `<leader>r` | Повторить сообщение |
+| `diff_open` | `none` | Открыть просмотр Diff (по умолчанию не привязана) |
+| `prompt_skills` | `none` | Открыть выбор Skill (по умолчанию не привязан) |
 
-常用快捷键列表见 [速查/快捷键](../appendix/keybinds)。
+Список частых клавиш — в разделе [Шпаргалка/Горячие клавиши](../appendix/keybinds).
 
-> 源码依据：[TUI 配置 Schema](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/index.tsx#L61-L75) 和 [扁平快捷键及禁用值](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L28-L33)。
+> Основания в исходниках: [Schema конфигурации TUI](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/index.tsx#L61-L75) и [плоские горячие клавиши со значениями отключения](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/tui/src/config/keybind.ts#L28-L33).
 
-### Server 配置
+### Настройка Server
 
-配置 `opencode serve` 和 `opencode web` 命令的服务器：
+Настройка сервера команд `opencode serve` и `opencode web`:
 
 ```json
 {
@@ -182,21 +182,21 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `port` | 监听端口 |
-| `hostname` | 监听地址（启用 mdns 时默认 `0.0.0.0`） |
-| `mdns` | 启用 mDNS 服务发现（局域网设备可发现） |
-| `mdnsDomain` | mDNS 服务的自定义域名（默认 `opencode.local`） |
-| `cors` | 允许的 CORS 来源列表 |
+| `port` | Порт прослушивания |
+| `hostname` | Адрес прослушивания (при включённом mdns по умолчанию `0.0.0.0`) |
+| `mdns` | Включить обнаружение сервисов mDNS (устройства сети видят) |
+| `mdnsDomain` | Свой домен mDNS-сервиса (по умолчанию `opencode.local`) |
+| `cors` | Список разрешённых CORS-источников |
 
 ---
 
-## 行为配置
+## Настройки поведения
 
-### Share 配置
+### Настройка Share
 
-控制会话分享行为：
+Управление поведением шаринга сессий:
 
 ```json
 {
@@ -204,15 +204,15 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 值 | 说明 |
+| Значение | Описание |
 |-----|------|
-| `"manual"` | 手动分享（默认），使用 `/share` 命令 |
-| `"auto"` | 自动分享新会话 |
-| `"disabled"` | 禁用分享功能 |
+| `"manual"` | Ручной шаринг (по умолчанию) командой `/share` |
+| `"auto"` | Автошаринг новых сессий |
+| `"disabled"` | Функция шаринга отключена |
 
-### Compaction 配置
+### Настройка Compaction
 
-控制上下文压缩行为：
+Управление поведением сжатия контекста:
 
 ```json
 {
@@ -224,15 +224,15 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 | 默认值 |
+| Поле | Описание | По умолчанию |
 |-----|------|-------|
-| `auto` | 上下文满时自动压缩 | true |
-| `prune` | 删除旧工具输出节省 token | true |
-| `reserved` | 压缩时的 Token 缓冲区，预留足够窗口避免溢出 | - |
+| `auto` | Автосжатие при заполнении контекста | true |
+| `prune` | Удалять старые выводы инструментов ради экономии токенов | true |
+| `reserved` | Буфер токенов при сжатии — запас окна против переполнения | - |
 
-### Watcher 配置
+### Настройка Watcher
 
-配置文件监视器忽略模式：
+Настройка шаблонов игнора монитора файлов:
 
 ```json
 {
@@ -242,11 +242,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-使用 glob 语法排除噪声目录，减少文件监视开销。
+Глоб-синтаксисом исключайте шумные каталоги — меньше накладных расходов на мониторинг файлов.
 
-### Instructions 配置
+### Настройка Instructions
 
-指定额外的指令文件（与 AGENTS.md 合并）：
+Дополнительные файлы инструкций (сливаются с AGENTS.md):
 
 ```json
 {
@@ -259,45 +259,45 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-支持 glob 模式。适用于：
-- 复用现有规则文件（如 Cursor 的 rules）
-- 共享团队编码规范
-- monorepo 中引入子项目规则
+Глоб-шаблоны поддерживаются. Подходит для:
+- Переиспользования существующих файлов правил (вроде rules у Cursor)
+- Общих командных норм кодирования
+- Подтягивания правил подпроектов в монорепозитории
 
-### References 配置
+### Настройка References
 
-用 `references` 为项目补充本地目录或 Git 仓库上下文：
+Ключом `references` дополняйте контекст проекта локальными каталогами или Git-репозиториями:
 
 ```jsonc
 {
   "references": {
     "design-system": {
       "path": "../design-system",
-      "description": "团队组件库和设计规范"
+      "description": "Командная библиотека компонентов и нормы дизайна"
     },
     "upstream": {
       "repository": "https://github.com/example/upstream.git",
       "branch": "main",
-      "description": "上游实现参考",
+      "description": "Референсная реализация апстрима",
       "hidden": true
     }
   }
 }
 ```
 
-本地引用使用 `path`，Git 引用使用 `repository`，并可指定 `branch`。带 `description` 的引用会加入系统上下文；`hidden: true` 只会把它从 `@` 自动补全中隐藏。旧的单数键 `reference` 已弃用，请使用 `references`。
+Локальные ссылки — через `path`, Git-ссылки — через `repository` с необязательным `branch`. Ссылки с `description` попадают в системный контекст; `hidden: true` лишь прячет их из `@`-автодополнения. Старый ключ в единственном числе `reference` deprecated — используйте `references`.
 
-> `customize-opencode` 已是默认内置 Skill，用于安全地修改 OpenCode 自身配置，不需要额外安装。此前短暂加入的 Scout 已在目标版本前移除，不应再配置或依赖。
+> `customize-opencode` — уже встроенный Skill по умолчанию для безопасного изменения собственной конфигурации OpenCode, ставить отдельно не нужно. Недолго живший Scout удалён до целевой версии — настраивать его и опираться на него не следует.
 
-> 源码依据：[references Schema](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/config/reference.ts#L5-L21)、[主配置键及弃用别名](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L44-L50) 和 [内置 customize-opencode Skill](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/skill/index.ts#L276-L284)。
+> Основания в исходниках: [Schema references](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/config/reference.ts#L5-L21),[главные ключи конфигурации и deprecated-алиасы](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/core/src/v1/config/config.ts#L44-L50) и [встроенный Skill customize-opencode](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/opencode/src/skill/index.ts#L276-L284).
 
 ---
 
-## 功能配置
+## Настройки функций
 
-### Provider 配置
+### Настройка Provider
 
-配置 AI 提供商及其模型：
+Настройка AI-провайдеров и их моделей:
 
 ```jsonc
 {
@@ -321,21 +321,21 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-#### Provider 级别选项
+#### Опции уровня Provider
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `options.apiKey` | API 密钥，支持 `{env:VAR_NAME}` 环境变量替换 |
-| `options.baseURL` | 自定义 API 基础 URL（适用于代理或私有部署） |
-| `options.timeout` | 请求超时时间（毫秒），设为 `false` 禁用 |
-| `options.setCacheKey` | 启用 Prompt Caching（仅 Anthropic） |
-| `options.enterpriseUrl` | GitHub Enterprise URL（仅 Copilot） |
+| `options.apiKey` | API-ключ с подстановкой переменных окружения `{env:VAR_NAME}` |
+| `options.baseURL` | Свой базовый URL API (для прокси или приватных деплоев) |
+| `options.timeout` | Тайм-аут запросов (миллисекунды), `false` отключает |
+| `options.setCacheKey` | Включить Prompt Caching (только Anthropic) |
+| `options.enterpriseUrl` | URL GitHub Enterprise (только Copilot) |
 
-#### 模型级别自定义 API URL
+#### Свой API URL уровня моделей
 
-> v1.1.60+ 新增
+> Новое в v1.1.60+
 
-为单个模型配置独立的 API URL：
+Отдельный API URL для одной модели:
 
 ```jsonc
 {
@@ -353,14 +353,14 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-适用场景：
-- 使用同一 provider 的不同部署（如不同区域的 Azure OpenAI）
-- 测试私有部署的模型
-- 配置模型专用的代理服务器
+Сценарии:
+- Один провайдер с разными деплоями (разные регионы Azure OpenAI)
+- Тестирование приватно задеплоенных моделей
+- Прокси-сервер под конкретную модель
 
-#### 黑白名单
+#### Чёрные и белые списки
 
-控制可用模型：
+Управление доступными моделями:
 
 ```json
 {
@@ -373,16 +373,16 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `whitelist` | 只允许这些模型 |
-| `blacklist` | 禁用这些模型 |
+| `whitelist` | Только эти модели разрешены |
+| `blacklist` | Эти модели запрещены |
 
-> `whitelist` 和 `blacklist` 互斥，同时存在时 `whitelist` 优先。
+> `whitelist` и `blacklist` взаимоисключают, при обоих побеждает `whitelist`.
 
-### Tools 配置
+### Настройка Tools
 
-控制 LLM 可用的工具：
+Управление доступными LLM инструментами:
 
 ```json
 {
@@ -394,11 +394,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-默认所有工具启用。设为 `false` 禁用。
+По умолчанию все инструменты включены. `false` отключает.
 
-#### 通配符
+#### Wildcard-шаблоны
 
-`tools` 的 key 最终会转换为 `permission` 规则，因此通配符能通过权限系统间接生效：
+Ключи `tools` в итоге конвертируются в правила `permission`, поэтому wildcard опосредованно действуют через систему прав:
 
 ```json
 {
@@ -408,24 +408,24 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-禁用名为 `mymcp` 的 MCP 服务器的所有工具。
+Отключает все инструменты MCP-сервера с именем `mymcp`.
 
-> 推荐直接使用 `permission` 配置来实现通配符控制，提供更细粒度的 allow/ask/deny 选项。
+> Прямое использование конфигурации `permission` рекомендуем ради wildcard-контроля с точной градацией allow/ask/deny.
 
 #### Tools vs Permission
 
-`tools` 是遗留配置，会自动转换为 `permission`：
+`tools` — наследие конфигурации, автоматически конвертируется в `permission`:
 
-| tools 设置 | 等效 permission |
+| Настройка tools | Эквивалент permission |
 |-----------|-----------------|
 | `"write": false` | `"edit": "deny"` |
 | `"bash": false` | `"bash": "deny"` |
 
-> 推荐使用 `permission` 配置，提供更细粒度控制（allow/ask/deny）。详见 [5.5 权限管控](./05-permissions)。
+> Конфигурацию `permission` рекомендуем за точную градацию (allow/ask/deny). Подробности — [5.5 Контроль прав](./05-permissions).
 
-### Permission 配置
+### Настройка Permission
 
-细粒度权限控制：
+Точечный контроль прав:
 
 ```json
 {
@@ -441,31 +441,31 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-> 注意：配置键是 `permission`（单数），不是 `permissions`。
+> Обратите внимание: ключ конфигурации — `permission` (единственное число), а не `permissions`.
 
-详细配置见 [5.5 权限管控](./05-permissions)。
+Подробности — [5.5 Контроль прав](./05-permissions).
 
-### Agent 配置
+### Настройка Agent
 
-配置 Agent 行为：
+Поведение Agent в конфигурации:
 
 ```jsonc
 {
   "agent": {
     "code-reviewer": {
-      "description": "代码审查专家",
+      "description": "Эксперт по ревью кода",
       "mode": "subagent",
       "model": "anthropic/claude-opus-4-5-thinking",
-      "prompt": "你是代码审查专家...",
-      
-      // 高级配置
+      "prompt": "Вы — эксперт по ревью кода...",
+
+      // Продвинутая настройка
       "temperature": 0.3,
       "top_p": 0.9,
       "steps": 50,
       "color": "#FF5733",
       "hidden": true,
-      
-      // 权限
+
+      // Права
       "permission": {
         "edit": "deny"
       }
@@ -474,59 +474,59 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-> 注意：配置键是 `agent`（单数），不是 `agents`。
+> Обратите внимание: ключ конфигурации — `agent` (единственное число), а не `agents`.
 
-#### 高级配置字段
+#### Поля продвинутой настройки
 
-| 字段 | 类型 | 说明 |
+| Поле | Тип | Описание |
 |-----|------|------|
-| `temperature` | 有限 number | 创造性参数；实际可用范围由模型与 Provider 决定 |
-| `top_p` | 有限 number | 核采样参数；实际可用范围由模型与 Provider 决定 |
-| `variant` | string | 默认模型变体（仅在使用该 Agent 配置的模型时生效） |
-| `steps` | 正整数 | 最大自动迭代步数；达到上限后输出最终纯文本响应 |
-| `color` | string | 十六进制颜色（如 `#FF5733`）或主题色名（如 `primary`） |
-| `hidden` | boolean | 从 @ 菜单隐藏（仅 subagent 生效） |
+| `temperature` | конечное number | Параметр креативности; реальный диапазон задают модель и провайдер |
+| `top_p` | конечное number | Параметр ядерной выборки; реальный диапазон задают модель и провайдер |
+| `variant` | string | Вариант модели по умолчанию (действует лишь когда у Agent настроена своя модель) |
+| `steps` | положительное целое | Максимум шагов автоитераций; по достижении — вывод финального текстового ответа |
+| `color` | string | Hex-цвет (вроде `#FF5733`) или имя цвета темы (вроде `primary`) |
+| `hidden` | boolean | Скрыть из @-меню (действует лишь для subagent) |
 
-> `maxSteps` 已废弃，请使用 `steps`。
+> `maxSteps` deprecated, используйте `steps`.
 
-详细配置见 [5.2 自定义 Agent](./02a-agent-quickstart)。
+Подробности — [5.2 Свои Agent](./02a-agent-quickstart).
 
-### Command 配置
+### Настройка Command
 
-在配置文件中定义命令：
+Определение команд в конфиге:
 
 ```jsonc
 {
   "command": {
     "test": {
-      "template": "运行测试并显示失败结果",
-      "description": "运行测试",
+      "template": "Запустить тесты и показать упавшие результаты",
+      "description": "Запуск тестов",
       "agent": "build",
       "model": "anthropic/claude-opus-4-5-thinking"
     },
     "component": {
-      "template": "创建名为 $ARGUMENTS 的 React 组件",
-      "description": "创建新组件"
+      "template": "Создать React-компонент с именем $ARGUMENTS",
+      "description": "Создание нового компонента"
     }
   }
 }
 ```
 
-> 注意：配置键是 `command`（单数），不是 `commands`。
+> Обратите внимание: ключ конфигурации — `command` (единственное число), а не `commands`.
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `template` | 命令模板，`$ARGUMENTS` 代表参数 |
-| `description` | 命令描述 |
-| `agent` | 使用的 Agent |
-| `model` | 使用的模型 |
-| `subtask` | 是否作为子任务运行 |
+| `template` | Шаблон команды, `$ARGUMENTS` — параметры |
+| `description` | Описание команды |
+| `agent` | Используемый Agent |
+| `model` | Используемая модель |
+| `subtask` | Запускать ли как подзадачу |
 
-详细配置见 [5.4 快捷命令](./04-commands)。
+Подробности — [5.4 Быстрые команды](./04-commands).
 
-### Formatter 配置
+### Настройка Formatter
 
-配置代码格式化器：
+Настройка форматтеров кода:
 
 ```json
 {
@@ -545,9 +545,9 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-> 注意：配置键是 `formatter`（单数），不是 `formatters`。
+> Обратите внимание: ключ конфигурации — `formatter` (единственное число), а не `formatters`.
 
-设为 `false` 完全禁用格式化：
+Полное отключение форматирования значением `false`:
 
 ```json
 {
@@ -555,11 +555,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-详细配置见 [5.18 格式化器](./18-formatters)。
+Подробности — [5.18 Форматтеры](./18-formatters).
 
-### MCP 配置
+### Настройка MCP
 
-配置 MCP 服务器：
+Настройка MCP-серверов:
 
 ```json
 {
@@ -584,13 +584,13 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-远程 MCP 服务器支持 `headers`（自定义请求头）和 `oauth`（OAuth 认证）。`oauth` 设为 `false` 可禁用自动 OAuth 检测。
+Удалённые MCP-серверы поддерживают `headers` (свои заголовки запросов) и `oauth` (OAuth-аутентификация). Значением `false` у `oauth` отключается автоопределение OAuth.
 
-详细配置见 [5.7 MCP 扩展](./07a-mcp-basics)。
+Подробности — [5.7 Расширения MCP](./07a-mcp-basics).
 
-### Plugin 配置
+### Настройка Plugin
 
-加载 npm 插件：
+Загрузка npm-плагинов:
 
 ```json
 {
@@ -598,13 +598,13 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-也可以在 `.opencode/plugin/` 目录放置本地插件（`.ts` 或 `.js` 文件）。
+Локальные плагины кладутся файлами (`.ts` или `.js`) в каталог `.opencode/plugin/`.
 
-详细配置见 [5.12 插件系统](./12a-plugins-basics)。
+Подробности — [5.12 Система плагинов](./12a-plugins-basics).
 
-### LSP 配置
+### Настройка LSP
 
-配置 LSP 服务器：
+Настройка LSP-серверов:
 
 ```json
 {
@@ -626,15 +626,15 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `disabled` | 禁用此 LSP |
-| `command` | 启动命令 |
-| `extensions` | 文件扩展名（自定义 LSP 必填） |
-| `env` | 环境变量 |
-| `initialization` | LSP 初始化配置 |
+| `disabled` | Отключить этот LSP |
+| `command` | Команда запуска |
+| `extensions` | Расширения файлов (для своих LSP обязательно) |
+| `env` | Переменные окружения |
+| `initialization` | Конфигурация инициализации LSP |
 
-设为 `false` 禁用所有 LSP：
+Значением `false` отключаются все LSP:
 
 ```json
 {
@@ -642,11 +642,11 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-详细配置见 [5.19 LSP 服务器](./19-lsp)。
+Подробности — [5.19 LSP-серверы](./19-lsp).
 
 ---
 
-## 实验性功能
+## Экспериментальные функции
 
 ```json
 {
@@ -658,37 +658,37 @@ TUI 设置使用独立的 `tui.json` 或 `tui.jsonc`，字段直接写在顶层�
 }
 ```
 
-| 字段 | 说明 |
+| Поле | Описание |
 |-----|------|
-| `batch_tool` | 启用批量工具 |
-| `openTelemetry` | 启用 OpenTelemetry 追踪 |
-| `disable_paste_summary` | 禁用粘贴大段文本时的自动摘要 |
-| `primary_tools` | 仅限 Primary Agent 使用的工具列表 |
-| `continue_loop_on_deny` | 工具被拒绝时继续循环 |
-| `mcp_timeout` | MCP 请求的全局超时时间（毫秒） |
+| `batch_tool` | Включить пакетный инструмент |
+| `openTelemetry` | Включить трассировку OpenTelemetry |
+| `disable_paste_summary` | Отключить автосуммирование при вставке больших кусков текста |
+| `primary_tools` | Список инструментов только для Primary Agent |
+| `continue_loop_on_deny` | Продолжать цикл при отказе в инструменте |
+| `mcp_timeout` | Глобальный тайм-аут запросов MCP (миллисекунды) |
 
-> ⚠️ 实验性功能可能随时变更或移除。
+> ⚠️ Экспериментальные функции могут измениться или удалиться в любой момент.
 
-::: tip 关于 Hook（事件钩子）
-Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 [5.12c Hooks 机制](./12c-hooks)。
+::: tip Про Hook (хуки событий)
+Функционал Hook реализован через **систему плагинов**, а не конфигурацию `experimental`. Подробности — [5.12c Механизмы Hooks](./12c-hooks).
 :::
 
 ---
 
-## 完整配置示例
+## Полный пример конфигурации
 
-主配置 `opencode.jsonc`：
+Главная конфигурация `opencode.jsonc`:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  
-  // === 模型 ===
+
+  // === Модели ===
   "model": "anthropic/claude-opus-4-5-thinking",
   "small_model": "anthropic/claude-haiku-4-5",
   "default_agent": "build",
-  
-  // === Provider ===
+
+  // === Провайдер ===
   "provider": {
     "anthropic": {
       "options": {
@@ -708,17 +708,17 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
     }
   },
   "disabled_providers": ["gemini"],
-  
-  // === 用户 ===
-  "username": "开发者",
-  
-  // === 服务器 ===
+
+  // === Пользователь ===
+  "username": "разработчик",
+
+  // === Сервер ===
   "server": {
     "port": 4096,
     "hostname": "localhost"
   },
-  
-  // === 行为 ===
+
+  // === Поведение ===
   "share": "manual",
   "compaction": {
     "auto": true,
@@ -729,8 +729,8 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
     "ignore": ["node_modules/**", "dist/**"]
   },
   "instructions": ["CONTRIBUTING.md"],
-  
-  // === 权限 ===
+
+  // === Права ===
   "permission": {
     "edit": "ask",
     "bash": {
@@ -738,11 +738,11 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
       "git *": "allow"
     }
   },
-  
+
   // === Agent ===
   "agent": {
     "code-reviewer": {
-      "description": "代码审查专家",
+      "description": "Эксперт по ревью кода",
       "mode": "subagent",
       "temperature": 0.2,
       "permission": {
@@ -750,22 +750,22 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
       }
     }
   },
-  
-  // === 命令 ===
+
+  // === Команды ===
   "command": {
     "test": {
-      "template": "运行测试",
-      "description": "运行测试套件"
+      "template": "Запустить тесты",
+      "description": "Запуск тестового набора"
     }
   },
-  
-  // === 格式化器 ===
+
+  // === Форматтеры ===
   "formatter": {
     "prettier": {
       "disabled": false
     }
   },
-  
+
   // === MCP ===
   "mcp": {
     "context7": {
@@ -776,7 +776,7 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
 }
 ```
 
-界面配置 `tui.jsonc`：
+Конфигурация интерфейса `tui.jsonc`:
 
 ```jsonc
 {
@@ -793,62 +793,62 @@ Hook 功能通过**插件系统**实现，不是 `experimental` 配置。详见 
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| 用了 `keybind` | 键名错误 | 在 `tui.json` 中使用 `keybinds`（**复数**） |
-| 用了 `permissions` | 键名错误 | 应为 `permission`（单数） |
-| 用了 `agents` | 键名错误 | 应为 `agent`（单数） |
-| 用了 `commands` | 键名错误 | 应为 `command`（单数） |
-| 用了 `formatters` | 键名错误 | 应为 `formatter`（单数） |
-| 主配置写了 `theme` / `keybinds` / `tui` | 配置文件错误 | 移到同层级的 `tui.json` / `tui.jsonc` |
-| tools 配置不生效 | 遗留配置 | 推荐使用 `permission` |
-| baseURL 不生效 | 位置错误 | 应在 `provider.options.baseURL` 而非顶层 |
-| 模型 API URL 不生效 | 字段错误 | 模型级别用 `provider.api`，Provider 级别用 `options.baseURL` |
-| 快捷键冲突 | 与终端冲突 | 使用 leader 键前缀 |
-| LSP 自定义失败 | 缺少 extensions | 自定义 LSP 必须指定 extensions |
+| Использовали `keybind` | Ошибка в имени ключа | В `tui.json` используйте `keybinds` (**множественное число**) |
+| Использовали `permissions` | Ошибка в имени ключа | Должно быть `permission` (единственное число) |
+| Использовали `agents` | Ошибка в имени ключа | Должно быть `agent` (единственное число) |
+| Использовали `commands` | Ошибка в имени ключа | Должно быть `command` (единственное число) |
+| Использовали `formatters` | Ошибка в имени ключа | Должно быть `formatter` (единственное число) |
+| В главной конфигурации `theme` / `keybinds` / `tui` | Неверный файл конфигурации | Перенесите в `tui.json` / `tui.jsonc` того же уровня |
+| Настройка tools не действует | Наследие конфигурации | Рекомендуется `permission` |
+| baseURL не действует | Неверное место | Должно быть в `provider.options.baseURL`, а не в корне |
+| API URL модели не действует | Ошибка в поле | На уровне моделей — `provider.api`, на уровне провайдера — `options.baseURL` |
+| Конфликт горячих клавиш | Конфликт с терминалом | Префикс клавиши leader |
+| Свой LSP не работает | Нет extensions | Свой LSP обязан указывать extensions |
 
 ---
 
-## 配置键名速查表
+## Шпаргалка имён ключей конфигурации
 
-| 配置项 | 正确键名 | 常见错误 |
+| Опция | Верное имя ключа | Частая ошибка |
 |--------|----------|----------|
 | Provider | `provider` | ~~providers~~ |
 | Permission | `permission` | ~~permissions~~ |
 | Agent | `agent` | ~~agents~~ |
 | Command | `command` | ~~commands~~ |
 | Formatter | `formatter` | ~~formatters~~ |
-| **Keybinds（TUI 配置）** | `keybinds` | ~~keybind~~ |
-| Theme（TUI 配置） | `theme` | ~~tui.theme~~ |
+| **Keybinds (конфиг TUI)** | `keybinds` | ~~keybind~~ |
+| Theme (конфиг TUI) | `theme` | ~~tui.theme~~ |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. 独立的 TUI 界面配置、快捷键，以及主配置中的服务器设置
-2. 行为配置：分享、压缩、监视器、指令文件
-3. 功能配置：Provider、references、工具、权限、Agent、命令、格式化器、MCP、插件、LSP
-4. 实验性功能：批量工具、OpenTelemetry 等
-5. 自定义模型 API URL（v1.1.60+）
-
----
-
-## 相关资源
-
-- [5.1a 配置基础](./01a-config-basics) - 核心配置
-- [5.2 自定义 Agent](./02a-agent-quickstart) - Agent 详细配置
-- [5.4 快捷命令](./04-commands) - 命令详细配置
-- [5.5 权限管控](./05-permissions) - 权限详细配置
-- [5.7 MCP 扩展](./07a-mcp-basics) - MCP 详细配置
-- [速查/快捷键](../appendix/keybinds) - 常用快捷键列表
-- [速查/配置参考](../appendix/config-ref) - 配置速查表
+1. Отдельной конфигурации интерфейса TUI, горячим клавишам и серверным настройкам главной конфигурации
+2. Настройкам поведения: шаринг, сжатие, монитор, файлы инструкций
+3. Настройкам функций: провайдеры, references, инструменты, права, Agent, команды, форматтеры, MCP, плагины, LSP
+4. Экспериментальным функциям: пакетные инструменты, OpenTelemetry и др.
+5. Своим API URL моделей (v1.1.60+)
 
 ---
 
-## 下一课预告
+## Связанные материалы
 
-> 下一课我们将学习如何创建自定义 Agent。
+- [5.1a Основы конфигурации](./01a-config-basics) — главная конфигурация
+- [5.2 Свои Agent](./02a-agent-quickstart) — подробная настройка Agent
+- [5.4 Быстрые команды](./04-commands) — подробная настройка команд
+- [5.5 Контроль прав](./05-permissions) — подробная настройка прав
+- [5.7 Расширения MCP](./07a-mcp-basics) — подробная настройка MCP
+- [Шпаргалка/Горячие клавиши](../appendix/keybinds) — список частых клавиш
+- [Шпаргалка/Справочник конфигурации](../appendix/config-ref) — таблица-шпаргалка конфигурации
+
+---
+
+## Анонс следующего урока
+
+> В следующем уроке научимся создавать собственных Agent.

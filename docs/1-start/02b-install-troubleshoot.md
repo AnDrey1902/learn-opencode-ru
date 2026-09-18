@@ -27,7 +27,7 @@ prerequisite:
 
 ```bash
 zsh: command not found: opencode
-# 或 Windows 上
+# или на Windows
 'opencode' is not recognized as an internal or external command
 ```
 
@@ -57,14 +57,14 @@ echo $PATH | tr ':' '\n' | grep opencode
 
 ### 3. Добавьте каталог в PATH вручную
 
-**macOS/Linux (zsh)：**
+**macOS/Linux (zsh):**
 
 ```bash
 echo 'export PATH="$HOME/.opencode/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-**macOS/Linux (bash)：**
+**macOS/Linux (bash):**
 
 ```bash
 echo 'export PATH="$HOME/.opencode/bin:$PATH"' >> ~/.bashrc
@@ -85,7 +85,7 @@ Scoop настраивает PATH автоматически; если изме�
 
 ```
 curl: (7) Failed to connect to opencode.ai port 443
-# 或
+# или
 Error: connect ETIMEDOUT
 ```
 
@@ -146,7 +146,7 @@ GitHub API ограничивает частоту анонимных запро
 
 ```
 Error: 'tar' is required but not installed.
-# 或
+# или
 Error: 'unzip' is required but not installed.
 ```
 
@@ -155,8 +155,8 @@ Error: 'unzip' is required but not installed.
 Установите недостающие инструменты:
 
 ```bash
-# macOS（一般自带）
-# 如果没有，安装 Xcode 命令行工具：
+# macOS(обычно уже есть)
+# Если нет — ставим Xcode Command Line Tools:
 xcode-select --install
 
 # Ubuntu/Debian
@@ -242,13 +242,13 @@ opencode uninstall
 **macOS/Linux (установка официальным скриптом):**
 
 ```bash
-# 删除二进制
+# Удаляем бинарь
 rm -rf ~/.opencode/bin
 
-# 删除配置
+# Удаляем конфигурацию
 rm -rf ~/.config/opencode
 
-# 删除数据、缓存和状态
+# Удаляем данные, кэш и состояние
 rm -rf ~/.local/share/opencode
 rm -rf ~/.cache/opencode
 rm -rf ~/.local/state/opencode

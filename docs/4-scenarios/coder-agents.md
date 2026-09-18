@@ -1,106 +1,106 @@
 ---
-title: B5 专属开发 Agent
-subtitle: 创建 Code Reviewer、Security Auditor
-course: OpenCode 中文实战课
-stage: 第四阶段
+title: B5 Собственные Agent для разработки
+subtitle: Создаём Code Reviewer и Security Auditor
+course: Практический курс OpenCode на русском языке
+stage: Этап 4
 lesson: "B5"
-duration: 25 分钟
-practice: 30 分钟
-level: 进阶
-description: 创建专属 Code Reviewer 和 Security Auditor Agent，自动化代码审查和安全检查。
+duration: 25 минут
+practice: 30 минут
+level: Продвинутый
+description: Создайте собственных Code Reviewer и Security Auditor Agent для автоматического ревью кода и проверок безопасности.
 tags:
   - Agent
   - Code Review
-  - 安全审计
+  - Аудит безопасности
 prerequisite:
-  - B1 开发日常
-  - 3.2 认识 Agent
+  - B1 Повседневная разработка
+  - 3.2 Знакомство с Agent
 ---
 
-# B5 专属开发 Agent
+# B5 Собственные Agent для разработки
 
-> 💡 **一句话总结**：创建 Code Reviewer、Security Auditor、Test Writer 等专属开发 Agent。
+> 💡 **Коротко**: создайте собственных Code Reviewer, Security Auditor, Test Writer и других Agent для разработки.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/4-scenarios/coder-agents-notes.mini.jpeg"
-     alt="B5 专属开发 Agent学霸笔记"
+     alt="Шпаргалка урока: B5 Собственные Agent для разработки"
      data-zoom-src="/images/4-scenarios/coder-agents-notes.jpeg" />
 
 ---
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 创建 Code Reviewer Agent
-- 创建 Security Auditor Agent
-- 创建 Test Writer Agent
-- 组合多个 Agent 形成开发工作流
-
----
-
-## 你现在的困境
-
-- 代码审查、安全检查、测试生成都要自己做
-- 每次都要告诉 AI 用什么标准审查
-- 想让多个"专家"协作，但不知道怎么实现
+- Создать Code Reviewer Agent
+- Создать Security Auditor Agent
+- Создать Test Writer Agent
+- Комбинировать нескольких Agent в рабочий процесс
 
 ---
 
-## 什么时候用这一招
+## С какими трудностями вы столкнулись
 
-- 当你需要：用专业化 Agent 提升开发质量
-- 而且不想：每次都重复输入审查标准
-
----
-
-## 🎒 开始前的准备
-
-> 确保你已经完成以下事项：
-
-- [ ] 完成了 [B1 开发日常](./coder-daily)
-- [ ] 完成了 [3.2 认识 Agent](../3-workflow/02-agents)
+- Ревью кода, проверки безопасности и генерация тестов — всё вручную
+- Каждый раз приходится объяснять AI стандарты проверки
+- Хочется кооперации нескольких «экспертов», но непонятно как
 
 ---
 
-## 核心思路
+## Когда это пригодится
 
-### 开发 Agent 矩阵
+- Когда нужно: поднять качество разработки профильными Agent
+- И не хочется: каждый раз заново вводить стандарты проверки
 
-| Agent | 职责 | 使用场景 |
+---
+
+## 🎒 Перед началом
+
+> Убедитесь, что выполнены следующие условия:
+
+- [ ] Пройден урок [B1 Повседневная разработка](./coder-daily)
+- [ ] Пройден урок [3.2 Знакомство с Agent](../3-workflow/02-agents)
+
+---
+
+## Основная идея
+
+### Матрица Agent для разработки
+
+| Agent | Обязанности | Сценарии |
 |-------|------|---------|
-| Code Reviewer | 代码审查 | PR 审核、自检 |
-| Security Auditor | 安全审计 | 上线前检查 |
-| Test Writer | 测试生成 | 补充测试覆盖 |
-| Doc Writer | 文档生成 | 注释、README |
+| Code Reviewer | Ревью кода | Проверка PR, самопроверка |
+| Security Auditor | Аудит безопасности | Проверка перед релизом |
+| Test Writer | Генерация тестов | Добивка покрытия |
+| Doc Writer | Генерация документации | Комментарии, README |
 
 ---
 
-## 跟我做
+## Повторите за мной
 
-### 第 1 步：创建 Code Reviewer Agent
+### Шаг 1: создайте Code Reviewer Agent
 
-**为什么**  
-专业的代码审查 Agent 能发现更多问题。
+**Зачем**
+Профильный ревьюер находит больше проблем.
 
 ```bash
 mkdir -p ~/.config/opencode/agent
 ```
 
-> Agent 配置文件放置位置：
-> - 全局：`~/.config/opencode/agent/`
-> - 项目级：`.opencode/agent/`
+> Куда класть конфиги Agent:
+> - Глобально: `~/.config/opencode/agent/`
+> - На уровне проекта: `.opencode/agent/`
 >
-> Agent 的调用名默认来自文件名：例如 `code-reviewer.md` 对应 `@code-reviewer`。
+> Имя вызова по умолчанию берётся из имени файла: например, `code-reviewer.md` соответствует `@code-reviewer`.
 
-创建配置：
+Создайте конфиг:
 
 ```
-帮我创建一个 Code Reviewer Agent，保存到 ~/.config/opencode/agent/code-reviewer.md：
+Создай Code Reviewer Agent и сохрани в ~/.config/opencode/agent/code-reviewer.md:
 
 ---
-description: 严格的代码审查专家
+description: Строгий эксперт по ревью кода
 mode: subagent
 model: anthropic/claude-opus-4-5-thinking
 temperature: 0.3
@@ -112,52 +112,52 @@ permission:
 
 # Code Reviewer Agent
 
-你是一位经验丰富的高级工程师，专门负责代码审查。
+Ты — опытный senior-инженер, специализируешься на ревью кода.
 
-## 审查清单
+## Чек-лист проверки
 
-### 代码质量
-- [ ] 函数职责单一
-- [ ] 命名清晰准确
-- [ ] 无重复代码
-- [ ] 适当的注释
+### Качество кода
+- [ ] Единственная ответственность функций
+- [ ] Ясные и точные имена
+- [ ] Нет дублирующегося кода
+- [ ] Уместные комментарии
 
-### 潜在问题
-- [ ] 边界条件处理
-- [ ] 错误处理完整
-- [ ] 无内存泄漏风险
-- [ ] 无竞态条件
+### Потенциальные проблемы
+- [ ] Обработка граничных условий
+- [ ] Полнота обработки ошибок
+- [ ] Нет рисков утечек памяти
+- [ ] Нет состояний гонки
 
-### 可维护性
-- [ ] 代码易于理解
-- [ ] 可测试性好
-- [ ] 符合项目规范
+### Поддерживаемость
+- [ ] Код легко понять
+- [ ] Хорошая тестируемость
+- [ ] Соответствие нормам проекта
 
-## 输出格式
+## Формат вывода
 
-对于每个问题，按以下格式输出：
-- **位置**：文件名:行号
-- **问题**：问题描述
-- **严重程度**：高 / 中 / 低
-- **建议**：修复建议
+Для каждой проблемы выводи по формату:
+- **Место**: файл:строка
+- **Проблема**: описание проблемы
+- **Серьёзность**: высокая / средняя / низкая
+- **Рекомендация**: как исправить
 ```
 
-来源（Agent Markdown 字段与 tools 写法示例）：
+Источники (поля Agent Markdown и примеры записи tools):
 - `opencode/packages/web/src/content/docs/agents.mdx:163`
 - `opencode/packages/web/src/content/docs/agents.mdx:167`
 - `opencode/packages/web/src/content/docs/agents.mdx:169`
 
-### 第 2 步：创建 Security Auditor Agent
+### Шаг 2: создайте Security Auditor Agent
 <AdInArticle />
 
-**为什么**  
-安全审计需要专门的视角。
+**Зачем**
+Аудиту безопасности нужен особый взгляд.
 
 ```
-帮我创建一个 Security Auditor Agent，保存到 ~/.config/opencode/agent/security-auditor.md：
+Создай Security Auditor Agent и сохрани в ~/.config/opencode/agent/security-auditor.md:
 
 ---
-description: 安全漏洞猎人
+description: Охотник за уязвимостями
 mode: subagent
 model: anthropic/claude-opus-4-5-thinking
 temperature: 0.2
@@ -168,51 +168,51 @@ permission:
 
 # Security Auditor Agent
 
-你是一位安全专家，专门发现代码中的安全隐患。
+Ты — эксперт по безопасности, находишь скрытые угрозы в коде.
 
-## 检查项目
+## Что проверять
 
-### 输入验证
-- SQL 注入
-- XSS 攻击
-- 命令注入
-- 路径遍历
+### Валидация ввода
+- SQL-инъекции
+- XSS-атаки
+- Инъекции команд
+- Обход путей (path traversal)
 
-### 认证授权
-- 身份验证绕过
-- 权限提升
-- 会话管理
+### Аутентификация и авторизация
+- Обход проверки личности
+- Повышение привилегий
+- Управление сессиями
 
-### 敏感数据
-- 硬编码密钥
-- 敏感信息泄露
-- 不安全的存储
+### Чувствительные данные
+- Захардкоженные ключи
+- Утечки чувствительной информации
+- Небезопасное хранение
 
-### 依赖安全
-- 已知漏洞依赖
-- 过时的包版本
+### Безопасность зависимостей
+- Зависимости с известными уязвимостями
+- Устаревшие версии пакетов
 
-## 输出格式
+## Формат вывода
 
-对于每个安全问题：
-- **漏洞类型**：OWASP 分类
-- **位置**：文件名:行号
-- **风险等级**：Critical/High/Medium/Low
-- **描述**：漏洞描述
-- **修复建议**：如何修复
-- **参考**：相关 CWE/CVE
+Для каждой проблемы безопасности:
+- **Тип уязвимости**: классификация OWASP
+- **Место**: файл:строка
+- **Уровень риска**: Critical/High/Medium/Low
+- **Описание**: в чём уязвимость
+- **Рекомендация**: как исправить
+- **Ссылки**: связанные CWE/CVE
 ```
 
-### 第 3 步：创建 Test Writer Agent
+### Шаг 3: создайте Test Writer Agent
 
-**为什么**  
-专门的测试 Agent 能生成更全面的测试。
+**Зачем**
+Профильный тестовый Agent пишет более полные тесты.
 
 ```
-帮我创建一个 Test Writer Agent，保存到 ~/.config/opencode/agent/test-writer.md：
+Создай Test Writer Agent и сохрани в ~/.config/opencode/agent/test-writer.md:
 
 ---
-description: 测试用例专家
+description: Эксперт по тест-кейсам
 mode: subagent
 model: anthropic/claude-opus-4-5-thinking
 temperature: 0.4
@@ -223,130 +223,130 @@ permission:
 
 # Test Writer Agent
 
-你是一位测试专家，擅长设计和编写测试用例。
+Ты — эксперт по тестированию, проектируешь и пишешь тест-кейсы.
 
-## 测试策略
+## Стратегия тестов
 
-1. **单元测试**：隔离测试每个函数
-2. **集成测试**：测试模块间交互
-3. **边界测试**：测试边界条件
-4. **异常测试**：测试错误处理
+1. **Юнит-тесты**: изолированная проверка каждой функции
+2. **Интеграционные тесты**: взаимодействие модулей
+3. **Граничные тесты**: проверка граничных условий
+4. **Негативные тесты**: проверка обработки ошибок
 
-## 测试覆盖
+## Покрытие тестами
 
-每个函数必须覆盖：
-- 正常输入
-- 边界值（最大、最小、临界）
-- 非法输入（null、undefined、错误类型）
-- 异常情况（网络错误、超时）
+Каждая функция должна покрывать:
+- нормальный ввод
+- граничные значения (максимум, минимум, пороги)
+- некорректный ввод (null, undefined, неверный тип)
+- нештатные ситуации (ошибки сети, тайм-ауты)
 
-## 输出格式
+## Формат вывода
 
-使用项目的测试框架，生成可直接运行的测试代码。
+Используй тестовый фреймворк проекта, генерируй сразу запускаемый тестовый код.
 ```
 
-### 第 4 步：使用专属 Agent
+### Шаг 4: используйте собственных Agent
 
-**为什么**  
-调用专属 Agent 完成任务。
+**Зачем**
+Вызывайте профильных Agent для задач.
 
-重启 OpenCode：
+Перезапустите OpenCode:
 
 ```bash
 opencode
 ```
 
-调用 Code Reviewer：
+Вызов Code Reviewer:
 
 ```
-@code-reviewer @src/services/auth.ts 请审查这个认证模块
+@code-reviewer @src/services/auth.ts проверь этот модуль аутентификации
 ```
 
-调用 Security Auditor：
+Вызов Security Auditor:
 
 ```
-@security-auditor @src/controllers/ 对这个目录进行安全审计
+@security-auditor @src/controllers/ проведи аудит безопасности этого каталога
 ```
 
-调用 Test Writer：
+Вызов Test Writer:
 
 ```
-@test-writer @src/utils/validate.ts 为这个文件生成完整的测试用例
+@test-writer @src/utils/validate.ts сгенерируй полные тест-кейсы для этого файла
 ```
 
-### 第 5 步：组合工作流
+### Шаг 5: комбинируйте в процесс
 
-**为什么**  
-多个 Agent 协作更高效。
+**Зачем**
+Несколько Agent вместе эффективнее.
 
-创建一个综合审查命令 `.opencode/command/全面审查.md`：
+Создайте комплексную команду проверки `.opencode/command/full-review.md`:
 
 ```
 ---
-description: 综合代码审查
+description: Комплексное ревью кода
 ---
 
-请依次执行：
-1. @code-reviewer 审查代码质量
-2. @security-auditor 检查安全隐患
-3. @test-writer 分析测试覆盖率
+Выполни по порядку:
+1. @code-reviewer проверь качество кода
+2. @security-auditor проверь угрозы безопасности
+3. @test-writer оцени покрытие тестами
 
-目标文件：$ARGUMENTS
+Целевые файлы: $ARGUMENTS
 
-最后汇总所有问题，按优先级排序。
+В конце сведи все проблемы и отсортируй по приоритету.
 ```
 
-来源（自定义命令目录与参数占位符）：
+Источники (каталог пользовательских команд и плейсхолдер параметров):
 - `opencode/packages/web/src/content/docs/commands.mdx:20`
 - `opencode/packages/web/src/content/docs/commands.mdx:113`
 - `opencode/packages/opencode/src/config/config.ts:191`
 - `opencode/packages/opencode/src/command/index.ts:49`
 
-使用：
+Использование:
 
 ```
-/全面审查 src/services/payment.ts
+/full-review src/services/payment.ts
 ```
 
 ---
 
-## 检查点 ✅
+## Контрольные пункты ✅
 
-> 全部通过才能继续
+> Продолжайте, только когда всё выполнено
 
-- [ ] 创建了 Code Reviewer Agent
-- [ ] 创建了 Security Auditor Agent
-- [ ] 创建了 Test Writer Agent
-- [ ] 能用 @agent名 调用
+- [ ] Создали Code Reviewer Agent
+- [ ] Создали Security Auditor Agent
+- [ ] Создали Test Writer Agent
+- [ ] Умеете вызывать через @имя_агента
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| @agent名 没反应 | 调用名和文件名不一致（或拼写错误） | 确认文件名（不含 .md）就是调用名，例如 `code-reviewer.md` → `@code-reviewer` |
-| Agent 配置不生效 | 配置文件不在 agent 目录 | 放到 `~/.config/opencode/agent/`（全局）或 `.opencode/agent/`（项目级） |
-| 多 Agent 结果不一致 | 各自独立执行 | 用命令串联，统一汇总 |
+| @имя_агента не реагирует | Имя вызова не совпадает с файлом (или опечатка) | Проверьте: имя файла (без .md) и есть имя вызова, например `code-reviewer.md` → `@code-reviewer` |
+| Конфиг Agent не применяется | Файл не в каталоге agent | Положите в `~/.config/opencode/agent/` (глобально) или `.opencode/agent/` (на уровне проекта) |
+| Результаты Agent расходятся | Выполняются независимо | Свяжите командой, сведите в общий итог |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. 创建 Code Reviewer Agent
-2. 创建 Security Auditor Agent
-3. 创建 Test Writer Agent
-4. 组合多个 Agent 形成工作流
+1. Создавать Code Reviewer Agent
+2. Создавать Security Auditor Agent
+3. Создавать Test Writer Agent
+4. Комбинировать нескольких Agent в процесс
 
 ---
 
-## 下一课预告
+## Анонс следующего урока
 
-> 下一课我们学习 **[B6 内网/离线部署](./coder-intranet)**。
+> В следующем уроке изучим **[B6 Интранет и офлайн](./coder-intranet)**.
 >
-> 你会学到：
-> - 在企业内网环境运行 OpenCode
-> - 禁用所有外网请求
-> - 配置内部 AI 网关
+> Вы узнаете:
+> - как запускать OpenCode в корпоративной сети
+> - как отключить все внешние запросы
+> - как настроить внутренний AI-шлюз

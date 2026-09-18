@@ -1,21 +1,21 @@
-# 统计数据自动生成
+# Автогенерация статистики
 
-## 功能说明
+## Что это
 
-每次构建或启动开发服务器时，会自动运行 `scripts/stats.sh` 统计教程字数和 4K 笔记数量，并生成 `docs/data/stats.json` 文件。
+При каждой сборке или запуске dev-сервера автоматически выполняется `scripts/stats.sh`: считает слова учебника и число 4K-шпаргалок, генерирует файл `docs/data/stats.json`.
 
-## 统计规则
+## Правила подсчёта
 
-- **字数统计**（Word 风格）：
-  - 中文：每个汉字算 1 字
-  - 英文：每个单词算 1 字
-  - 统计范围：`docs/` 下所有 `.md` 文件（排除 `.vitepress` 目录）
+- **Подсчёт слов** (в стиле Word):
+  - Китайский: каждый иероглиф — 1 слово
+  - Русский/английский: каждое слово — 1
+  - Охват: все `.md` в `docs/` (кроме каталога `.vitepress`)
 
-- **笔记统计**：
-  - 统计 `docs/public/images` 下所有 `*-notes.jpeg` 文件
-  - 排除 `*.mini.jpeg` 缩略图
+- **Подсчёт шпаргалок**:
+  - Считаются файлы `*-notes.jpeg` в `docs/public/images`
+  - Миниатюры `*.mini.jpeg` исключаются
 
-## 数据格式
+## Формат данных
 
 ```json
 {
@@ -24,20 +24,20 @@
 }
 ```
 
-## 使用方式
+## Использование
 
-在首页 `docs/index.md` 中通过 Vue 脚本导入并使用：
+На главной `docs/index.md` подключается Vue-скриптом:
 
 ```vue
 <script setup>
 import stats from './data/stats.json'
 </script>
 
-<span class="stat-number">{{ Math.round(stats.wordCount / 10000).toFixed(1) }}万</span>
+<span class="stat-number">{{ (stats.wordCount / 1000).toFixed(0) }} тыс.</span>
 <span class="stat-number">{{ stats.notesCount }}</span>
 ```
 
-## 自动触发
+## Автозапуск
 
 ```json
 "scripts": {

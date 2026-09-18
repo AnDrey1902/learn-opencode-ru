@@ -1,62 +1,62 @@
 ---
-title: 5.10a SDK 基础
-subtitle: 编程方式控制 OpenCode
-course: OpenCode 中文实战课
-stage: 第五阶段
+title: 5.10a Основы SDK
+subtitle: Управление OpenCode программным способом
+course: Практический курс OpenCode на русском языке
+stage: Этап 5
 lesson: "5.10a"
-duration: 25 分钟
-practice: 30 分钟
-level: 进阶
-description: 使用 SDK 编程方式控制 OpenCode，实现自动化和深度集成。
+duration: 25 минут
+practice: 30 минут
+level: Продвинутый
+description: Управляйте OpenCode программным способом через SDK для автоматизации и глубокой интеграции.
 tags:
   - SDK
-  - 编程接口
-  - 自动化
+  - Программный интерфейс
+  - Автоматизация
 prerequisite:
-  - 5.1 配置全解
-  - 5.9 远程开发
+  - 5.1 Всё о конфигурации
+  - 5.9 Удалённая разработка
 ---
 
-# 5.10a SDK 基础
+# 5.10a Основы SDK
 
-> **一句话总结**：使用 JavaScript/TypeScript SDK 以编程方式控制 OpenCode，实现自动化工作流和自定义集成。
+> **Коротко**: управляйте OpenCode программным способом через JavaScript/TypeScript SDK для автоматических процессов и своих интеграций.
 
-## 📝 课程笔记
+## 📝 Конспект урока
 
-本课核心知识点整理：
+Ключевые идеи урока в сжатом виде:
 
 <img src="/images/5-advanced/10a-sdk-basics-notes.mini.jpeg"
-     alt="5.10a SDK 基础学霸笔记"
+     alt="Шпаргалка урока: 5.10a Основы SDK"
      data-zoom-src="/images/5-advanced/10a-sdk-basics-notes.jpeg" />
 
 ---
 
-## 学完你能做什么
+## Что вы сможете после урока
 
-- 安装和配置 OpenCode SDK
-- 创建服务器和客户端实例
-- 启动 TUI 界面
-- 管理会话和发送消息
-- 监听实时事件
-
----
-
-## 你现在的困境
-
-- 想在自己的应用里调用 OpenCode
-- 想以编程方式批量处理任务
-- 想构建自定义集成（IDE 插件、CI/CD 工具等）
-- 想在脚本中自动化 OpenCode 操作
+- Установить и настроить OpenCode SDK
+- Создавать экземпляры сервера и клиента
+- Запускать TUI-интерфейс
+- Вести сессии и отправлять сообщения
+- Слушать события реального времени
 
 ---
 
-## SDK 架构概览
+## С какими трудностями вы столкнулись
+
+- Хотите вызывать OpenCode из своего приложения
+- Хотите пакетно обрабатывать задачи программным способом
+- Хотите построить свои интеграции (плагины IDE, инструменты CI/CD и т. д.)
+- Хотите автоматизировать действия OpenCode в скриптах
+
+---
+
+## Архитектура SDK: обзор
 
 <AdInArticle />
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    你的应用程序                           │
+│                    Ваше приложение                        │
 ├─────────────────────────────────────────────────────────┤
 │                   @opencode-ai/sdk                       │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
@@ -64,79 +64,80 @@ prerequisite:
 │  │             │  │   Client    │  │    Tui      │      │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘      │
 │         │                │                │              │
-│  服务器+客户端      仅客户端连接      启动 TUI 界面       │
+│  Сервер+клиент    Только подключение     Запуск TUI     │
+│                   к клиенту                             │
 └─────────┼────────────────┼────────────────┼─────────────┘
           │                │                │
           ▼                ▼                ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  OpenCode Server                         │
-│            HTTP API (默认端口 4096)                       │
+│            HTTP API (порт по умолчанию 4096)              │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 安装 SDK
+## Установка SDK
 
 ```bash
 npm install @opencode-ai/sdk
 ```
 
-### V1 与 V2 入口
+### Входы V1 и V2
 
-本课现有示例使用 V1 入口 `@opencode-ai/sdk`。到 `v1.18.22`，V1 **没有移除**；同一个包另外导出 `@opencode-ai/sdk/v2`，用于会话、问题、当前位置、事件流、历史分页、运行时操作和权限请求等 V2 扩展。两套入口参数结构不同，不要只改 import 后继续照搬 V1 的 `{ path, body }` 调用。
+Примеры урока используют вход V1 `@opencode-ai/sdk`. К `v1.18.22` V1 **не удалён**; тот же пакет дополнительно экспортирует `@opencode-ai/sdk/v2` для сессий, вопросов, текущей позиции, потоков событий, пагинации истории, рантайм-операций, запросов прав и других расширений V2. Структуры параметров двух входов различаются — не копируйте вызовы V1 вида `{ path, body }` после смены одного лишь import.
 
 ```typescript
-// V1：本课后续示例使用这个入口
+// V1: вход для дальнейших примеров урока
 import { createOpencodeClient } from "@opencode-ai/sdk"
 
-// V2：平铺参数，详见 5.10c
+// V2: плоские параметры, подробности в 5.10c
 import { createOpencodeClient as createV2Client } from "@opencode-ai/sdk/v2"
 ```
 
-> 来源：[`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20)、[`V1 sdk.gen.ts:431-700`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L431-L700)、[`V2 location:5038-5058`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5038-L5058)、[`V2 session:5171-5793`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5171-L5793)
+> Источники: [`packages/sdk/js/package.json:12-20`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/package.json#L12-L20),[`V1 sdk.gen.ts:431-700`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/gen/sdk.gen.ts#L431-L700),[`V2 location:5038-5058`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5038-L5058),[`V2 session:5171-5793`](https://github.com/anomalyco/opencode/blob/v1.18.22/packages/sdk/js/src/v2/gen/sdk.gen.ts#L5171-L5793)
 
 ---
 
-## 三种使用方式
+## Три способа использования
 
-### 1. 创建服务器 + 客户端（推荐）
+### 1. Сервер + клиент (рекомендуется)
 
-同时启动服务器和客户端，适合独立脚本和自动化场景：
+Одновременный запуск сервера и клиента — для standalone-скриптов и автоматизации:
 
 ```typescript
 import { createOpencode } from "@opencode-ai/sdk"
 
 const { client, server } = await createOpencode()
 
-// 使用 client 调用 API
+// Вызываем API через client
 const sessions = await client.session.list()
-console.log(`当前有 ${sessions.data?.length} 个会话`)
+console.log(`Сейчас сессий: ${sessions.data?.length}`)
 
-// 完成后关闭服务器
+// По завершении закрываем сервер
 server.close()
 ```
 
-#### ServerOptions 参数
+#### Параметры ServerOptions
 
-| 参数 | 类型 | 描述 | 默认值 |
+| Параметр | Тип | Описание | По умолчанию |
 |------|------|------|--------|
-| `hostname` | `string` | 服务器主机名 | `127.0.0.1` |
-| `port` | `number` | 服务器端口 | `4096` |
-| `signal` | `AbortSignal` | 用于取消的中止信号 | `undefined` |
-| `timeout` | `number` | 服务器启动超时（毫秒） | `5000` |
-| `config` | `Config` | 配置对象，覆盖 `opencode.json` | `{}` |
+| `hostname` | `string` | Имя хоста сервера | `127.0.0.1` |
+| `port` | `number` | Порт сервера | `4096` |
+| `signal` | `AbortSignal` | Сигнал останова | `undefined` |
+| `timeout` | `number` | Тайм-аут старта сервера (миллисекунды) | `5000` |
+| `config` | `Config` | Объект конфигурации, перекрывает `opencode.json` | `{}` |
 
-> **来源**：`packages/sdk/js/src/server.ts:5-11`
+> **Источник**: `packages/sdk/js/src/server.ts:5-11`
 
-#### 配置覆盖示例
+#### Пример перекрытия конфигурации
 
 ```typescript
 import { createOpencode } from "@opencode-ai/sdk"
 
 const opencode = await createOpencode({
   hostname: "127.0.0.1",
-  port: 4097,  // 使用不同端口避免冲突
+  port: 4097,  // Другой порт во избежание конфликтов
   timeout: 10000,
   config: {
     model: "anthropic/claude-opus-4-5-thinking",
@@ -144,17 +145,17 @@ const opencode = await createOpencode({
   },
 })
 
-console.log(`服务器运行在 ${opencode.server.url}`)
+console.log(`Сервер работает на ${opencode.server.url}`)
 
-// 使用完毕后关闭
+// По завершении закрыть
 opencode.server.close()
 ```
 
 ---
 
-### 2. 仅客户端模式
+### 2. Только клиент
 
-连接到已运行的 OpenCode 实例，适合插件开发：
+Подключение к уже запущенному инстансу OpenCode — для разработки плагинов:
 
 ```typescript
 import { createOpencodeClient } from "@opencode-ai/sdk"
@@ -163,71 +164,71 @@ const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
 })
 
-// 直接使用 client
+// Пользуемся client напрямую
 const sessions = await client.session.list()
 ```
 
-#### ClientOptions 参数
+#### Параметры ClientOptions
 
-| 参数 | 类型 | 描述 | 默认值 |
+| Параметр | Тип | Описание | По умолчанию |
 |------|------|------|--------|
-| `baseUrl` | `string` | 服务器 URL | `http://localhost:4096` |
-| `fetch` | `function` | 自定义 fetch 实现 | `globalThis.fetch` |
-| `parseAs` | `string` | 响应解析方式：`auto`, `json`, `text`, `blob`, `arrayBuffer`, `stream`, `formData` | `auto` |
-| `responseStyle` | `"data" \| "fields"` | 返回风格：`data` 仅返回数据，`fields` 返回完整响应 | `fields` |
-| `throwOnError` | `boolean` | 出错时抛出异常而非返回 | `false` |
-| `directory` | `string` | 指定项目目录（通过 `X-Opencode-Directory` header 传递） | `undefined` |
+| `baseUrl` | `string` | URL сервера | `http://localhost:4096` |
+| `fetch` | `function` | Своя реализация fetch | `globalThis.fetch` |
+| `parseAs` | `string` | Способ разбора ответа: `auto`, `json`, `text`, `blob`, `arrayBuffer`, `stream`, `formData` | `auto` |
+| `responseStyle` | `"data" \| "fields"` | Стиль возврата: `data` — только данные, `fields` — полный ответ | `fields` |
+| `throwOnError` | `boolean` | При ошибке бросать исключение, а не возвращать | `false` |
+| `directory` | `string` | Каталог проекта (передаётся заголовком `X-Opencode-Directory`) | `undefined` |
 
-> **来源**：`packages/sdk/js/src/gen/client/types.gen.ts:10-52`、`packages/sdk/js/src/client.ts:33`
+> **Источник**: `packages/sdk/js/src/gen/client/types.gen.ts:10-52`,`packages/sdk/js/src/client.ts:33`
 
-#### 多项目目录切换
+#### Переключение каталогов нескольких проектов
 
 ```typescript
-// 连接到不同项目
+// Подключение к другому проекту
 const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
   directory: "/path/to/my-project",
 })
 ```
 
-#### 远程连接（带认证）
+#### Удалённое подключение (с аутентификацией)
 
-当连接远程 OpenCode 服务器时，如果服务器设置了 `OPENCODE_SERVER_PASSWORD`，需要通过 `headers` 传递 Basic Auth 认证：
+При подключении к удалённому серверу OpenCode с заданным `OPENCODE_SERVER_PASSWORD` передавайте Basic Auth через `headers`:
 
 ```typescript
 import { createOpencodeClient } from "@opencode-ai/sdk"
 
-// 远程连接（带认证）
+// Удалённое подключение (с аутентификацией)
 const client = createOpencodeClient({
   baseUrl: "http://192.168.1.100:4096",
   headers: {
-    // Basic Auth 格式：Base64(username:password)
-    // 浏览器/Edge Runtime 用 btoa()
+    // Формат Basic Auth: Base64(username:password)
+    // В браузере и Edge Runtime — через btoa()
     Authorization: `Basic ${btoa("opencode:your-password")}`
   },
-  directory: "/projects/my-app"  // 指定远程项目目录
+  directory: "/projects/my-app"  // Каталог удалённого проекта
 })
 ```
 
-::: details Node.js 环境用 Buffer
+::: details В Node.js — через Buffer
 ```typescript
-// Node.js 没有 btoa，用 Buffer 代替
+// В Node.js нет btoa, используйте Buffer
 Authorization: `Basic ${Buffer.from("opencode:password").toString("base64")}`
 ```
 :::
 
-| 场景 | 用户名 | 说明 |
+| Сценарий | Имя пользователя | Пояснение |
 |------|--------|------|
-| 默认 | `opencode` | 服务器默认用户名 |
-| 自定义 | 环境变量 `OPENCODE_SERVER_USERNAME` 的值 | 如果服务器设置了自定义用户名 |
+| По умолчанию | `opencode` | Имя пользователя сервера по умолчанию |
+| Своё | Значение переменной окружения `OPENCODE_SERVER_USERNAME` | Если на сервере задано своё имя |
 
-> **来源**：`packages/opencode/src/server/auth.ts:36-42`（Basic Auth header 生成）、`packages/opencode/src/server/routes/instance/httpapi/middleware/authorization.ts`（请求解析）
+> **Источник**: `packages/opencode/src/server/auth.ts:36-42` (генерация заголовка Basic Auth),`packages/opencode/src/server/routes/instance/httpapi/middleware/authorization.ts` (разбор запросов)
 
 ---
 
-### 3. 启动 TUI 界面
+### 3. Запуск TUI-интерфейса
 
-以编程方式启动 OpenCode 的终端界面：
+Программный запуск терминального интерфейса OpenCode:
 
 ```typescript
 import { createOpencodeTui } from "@opencode-ai/sdk"
@@ -235,150 +236,150 @@ import { createOpencodeTui } from "@opencode-ai/sdk"
 const tui = createOpencodeTui({
   project: "/path/to/my-project",
   model: "anthropic/claude-opus-4-5-thinking",
-  session: "abc123",  // 恢复指定会话
+  session: "abc123",  // Восстановить указанную сессию
   agent: "build",
 })
 
-// 用户可以在 TUI 中交互
+// Пользователь общается в TUI
 // ...
 
-// 关闭 TUI
+// Закрыть TUI
 tui.close()
 ```
 
-#### TuiOptions 参数
+#### Параметры TuiOptions
 
-| 参数 | 类型 | 描述 |
+| Параметр | Тип | Описание |
 |------|------|------|
-| `project` | `string` | 项目目录路径 |
-| `model` | `string` | 使用的模型（格式：`provider/model`） |
-| `session` | `string` | 恢复指定会话 ID |
-| `agent` | `string` | 使用的 Agent（如 `build`, `plan`） |
-| `signal` | `AbortSignal` | 用于取消的中止信号 |
-| `config` | `Config` | 配置对象 |
+| `project` | `string` | Путь каталога проекта |
+| `model` | `string` | Используемая модель (формат: `provider/model`) |
+| `session` | `string` | ID восстанавливаемой сессии |
+| `agent` | `string` | Используемый Agent (например, `build`, `plan`) |
+| `signal` | `AbortSignal` | Сигнал останова |
+| `config` | `Config` | Объект конфигурации |
 
-> **来源**：`packages/sdk/js/src/server.ts:13-20`
+> **Источник**: `packages/sdk/js/src/server.ts:13-20`
 
 ---
 
-## 基础 API 使用
+## Базовое использование API
 
-### 会话管理
+### Ведение сессий
 
 ```typescript
-// 创建新会话
+// Создать новую сессию
 const session = await client.session.create({
-  body: { title: "我的任务" },
+  body: { title: "Моя задача" },
 })
-console.log(`创建会话: ${session.data?.id}`)
+console.log(`Сессия создана: ${session.data?.id}`)
 
-// 列出所有会话
+// Список всех сессий
 const sessions = await client.session.list()
 
-// 获取单个会话
+// Получить одну сессию
 const detail = await client.session.get({
   path: { id: session.data!.id },
 })
 
-// 删除会话
+// Удалить сессию
 await client.session.delete({
   path: { id: session.data!.id },
 })
 ```
 
-### 发送消息
+### Отправка сообщений
 
 ```typescript
-// 发送提示并等待 AI 响应
+// Отправить промпт и дождаться ответа AI
 const result = await client.session.prompt({
   path: { id: sessionId },
   body: {
     model: { providerID: "anthropic", modelID: "claude-opus-4-5-thinking" },
-    parts: [{ type: "text", text: "请帮我分析这段代码的性能问题" }],
+    parts: [{ type: "text", text: "Проанализируй проблемы производительности этого кода" }],
   },
 })
 
-// 注入上下文（不触发 AI 响应）
+// Внедрить контекст (без ответа AI)
 await client.session.prompt({
   path: { id: sessionId },
   body: {
     noReply: true,
-    parts: [{ type: "text", text: "你是一个专业的代码审查助手。" }],
+    parts: [{ type: "text", text: "Ты — профессиональный помощник по ревью кода." }],
   },
 })
 ```
 
-### 异步发送（不等待响应）
+### Асинхронная отправка (без ожидания ответа)
 
 ```typescript
-// 发送后立即返回，适合长时间任务
+// Отправить и сразу вернуться — для долгих задач
 await client.session.promptAsync({
   path: { id: sessionId },
   body: {
-    parts: [{ type: "text", text: "请重构整个模块" }],
+    parts: [{ type: "text", text: "Отрефактори весь модуль" }],
   },
 })
 
-// 通过事件监听获取响应
+// Ответ забирать через подписку на события
 ```
 
-### 文件操作
+### Операции с файлами
 
 ```typescript
-// 搜索文本内容
+// Поиск текстового содержимого
 const textResults = await client.find.text({
   query: { pattern: "function.*opencode" },
 })
 
-// 查找文件（支持 glob 模式）
+// Поиск файлов (поддерживает glob-шаблоны)
 const files = await client.find.files({
   query: { query: "*.ts" },
 })
 
-// 只查找目录
+// Только каталоги
 const dirs = await client.find.files({
   query: { query: "src", dirs: "true" },
 })
 
-// 读取文件内容
+// Чтение содержимого файла
 const content = await client.file.read({
   query: { path: "src/index.ts" },
 })
 
-// 获取文件状态（git 变更）
+// Статус файлов (изменения git)
 const status = await client.file.status()
 ```
 
-### TUI 控制
+### Управление TUI
 
 ```typescript
-// 向输入框追加文本
+// Дописать текст в поле ввода
 await client.tui.appendPrompt({
-  body: { text: "请检查这个文件" },
+  body: { text: "Проверь этот файл" },
 })
 
-// 提交当前输入
+// Отправить текущий ввод
 await client.tui.submitPrompt()
 
-// 清空输入
+// Очистить ввод
 await client.tui.clearPrompt()
 
-// 显示通知
+// Показать уведомление
 await client.tui.showToast({
-  body: { 
-    message: "任务完成！", 
+  body: {
+    message: "Задача выполнена!",
     variant: "success",
-    duration: 3000,  // 显示 3 秒
+    duration: 3000,  // Показывать 3 секунды
   },
 })
 
-// 打开对话框
+// Открыть диалоги
 await client.tui.openHelp()
 await client.tui.openSessions()
 await client.tui.openThemes()
 await client.tui.openModels()
 
-// 执行 TUI 命令
+// Выполнить команду TUI
 await client.tui.executeCommand({
   body: { command: "agent_cycle" },
 })
@@ -386,70 +387,70 @@ await client.tui.executeCommand({
 
 ---
 
-## 实时事件监听
+## Слушание событий реального времени
 
-### 订阅事件流
+### Подписка на поток событий
 
 ```typescript
 const events = await client.event.subscribe()
 
 for await (const event of events.stream) {
-  console.log(`事件类型: ${event.type}`)
-  console.log(`事件数据:`, event.properties)
-  
-  // 根据事件类型处理
+  console.log(`Тип события: ${event.type}`)
+  console.log(`Данные события:`, event.properties)
+
+  // Обработка по типу события
   switch (event.type) {
     case "message.updated":
-      console.log("消息更新:", event.properties.info)
+      console.log("Сообщение обновлено:", event.properties.info)
       break
     case "session.idle":
-      console.log("会话空闲:", event.properties.sessionID)
+      console.log("Сессия простаивает:", event.properties.sessionID)
       break
     case "permission.updated":
-      console.log("权限请求:", event.properties)
+      console.log("Запрос права:", event.properties)
       break
   }
 }
 ```
 
-### 常用事件类型
+### Частые типы событий
 
-| 事件类型 | 说明 |
+| Тип события | Описание |
 |---------|------|
-| `message.updated` | 消息内容更新 |
-| `message.part.updated` | 消息部分更新（含 delta 增量） |
-| `session.status` | 会话状态变更（idle/busy/retry） |
-| `session.idle` | 会话进入空闲状态 |
-| `permission.updated` | 权限请求待处理 |
-| `file.edited` | 文件被编辑 |
-| `todo.updated` | Todo 列表更新 |
+| `message.updated` | Обновление содержимого сообщения |
+| `message.part.updated` | Обновление части сообщения (включая delta-приращения) |
+| `session.status` | Смена статуса сессии (idle/busy/retry) |
+| `session.idle` | Сессия перешла в простой |
+| `permission.updated` | Ожидающий запрос права |
+| `file.edited` | Файл отредактирован |
+| `todo.updated` | Список Todo обновлён |
 
-> 完整事件类型列表请参阅 [5.10b API 参考](./10b-sdk-reference#事件类型完整列表)
+> Полный список типов событий — в разделе [5.10b Справочник API](./10b-sdk-reference#полный-список-типов-событий)
 
 ---
 
-## 类型导入
+## Импорт типов
 
-SDK 提供完整的 TypeScript 类型定义：
+SDK предоставляет полные определения типов TypeScript:
 
 ```typescript
-import type { 
-  // 核心类型
+import type {
+  // Главные типы
   Session,
   Message,
   Part,
-  
-  // 事件类型
+
+  // Типы событий
   Event,
   EventMessageUpdated,
   EventSessionIdle,
-  
-  // 配置类型
+
+  // Типы конфигурации
   Config,
   AgentConfig,
   ProviderConfig,
-  
-  // 其他
+
+  // Прочие
   Todo,
   Permission,
   Agent,
@@ -460,37 +461,37 @@ import type {
 
 ---
 
-## 错误处理
+## Обработка ошибок
 
-### 标准错误处理
+### Стандартная обработка ошибок
 
 ```typescript
 try {
-  const session = await client.session.get({ 
-    path: { id: "invalid-id" } 
+  const session = await client.session.get({
+    path: { id: "invalid-id" }
   })
 } catch (error) {
-  console.error("获取会话失败:", (error as Error).message)
+  console.error("Не удалось получить сессию:", (error as Error).message)
 }
 ```
 
-### 使用 throwOnError 选项
+### Опция throwOnError
 
 ```typescript
-// 全局配置
+// Глобальная настройка
 const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
-  throwOnError: true,  // 所有请求出错都抛出异常
+  throwOnError: true,  // Все ошибочные запросы бросают исключения
 })
 
-// 或在单个请求中使用
+// Или в отдельном запросе
 const result = await client.session.get({
   path: { id: sessionId },
   throwOnError: true,
 })
 ```
 
-### 检查返回值
+### Проверка возвращаемого значения
 
 ```typescript
 const result = await client.session.get({
@@ -498,15 +499,15 @@ const result = await client.session.get({
 })
 
 if (result.error) {
-  console.error("错误:", result.error)
+  console.error("Ошибка:", result.error)
 } else {
-  console.log("会话:", result.data)
+  console.log("Сессия:", result.data)
 }
 ```
 
 ---
 
-## 实战示例：批量代码审查
+## Боевой пример: пакетное ревью кода
 
 ```typescript
 import { createOpencode } from "@opencode-ai/sdk"
@@ -520,35 +521,35 @@ async function batchCodeReview(directory: string) {
   })
 
   try {
-    // 创建会话
+    // Создать сессию
     const session = await client.session.create({
-      body: { title: `批量代码审查 - ${directory}` },
+      body: { title: `Пакетное ревью кода - ${directory}` },
     })
     const sessionId = session.data!.id
 
-    // 查找所有 TypeScript 文件
+    // Найти все TypeScript-файлы
     const files = await client.find.files({
       query: { query: "*.ts", directory },
     })
 
-    console.log(`找到 ${files.data?.length} 个文件`)
+    console.log(`Найдено файлов: ${files.data?.length}`)
 
-    // 逐个审查
+    // Ревью по одному
     for (const file of files.data ?? []) {
-      console.log(`审查: ${file}`)
-      
+      console.log(`Ревью: ${file}`)
+
       await client.session.prompt({
         path: { id: sessionId },
         body: {
-          parts: [{ 
-            type: "text", 
-            text: `请审查文件 ${file}，检查潜在问题和改进建议。` 
+          parts: [{
+            type: "text",
+            text: `Проверь файл ${file}, найди потенциальные проблемы и предложи улучшения.`
           }],
         },
       })
     }
 
-    console.log("审查完成！")
+    console.log("Ревью завершено!")
   } finally {
     server.close()
   }
@@ -559,41 +560,41 @@ batchCodeReview("./src")
 
 ---
 
-## 踩坑提醒
+## Типичные проблемы
 
-| 现象 | 原因 | 解决 |
+| Симптом | Причина | Решение |
 |-----|-----|-----|
-| SDK 连接失败 | 服务器未启动 | 先运行 `opencode serve` 或使用 `createOpencode()` |
-| 端口冲突 | 默认端口 4096 被占用 | 指定其他端口 `port: 4097` |
-| 类型错误 | SDK 版本不匹配 | 更新到最新版本 `npm update @opencode-ai/sdk` |
-| 超时错误 | 服务器启动慢或网络问题 | 增加 `timeout` 值 |
-| 事件流中断 | 连接断开 | 实现重连逻辑 |
-| 响应格式困惑 | `responseStyle` 配置 | 默认为 `fields`，返回 `{ data, error, request, response }` |
+| Не удаётся подключиться через SDK | Сервер не запущен | Сначала выполните `opencode serve` или используйте `createOpencode()` |
+| Конфликт портов | Порт 4096 по умолчанию занят | Укажите другой порт `port: 4097` |
+| Ошибка типов | Несовпадение версий SDK | Обновитесь: `npm update @opencode-ai/sdk` |
+| Ошибка тайм-аута | Медленный старт сервера или проблемы сети | Увеличьте значение `timeout` |
+| Обрыв потока событий | Разорвано соединение | Реализуйте логику переподключения |
+| Путаница с форматом ответа | Настройка `responseStyle` | По умолчанию `fields`, возвращает `{ data, error, request, response }` |
 
 ---
 
-## 本课小结
+## Итоги урока
 
-你学会了：
+Вы научились:
 
-1. **安装 SDK**：`npm install @opencode-ai/sdk`
-2. **三种使用方式**：
-   - `createOpencode()` - 服务器 + 客户端
-   - `createOpencodeClient()` - 仅客户端
-   - `createOpencodeTui()` - 启动 TUI
-3. **基础 API**：会话管理、消息发送、文件操作、TUI 控制
-4. **事件监听**：实时接收状态变更
-
----
-
-## 相关资源
-
-- [5.10b API 参考](./10b-sdk-reference) - 完整 API 文档
-- [5.9 远程开发](./09a-remote-basics) - HTTP Server 详解
-- [官方 SDK 文档](https://opencode.ai/docs/sdk)
+1. **Установке SDK**: `npm install @opencode-ai/sdk`
+2. **Трём способам использования**:
+   - `createOpencode()` — сервер + клиент
+   - `createOpencodeClient()` — только клиент
+   - `createOpencodeTui()` — запуск TUI
+3. **Базовым API**: ведение сессий, отправка сообщений, операции с файлами, управление TUI
+4. **Слушанию событий**: получение изменений статуса в реальном времени
 
 ---
 
-## 下一课预告
+## Связанные материалы
 
-> [5.10b API 参考](./10b-sdk-reference) 将详细介绍所有 20 个 API 模块加 1 个权限响应方法、完整类型定义和 32 种事件类型。
+- [5.10b Справочник API](./10b-sdk-reference) — полная документация API
+- [5.9 Удалённая разработка](./09a-remote-basics) — подробно о HTTP-сервере
+- [Официальная документация SDK](https://opencode.ai/docs/sdk)
+
+---
+
+## Анонс следующего урока
+
+> В разделе [5.10b Справочник API](./10b-sdk-reference) подробно разберём все 20 модулей API плюс 1 метод ответа на права, полные определения типов и 32 типа событий.

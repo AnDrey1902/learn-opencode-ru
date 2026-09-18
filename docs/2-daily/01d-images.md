@@ -26,7 +26,7 @@ prerequisite:
 Краткое изложение ключевых идей урока:
 
 <img src="/images/2-daily/01d-images-notes.mini.jpeg" 
-     alt="使用图片与 AI 对话学霸笔记" 
+     alt="Картинки в диалоге с AI — шпаргалка" 
      data-zoom-src="/images/2-daily/01d-images-notes.jpeg" />
 
 ---
@@ -122,7 +122,7 @@ OpenCode предлагает три способа показать изобр�
 
 ```
 ┌─────────────────────────────────────┐
-│  请帮我分析这个报错 [Image 1]        │
+│  Проанализируй эту ошибку [Image 1]        │
 └─────────────────────────────────────┘
 ```
 
@@ -150,13 +150,13 @@ echo $XDG_SESSION_TYPE
 
 ::: code-group
 
-```bash [X11（显示 x11）]
+```bash [X11(дисплей x11)]
 sudo apt install xclip
-# 或
+# или
 sudo apt install xsel
 ```
 
-```bash [Wayland（显示 wayland）]
+```bash [Wayland(дисплей wayland)]
 sudo apt install wl-clipboard
 ```
 
@@ -205,9 +205,9 @@ sudo apt install wl-clipboard
 **Пример диалога**
 
 ```
-用户：这个报错是什么意思？[Image 1]
+Пользователь:Что значит эта ошибка? [Image 1]
 
-AI：这个错误表示模块找不到。从截图看，问题出在...
+AI:Ошибка означает, что модуль не найден. Судя по скриншоту, проблема в...
 ```
 
 ---
@@ -251,17 +251,17 @@ AI：这个错误表示模块找不到。从截图看，问题出在...
 **Если это Linux и вставка не работает**:
 
 ```bash
-# 1. 确认显示服务器类型
+# 1. Определяем тип дисплейного сервера
 echo $XDG_SESSION_TYPE
-# 输出应该是 x11 或 wayland
+# Вывод должен быть x11 или wayland
 
-# 2. 检查是否安装了对应工具
-# X11 用户：
+# 2. Проверяем, стоят ли нужные инструменты
+# Пользователям X11:
 which xclip
-# 或
+# или
 which xsel
 
-# Wayland 用户：
+# Пользователям Wayland:
 which wl-paste
 ```
 
@@ -272,7 +272,7 @@ which wl-paste
   ```bash
   # X11
   xclip -selection clipboard -t image/png -o > /tmp/test.png
-  # 如果生成了 test.png 文件，说明工具正常
+  # Если появился файл test.png — инструменты в порядке
 
   # Wayland
   wl-paste -t image/png > /tmp/test.png
@@ -290,8 +290,8 @@ which wl-paste
 
 | Провайдер | Модели с поддержкой изображений |
 |--------|---------------|
-| OpenAI | GPT-5.2、GPT-5 |
-| Anthropic | Claude Opus 4.6、Claude Sonnet 4.6 |
+| OpenAI | GPT-5.2,GPT-5 |
+| Anthropic | Claude Opus 4.6,Claude Sonnet 4.6 |
 | Google | Gemini 3.1 Pro/Flash |
 | Moonshot AI | **Kimi K2.5** (рекомендуемая китайская модель) |
 
@@ -438,12 +438,12 @@ which wl-paste
 **Ключевые детали реализации** (`clipboard.ts:30-74`):
 
 ```typescript
-// 读取剪贴板图片的跨平台实现
+// Кроссплатформенное чтение картинки из буфера обмена
 if (os === "darwin") {
-  // macOS: 使用 osascript 读取剪贴板图片
+  // macOS: читаем картинку из буфера через osascript
 }
 if (os === "win32" || release().includes("WSL")) {
-  // Windows: 使用 PowerShell 读取剪贴板
+  // Windows: читаем буфер через PowerShell
 }
 if (os === "linux") {
   // Linux Wayland: wl-paste -t image/png
