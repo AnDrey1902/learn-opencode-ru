@@ -210,7 +210,34 @@ kbd {
 }
 
 .VPHome .VPFeatures .items {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
+  margin: 0;
+}
+
+.VPHome .VPFeatures .items > .item,
+.VPHome .VPFeatures .items > .item.grid-2,
+.VPHome .VPFeatures .items > .item.grid-3,
+.VPHome .VPFeatures .items > .item.grid-4,
+.VPHome .VPFeatures .items > .item.grid-6 {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .VPHome .VPFeatures .items {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .VPHome .VPFeatures .items {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .VPHome .VPFeatures .VPFeature {
@@ -241,12 +268,6 @@ kbd {
 .VPHome .VPFeatures .VPFeature .icon img {
   width: 28px;
   height: 28px;
-}
-
-@media (min-width: 960px) {
-  .VPHome .VPFeatures .items {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 /* Секции главной: щедрый ритм, единый контейнер */
