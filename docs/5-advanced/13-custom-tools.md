@@ -26,6 +26,22 @@ prerequisite:
      alt="Шпаргалка урока: 5.13 Свои инструменты"
      data-zoom-src="/images/5-advanced/13-custom-tools-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Создание инструментов — файлы в `.opencode/tool/`, файл = имя инструмента.
+2. Структура: `description`, `args` (Zod-схема), `execute`.
+3. Несколько инструментов в одном файле — формат имени `файл_экспорт`.
+4. Параметры — типы Zod: string, optional, default, enum, boolean, array, object.
+5. Контекст: sessionID, messageID, agent, abort (AbortSignal).
+6. Зависимости — через `.opencode/package.json`.
+7. Лимиты вывода: макс. 2000 строк / 50 KB.
+8. Отключение: `tools` в конфиге, wildcard `math_*`.
+9. Дебаг: `/tools`, `OPENCODE_DEBUG=1`, `bun check`.
+10. Ошибки: расширение файла, Zod-схема, обрезка вывода, Windows `python` против `python3`.
+
+</details>
+
 ---
 
 Создаваемые вами функции, которые LLM вызывает в диалоге, — это свои инструменты. Они работают бок о бок со встроенными инструментами OpenCode (`read`, `write`, `bash`).

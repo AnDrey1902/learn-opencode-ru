@@ -25,6 +25,18 @@ prerequisite:
 
 <img src="/images/5-advanced/config-basics-notes.mini.jpeg" alt="Шпаргалка урока: основы конфигурации" data-zoom-src="/images/5-advanced/config-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Иерархия приоритетов: переменные окружения > проект > глобально.
+2. Настройки сливаются (merge), а НЕ перезаписываются.
+3. `model` — основная модель (`provider/model`), `small_model` — дешёвая для простых задач.
+4. `provider` — в ЕДИНСТВЕННОМ числе (не providers!) с полями `apiKey`, `baseURL`, `timeout`.
+5. Подстановки: `{env:VARIABLE}` — переменная окружения, `{file:path}` — содержимое файла.
+6. Ловушки: `providers` → надо `provider`; `variables empty` → проверить env.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

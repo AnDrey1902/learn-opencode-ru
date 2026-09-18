@@ -26,6 +26,21 @@ prerequisite:
 
 <img src="/images/5-advanced/06a-themes-notes.mini.jpeg" alt="Шпаргалка урока: система тем" data-zoom-src="/images/5-advanced/06a-themes-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Терминал обязан поддерживать truecolor (24 бит) — проверка через `$COLORTERM`.
+2. Переключение тем: команда `/theme` или `Ctrl+X → T`.
+3. 32+ встроенных тем: opencode (по умолчанию), tokyonight, catppuccin, gruvbox, nord, dracula, github, cursor.
+4. Тема по умолчанию: `"theme": "tokyonight"` в `opencode.jsonc`.
+5. Ключ — `theme` (не `tui.theme`!).
+6. Свои темы: `.opencode/themes/my-theme.json` (primary, diffRemoved, syntaxKeyword; тёмная/светлая).
+7. TUI: `scroll_speed`, `scroll_acceleration` (macOS), `diff_style` (auto/stacked).
+8. Редактор: переменная `EDITOR` с `--wait` для GUI-редакторов (VS Code, Cursor, Vim).
+9. Ловушки: нет truecolor → 256 цветов; `tui.theme` вместо `theme`; неверный путь своей темы; нет `--wait`.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

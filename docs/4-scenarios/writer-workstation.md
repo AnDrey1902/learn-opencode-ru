@@ -30,6 +30,20 @@ prerequisite:
      alt="Шпаргалка урока: A9 Авторская станция"
      data-zoom-src="/images/4-scenarios/writer-workstation-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Три столпа: Agent (AI-личность) + Skill (сложные инструкции) + команды (быстрые).
+2. Agent писателя: каталог `.opencode/agent/`, файл = имя агента, frontmatter с mode (не agent): name, description.
+3. Пример: `name: novelist`, `mode: subagent`, `temperature: 0.8`.
+4. Skill: структура `skill/<название>/SKILL.md`, имена строчными (цифры, дефисы, 1–64 символа).
+5. Быстрые команды: каталог `.opencode/command/`, `$ARGUMENTS` для параметров, `subtask: true` для подзадач.
+6. Права: allow (грузится сразу), deny (скрыт), ask (запрос перед загрузкой).
+7. Проверка: перезапуск OpenCode, Tab для переключения, проверка команд.
+8. Ошибки: Agent не работает — неверный путь; ошибка frontmatter — неверные поля; Skill не найден — структура каталога; ошибка команды — синтаксис аргументов.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

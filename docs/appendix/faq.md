@@ -12,6 +12,19 @@ description: Ответы на частые вопросы по использо
      alt="Шпаргалка: частые вопросы (FAQ)"
      data-zoom-src="/images/appendix/faq-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Установка: `command not found` → PATH; Windows → Scoop/Choco/npm; macOS → `xattr -d`; обновление → чистка `~/.cache/opencode`.
+2. Сеть: таймауты → прокси (`export HTTP_PROXY=...`); сертификаты компании → `NODE_EXTRA_CA_CERTS=...`.
+3. Модели: ошибки ключа → формат `sk-ant-xxx`; недоступны → баланс/лимиты; 3 способа переключения; multi-provider JSON.
+4. Права: `permission.allow` от частых подтверждений; Ctrl+C / `/undo`; режим Plan vs Build; read/edit/bash allow/ask.
+5. Скорость: медленно → прокси/маленькая модель/compact; длинный контекст → `/compact`; память → `watcher.ignore`, игнор `node_modules`.
+6. Приёмы: память AI → `AGENTS.md` или `CLAUDE.md`; команды export/session/history; файл не меняется → режим Plan.
+7. Совместимость: кракозябры → WezTerm/Alacritty + `LANG=en_US.UTF-8`; хоткеи → проверить перехват; VS Code → `code --install-extension`.
+
+</details>
+
 > Возник вопрос? Сначала сюда
 
 ---

@@ -28,6 +28,17 @@ OpenCode встраивается в процессы GitLab через конв
      alt="Шпаргалка урока: интеграция GitLab"
      data-zoom-src="/images/5-advanced/gitlab-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. GitHub против GitLab: установка (авто против ручной), триггер (`/opencode` против `@opencode`), CI-компонент (встроенный против nagyv/gitlab-opencode@2).
+2. GitLab CI: авторизация как File-переменная, `include` в `.gitlab-ci.yml`.
+3. GitLab Duo: glab CLI, GitLab Runner, авто-создание ветки и MR.
+4. Примеры: `@opencode explain this issue`, `fix this`, `review this merge request`.
+5. Ошибки: тип переменной (File, не Variable), права glab (api, read/write_repository), git push отклонён, приватные инстансы (fork компонента).
+
+</details>
+
 ## Чем отличается от интеграции GitHub
 
 Прежде чем настраивать, важно понять разницу интеграций GitLab и GitHub:

@@ -28,6 +28,18 @@ prerequisite:
      alt="Шпаргалка урока: B4 CI/CD-интеграция"
      data-zoom-src="/images/4-scenarios/coder-cicd-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Идея: GitHub-агент вместо ручного кода; триггер через `/oc` или `/opencode` в комментариях; API-ключи через GitHub Secrets.
+2. Установка одной командой: `opencode github install` → установка App, генерация `.github/workflows/opencode.yml`, подсказка по Secrets.
+3. Коммит и пуш workflow: `git add .github/workflows/opencode.yml && commit && push`.
+4. Триггеры из Issue/PR: `/oc summarize`, `/opencode review`, `/oc test`.
+5. Secrets: Settings → Secrets → Actions; ключ `OPENCODE_API_KEY`.
+6. Ловушки: не сработало — нужен `/oc` или `/opencode`; нет API Key — проверить Secrets; слишком широкие права — настроить по документации.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

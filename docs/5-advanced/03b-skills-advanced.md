@@ -27,6 +27,19 @@ prerequisite:
 
 <img src="/images/5-advanced/03b-skills-advanced-notes.mini.jpeg" alt="Шпаргалка урока: продвинутые Skill" data-zoom-src="/images/5-advanced/03b-skills-advanced-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Три слоя: ~100 слов (name+desc) → 300–500 слов (SKILL.md) → детальные документы (references/).
+2. Структура SKILL.md: YAML frontmatter (name, description) + рабочий процесс + фильтры.
+3. Исполняемые скрипты `scripts/` (setup.py, export.sh, validate.js) — для детерминированных операций.
+4. Создание за 5 шагов: потребность → name+description → SKILL.md → references/ → тестирование.
+5. Итеративная разработка: вместе с Claude, учиться на ошибках, постоянная оптимизация.
+6. Аудит безопасности: содержимое, скрипты, сетевые запросы, зависимости, ресурсы.
+7. Доверие источникам: официальный — высокое, известный автор — среднее, неизвестный — низкое.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

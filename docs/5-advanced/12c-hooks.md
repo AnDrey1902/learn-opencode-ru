@@ -28,6 +28,18 @@ prerequisite:
      alt="Шпаргалка урока: хуки"
      data-zoom-src="/images/5-advanced/hooks-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Два типа Hook: Plugin Hook (код .ts/.js, гибкий) и Config Hook (JSON, ограниченный).
+2. Event Hook (прослушивание) и Functional Hook (модификация данных).
+3. Таблица: event (только чтение), tool.execute.before (да), chat.params (да), permission.ask (да), session.compacting (да).
+4. Сценарии: уведомление о завершении (event+session.idle), защита файлов (tool.execute.before), тюнинг параметров (chat.params), авторизация (permission.ask).
+5. Файлы плагинов: `.opencode/plugin/notify.ts`, `guard.ts`, `params.ts`.
+6. Ловушки: плагин не загружен → расширение; output не меняется → мутировать; событие не сработало → проверить event.type; конфликт плагинов → проверить дубли хуков.
+
+</details>
+
 ---
 
 > 💡 **Коротко**: Hook — это «интерфейс расширения» OpenCode: выполняйте свою логику при наступлении событий или перехватывайте и меняйте данные в ключевых процессах.

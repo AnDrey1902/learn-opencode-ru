@@ -30,6 +30,21 @@ prerequisite:
      alt="Шпаргалка урока: 5.11a Интеграция корпоративной аутентификации"
      data-zoom-src="/images/5-advanced/enterprise-auth-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Цель: OpenCode «из коробки» в корпоративной сети, без ручного ввода Key/Token.
+2. Способ A — переменные окружения: K8s/CI-секреты; без разработки; без автообновления токена.
+3. Способ B — well-known: единая раздача конфига и токена; только серверная настройка; только доверенная сеть.
+4. Способ C — Auth-плагин: OAuth/краткосрочные токены; нужен TypeScript; автообновление.
+5. Пример well-known: GET /.well-known/opencode → auth.command → stdout=token → auth.json.
+6. Конфиг: disabled.providers, провайдер corp-gateway, model, auth.command с corpctl.
+7. Метод авторизации: `auth.methods(api)` → `{type:"success", key: token}`.
+8. Практики: короткий токен → плагин; well-known — только доверенная сеть; свой провайдер через `opencode auth login`.
+9. Ловушки: токен не пишется в shell rc; /.well-known/opencode недоступен → ошибка запуска; config.plugin может запустить установку плагина.
+
+</details>
+
 ---
 
 Этот урок — про одно дело: **пусть OpenCode в корпоративном интранете работает «из коробки»**.

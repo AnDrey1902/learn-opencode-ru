@@ -30,6 +30,18 @@ prerequisite:
      alt="Шпаргалка урока: продвинутые паттерны Skill"
      data-zoom-src="/images/5-advanced/skills-patterns-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Skill + MCP: MCP = кухня (инструменты), Skill = рецепт (использование); без Skill — кухня без рецепта.
+2. Три области: документация, автоматизация процессов, улучшение MCP.
+3. 5 паттернов Workflow: Sequential, Multi-MCP coordination, Iterative optimization, Context selection, Domain intelligence.
+4. Распространение: локальный каталог, доп. пути, удалённый URL, Git-репозиторий.
+5. JSON-конфиг: `"skills": {"paths": ["~/my-skills"], "urls": ["https://.../index.json"]}`.
+6. Ловушки: ошибка загрузки — формат index.json; конфликт имён — перезапись; хаос порядка — маркировка 1/2/3.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

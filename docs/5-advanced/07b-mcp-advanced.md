@@ -27,6 +27,20 @@ prerequisite:
 
 <img src="/images/5-advanced/07b-mcp-advanced-notes.mini.jpeg" alt="Шпаргалка урока: MCP — продвинутый уровень" data-zoom-src="/images/5-advanced/07b-mcp-advanced-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. OAuth: автопоток — обнаружение 401 → старт OAuth → токен хранится локально.
+2. Ручной OAuth: clientId, clientSecret, scope (credentials нужны заранее).
+3. Команды: `mcp auth`, `mcp auth list`, `mcp list`, `mcp logout`, `mcp debug`.
+4. Права инструментов: глобальное отключение через wildcard-запреты; включение на уровне агента.
+5. Популярные серверы: Puppeteer, Memory, SQLite, Slack, GitHub, Postgres, Context7, Grep.
+6. Конфигурация: Puppeteer, Memory, SQLite, Slack (токены через env-переменные).
+7. Без OAuth: `"oauth": false` + Bearer-токен через env-переменную.
+8. Практики: включать только нужное, массово гасить через wildcard, проверять токены, следить за расходом.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

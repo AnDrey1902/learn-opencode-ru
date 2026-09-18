@@ -27,6 +27,17 @@ prerequisite:
      alt="Шпаргалка урока: поиск и чтение веба"
      data-zoom-src="/images/5-advanced/23-web-search-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Два инструмента: `websearch` (поиск, как Google) и `webfetch` (забрать URL, как открыть страницу).
+2. Включение: `webfetch` включён по умолчанию; `websearch` требует Zen-модель ИЛИ `OPENCODE_ENABLE_EXA=true` ИЛИ `OPENCODE_EXPERIMENTAL=true`.
+3. Параметры: websearch — query, numResults (8), type (auto/fast/deep), livecrawl (fallback); webfetch — url, format (markdown/text/html), timeout (30–120 с).
+4. Советы: пусть AI выбирает инструмент; конкретные ключевые слова; URL с http(s)://; формат markdown для документов.
+5. Ошибки: env не задан, формат URL, страница >5MB, блокировка сайта.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

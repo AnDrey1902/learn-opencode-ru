@@ -15,6 +15,20 @@ description: Быстро находите и решайте частые про
      alt="Шпаргалка: диагностика"
      data-zoom-src="/images/appendix/troubleshoot-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Логи: macOS/Linux — `~/.local/share/opencode/log/`; Windows — `%USERPROFILE%\\.local\\share\\opencode\\log\\`; отладка: `opencode --log-level DEBUG --print-logs`.
+2. Запуск: `command not found` → `npm install -g opencode-ai`; кэш → `rm -rf ~/.cache/opencode`; ProviderInitError → сброс конфига.
+3. Аутентификация: AuthenticationError → `auth list`; RateLimitError → смена модели/тарифа; перелогин: `opencode auth login` или `/connect`.
+4. Модели: AI_APICallError → сеть + ключ; Model not found → формат `provider/model`; пустой ответ → `/compact` или `/new`.
+5. Файлы: ETIMEDOUT → прокси; SSL/TLS → `NODE_EXTRA_CA_CERTS`; выбрать отечественную модель.
+6. Интерфейс: кракозябры → `LANG=en_US.UTF-8`; цвета → `COLORTERM=truecolor`; терминалы: WezTerm/Alacritty/iTerm2.
+7. Диагностика: `opencode --version`, `auth list`, `models`, `--log-level DEBUG --print-logs`.
+8. Типовые ошибки: AuthenticationError (креды → `auth list`), ETIMEDOUT (сеть → прокси), Model not found (формат → `provider/model`), ProviderInitError (конфиг → сброс).
+
+</details>
+
 ---
 
 ## Логи и места хранения

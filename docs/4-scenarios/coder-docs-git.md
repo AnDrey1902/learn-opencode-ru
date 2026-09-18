@@ -29,6 +29,19 @@ prerequisite:
      alt="Шпаргалка урока: B3 Документация и Git"
      data-zoom-src="/images/4-scenarios/coder-docs-git-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Сценарии автодокументации: README (создание/обновление), API-дока (после реализации), commit-сообщение (перед коммитом), PR-описание (при создании PR).
+2. README: `@explore`; состав: имя проекта, фичи, быстрый старт, примеры, конфигурация, контрибьютинг, лицензия.
+3. Commit-сообщения: Conventional Commits, формат `type(scope): desc` (feat/fix/docs/style/refactor/test/chore).
+4. PR-описание: `!git log --oneline -10` → обзор изменений, детали, тесты, связанные Issues.
+5. `/undo` и `/redo` с Git: откат/восстановление, нужен `git init`.
+6. JSDoc: параметры, возвращаемые значения, примеры.
+7. Ловушки: README неточный — `@explore`; неверный формат коммита — Conventional Commits; `/undo` не работает — не Git-репозиторий.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

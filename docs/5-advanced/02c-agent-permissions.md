@@ -27,6 +27,20 @@ prerequisite:
 
 <img src="/images/5-advanced/02c-agent-permissions-notes.mini.jpeg" alt="Шпаргалка урока: права и безопасность Agent" data-zoom-src="/images/5-advanced/02c-agent-permissions-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Архитектура прав: default → global permission → agent permission (последнее совпадение побеждает!).
+2. Три действия: allow (разрешить), ask (спросить), deny (запретить).
+3. 12+ типов прав: read, edit, glob, grep, list, bash, task, skill, webfetch, lsp, websearch, codesearch и др.
+4. Синтаксис: простой (`"permission": {"edit": "allow"}`) или объектный (`"bash": {"git *": "allow", "rm -rf*": "deny"}`).
+5. Wildcards: `*` — любые символы (0+), `?` — один символ.
+6. Встроенная безопасность: .env защищён, doom_loop (детект циклов), external_directory.
+7. Практики: минимальные права, чувствительное → ask, регулярный аудит, явный allow.
+8. Пример bash: git status→allow, git push*→ask, npm publish*→deny, rm -rf*→deny, sudo*→deny.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

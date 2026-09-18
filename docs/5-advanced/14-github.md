@@ -28,6 +28,20 @@ prerequisite:
      alt="Шпаргалка урока: 5.14 Интеграция GitHub"
      data-zoom-src="/images/5-advanced/github-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Обзор: упоминание `/opencode` или `/oc` в Issue/PR-комментариях, запуск на своём раннере.
+2. Workflow: файл `.github/workflows/opencode.yml`, триггеры `issue_comment`, `pull_request_review_comment`.
+3. Опции: model (обязательно), agent, prompt, use_github_token, mentions.
+4. Токены: OIDC (по умолчанию), GITHUB_TOKEN (встроенный), PAT (ручной).
+5. События: пользовательские (issue_comment, PR-события) и репозиторные (schedule, workflow_dispatch).
+6. Права: read-only (id-token: write + read) против write (id-token: write + write).
+7. Сценарии: объяснение Issue, исправление, ревью PR, комментарии к строкам кода.
+8. Ошибки: у OIDC нет `id-token: write`; `/opencode` не срабатывает; Fork PR; права; mentions.
+
+</details>
+
 ## Возможности
 
 - **Разбор вопросов**: пусть OpenCode смотрит Issue и объясняет проблему

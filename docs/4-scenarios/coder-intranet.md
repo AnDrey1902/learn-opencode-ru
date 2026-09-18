@@ -30,6 +30,18 @@ prerequisite:
      alt="Шпаргалка урока: B6 Интранет и офлайн"
      data-zoom-src="/images/4-scenarios/coder-intranet-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Идея: отключить внешние запросы + доступ к списку моделей + доступ к шлюзу.
+2. Два варианта списка моделей: A — полный офлайн (`OPENCODE_DISABLE_MODELS_FETCH=true` + `OPENCODE_MODELS_PATH`); B — зеркало внутри сети (`OPENCODE_MODELS_URL`).
+3. Внешние запросы: models.dev → `DISABLE_MODELS_FETCH`, npm → `npm config set registry`, GitHub → `DISABLE_UPDATE_CHECK`, LSP → `DISABLE_LSP_DOWNLOAD`.
+4. Ловушки: `@opencode-ai/plugin` зависает → `mkdir -p ~/.config/opencode/node_modules`; надолго → npm-зеркало или `DISABLE_PROJECT_CONFIG=true`.
+5. Конфиг шлюза: `opencode.json` с `enabled_providers`, `api` (внутренний URL), `model` (например, `corp-gateway/qwen2.5-72b`).
+6. Отладка: `opencode run "test" --print-logs --log-level DEBUG`, маркеры `service=bun`; 401/403 — проверить токен.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

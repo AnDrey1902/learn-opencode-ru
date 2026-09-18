@@ -30,6 +30,19 @@ prerequisite:
      alt="Шпаргалка урока: 5.10b Справочник API"
      data-zoom-src="/images/5-advanced/10b-sdk-reference-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Обзор: 21 API-модуль — Session (ядро, 22 метода), File/Find/Config, TUI/Auth/Provider, MCP/LSP/Formatter, PTY/Tool.
+2. Session — ключевые методы: create, get, list, delete, update, prompt (синхр.), promptAsync (асинхр.), messages/todo/diff/status.
+3. Управление сессиями: abort, fork, revert, unrevert.
+4. 35+ типов событий: message, session, permission, file, tui.toast, pty, vcs.
+5. Типы: Session, Message, Part (TextPart/ToolPart/FilePart), Todo, Agent.
+6. Трюки: проверять result.error вместо data; noReply:true для контекста; promptAsync для долгих задач.
+7. Ловушки: data=undefined → смотреть error; обрыв потока → ребондинг; tool.list пуст → задать provider+model; permission без ответа → postSessionIdPermissionId.
+
+</details>
+
 ---
 
 ## Обзор модулей API

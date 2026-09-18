@@ -10,6 +10,18 @@
      alt="Шпаргалка урока: инструменты отладки и диагностики"
      data-zoom-src="/images/5-advanced/22-debugging-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Ядро — видимость в runtime: Config → Skill → Agent.
+2. Дебаг конфига: `opencode debug config` — финальный слитый конфиг.
+3. Дебаг ФС: `rg search`, `rg tree`, `file read` (через ripgrep).
+4. Дебаг Agent и Skill: `debug skill`, `debug agent <name>`, ручной запуск инструмента с `--tool` и `--params`.
+5. Дебаг LSP и системы: `debug lsp diagnostics`, `debug paths`, `debug scrap` (Worktree).
+6. Шпаргалка команд: debug config, debug skill, debug agent, debug rg search, debug paths.
+
+</details>
+
 ---
 
 ## 🎒 Перед началом

@@ -25,6 +25,18 @@ prerequisite:
 
 <img src="/images/5-advanced/config-advanced-notes.mini.jpeg" alt="Шпаргалка урока: продвинутая конфигурация" data-zoom-src="/images/5-advanced/config-advanced-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. TUI: `scroll_speed`, `diff_style`; Keybinds: leader-префикс (`keybinds` — во МНОЖЕСТВЕННОМ!).
+2. Поведение: `share` (manual/auto/disabled), `compaction` (auto/prune), `watcher` (игнорирует node_modules).
+3. Функциональные конфиги — 8 модулей: tools, permission, agent, command, formatter, mcp, plugin, lsp.
+4. Только `keybinds` пишется во множественном числе!
+5. Экспериментальное: hook, batch_tool, openTelemetry.
+6. Ловушки: keybind→keybinds, permissions→permission, agents→agent, tui.theme→theme, tools→permission.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

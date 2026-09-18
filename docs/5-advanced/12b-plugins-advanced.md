@@ -28,6 +28,20 @@ prerequisite:
      alt="Шпаргалка урока: 5.12b Продвинутые плагины"
      data-zoom-src="/images/5-advanced/plugins-advanced-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Два типа хуков: Event (прослушивание, не меняет данные) и Functional (перехват, меняет данные).
+2. События: command.executed, file.edited, session.created/idle/updated (9), message.updated/removed (4), LSP/permission/todo/TUI.
+3. Конвейер: Start → config → chat.message → chat.params → permission.ask → tool.execute.before → tool.execute.after.
+4. Функциональные хуки: config, chat.message (модификация сообщений), chat.params (temperature, topP), permission.ask (allow/deny/ask).
+5. Свои инструменты: tool() с Zod-схемой (args), ToolContext (sessionID, messageID, agent, abort).
+6. Auth-хуки: auth.provider, methods (api/oauth), loader.
+7. Экспериментальные хуки: session.compacting, chat.messages.transform, chat.system.transform, text.complete (API может измениться).
+8. Ловушки: хук не срабатывает → проверить имя функции; output не меняется → мутировать объект; abort не отвечает → ctx.abort.aborted в цикле.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -27,6 +27,18 @@ prerequisite:
      alt="Шпаргалка урока: 5.19 LSP-серверы"
      data-zoom-src="/images/5-advanced/lsp-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. LSP = Language Server Protocol: связывает LLM и код, диагностика.
+2. Встроенные серверы: TS (typescript), Python (pyright), Go (gopls), Rust (rust-analyzer), C/C++ (clangd), Java (jdtls), Vue, Svelte + ещё 25+.
+3. Процесс: открытие файла → расширение → запуск LSP → диагностика → LLM понимает код.
+4. Конфигурация: `lsp: false`, отключение конкретных, свой LSP с command/extensions.
+5. Советы: автоустановка, `OPENCODE_DISABLE_LSP_DOWNLOAD=true`, лицензия PHP Intelephense.
+6. Ошибки: условия активации, Java JDK 21+, проектные зависимости (eslint).
+
+</details>
+
 ---
 
 Когда AI правит код, он не знает: где определена функция, кто ссылается на переменную, какие реализации у интерфейса?

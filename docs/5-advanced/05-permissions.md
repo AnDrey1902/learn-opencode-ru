@@ -25,6 +25,19 @@ prerequisite:
 
 <img src="/images/5-advanced/05-permissions-notes.mini.jpeg" alt="Шпаргалка урока: контроль прав" data-zoom-src="/images/5-advanced/05-permissions-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Три режима прав: allow (разрешить), ask (спрашивать), deny (запретить).
+2. Глобальная конфигурация в `opencode.jsonc` → поле `permission` (именно в единственном числе!).
+3. Тонкие правила для bash: `*` = ask, `git *` = allow, `rm *` = deny — последнее совпадение побеждает.
+4. Wildcards: `*` (0+ символов), `?` (1 символ), остальное — буквальное совпадение.
+5. Разрешения: read, edit, glob/grep/list, bash, task, todoread/todowrite, webfetch/websearch, skill.
+6. Уровень агента: вложенный объект `"agent"` перекрывает глобальные права.
+7. Ловушки: permissions→permission (ед.ч.), .env требует явного allow, git push перехватывается, права агента проверяют вложенность.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

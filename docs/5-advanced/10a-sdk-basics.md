@@ -29,6 +29,19 @@ prerequisite:
      alt="Шпаргалка урока: 5.10a Основы SDK"
      data-zoom-src="/images/5-advanced/10a-sdk-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Установка: `npm install @opencode-ai/sdk`; 3 режима: `createOpencode()` (сервер+клиент, рекомендуется), `createOpencodeClient()` (только клиент), `createOpencodeTui()` (TUI).
+2. Базовый API: сессии (CRUD), промпты (sync/async), файлы, TUI-контроль.
+3. Пример: `const { client, server } = await createOpencode()` → `client.session.list()` → обязательно `server.close()`.
+4. Real-time: `event.subscribe()` → Event Stream → message.updated, session.idle, permission.updated.
+5. TypeScript-типы: Session, Message, Event, Config — полная типизация для автодополнения.
+6. События: `for await (const event of stream)` — цикл обработки SSE.
+7. Ловушки: SDK не коннектится → запустить сервер; конфликт портов → другой port; таймаут → увеличить timeout; разрыв потока → переподключение.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

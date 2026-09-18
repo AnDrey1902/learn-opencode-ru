@@ -26,6 +26,20 @@ prerequisite:
 
 <img src="/images/5-advanced/08a-ide-vscode-notes.mini.jpeg" alt="Шпаргалка урока: расширение VS Code" data-zoom-src="/images/5-advanced/08a-ide-vscode-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Редакторы: VS Code, Cursor, Windsurf, VSCodium; остальные (Zed, JetBrains) — через ACP.
+2. Установка автоматическая (рекомендуется): открыть встроенный терминал VS Code → `opencode`.
+3. Клавиши: Cmd/Ctrl+Esc (панель), Cmd/Ctrl+Shift+Esc (новая сессия), Cmd/Ctrl+Alt+K (цитата).
+4. Процесс: Cmd+Esc → выделить код → Cmd+Opt+K → ввести вопрос → Enter.
+5. Context Awareness — выделенное передаётся автоматически.
+6. Внешний редактор: переменная `EDITOR` с `--wait` (Linux/macOS/Windows PowerShell).
+7. Совместимость: VS Code/Cursor/Windsurf — да, с `--wait`; Neovim/Vim/Nano — нет.
+8. Ловушки: расширение не стоит — встроенный терминал; конфликт клавиш; редактор закрывается сразу — нет `--wait`.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -28,6 +28,17 @@ prerequisite:
      alt="Шпаргалка урока: автоматизация CLI"
      data-zoom-src="/images/5-advanced/24-cli-automation-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Четыре режима: TUI (интерактив), Run (скрипты/CI), Serve (API без UI), Web (веб-интерфейс).
+2. Ключи `opencode run`: `-m` модель, `-f` файл, `--format json`, `-c` продолжить сессию.
+3. Безопасность сервера: обязательно пароль через `OPENCODE_SERVER_PASSWORD`/`USERNAME`, `serve --hostname 0.0.0.0`.
+4. Команда `opencode pr`: клонирует PR в ветку `pr/<номер>`, импортирует ссылки сессий, работает с Fork.
+5. Сессии в CLI: `session list`, `export`, `import`, `stats`.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

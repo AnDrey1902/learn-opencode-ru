@@ -17,6 +17,22 @@ description: Полный список 75+ провайдеров моделей
      alt="Шпаргалка: список провайдеров моделей"
      data-zoom-src="/images/appendix/providers-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Подключение: `/connect` → API Key (в `~/.local/share/opencode/auth.json`) → `opencode.json`.
+2. OpenCode Zen — новичкам; официальный список проверенных моделей.
+3. Отечественные: DeepSeek (deepseek-chat/reasoner), Moonshot AI (kimi-k2), MiniMax (M2.1), Z.AI (GLM-4.7) — прямое подключение без прокси.
+4. Международные: Claude (sonnet-4, opus-4, haiku-3-5), OpenAI (gpt-4o, o1, o3-mini), Gemini (2.0-flash/pro), xAI Grok, GitHub Copilot.
+5. Облака: Amazon Bedrock, Azure OpenAI, Azure Cognitive Services.
+6. Агрегаторы: OpenRouter (100+ моделей), Groq (быстрый инференс), Cerebras, Hugging Face, Vercel AI Gateway.
+7. Локальные: Ollama (localhost:11434), LM Studio (127.0.0.1:1234), llama.cpp (127.0.0.1:8080); `num_ctx` поднять до 16k–32k.
+8. Свой провайдер: `/connect` → Other → ID + ключ; пакет `@ai-sdk/openai-compatible`; `baseURL` + models.
+9. Пирамида выбора: DeepSeek (простое) → Claude Opus 4 (максимум) → DeepSeek (цена) → Claude Sonnet 4 (код) → Gemini 1.5 Pro (длинный контекст) → Ollama+Llama3.1 (оффлайн).
+10. Дебаг: `opencode auth list`; проверить `options.baseURL`.
+
+</details>
+
 ---
 
 ## Способы настройки

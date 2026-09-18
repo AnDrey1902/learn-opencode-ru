@@ -27,6 +27,20 @@ prerequisite:
 
 <img src="/images/5-advanced/08b-acp-notes.mini.jpeg" alt="Шпаргалка урока: протокол ACP" data-zoom-src="/images/5-advanced/08b-acp-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. ACP = Agent Client Protocol — связь редактор ↔ OpenCode через JSON-RPC (stdio).
+2. Запуск: `opencode acp` с параметрами `--cwd`, `--port`, `--hostname`.
+3. Zed: `~/.config/zed/settings.json` → agent_servers с относительным путём.
+4. JetBrains: acp.json → абсолютный путь к opencode (обязательно!).
+5. Neovim: Avante.nvim (acp_providers) или CodeCompanion.nvim (adapter).
+6. Поддерживается: встроенные и свои инструменты, слэш-команды, MCP-серверы, AGENTS.md, форматтеры, система прав.
+7. Не поддерживается: /undo, /redo — используйте средства редактора.
+8. Поиск пути: `which opencode` (Linux/macOS), `where opencode` (Windows).
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

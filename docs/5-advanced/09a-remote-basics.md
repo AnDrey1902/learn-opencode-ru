@@ -25,6 +25,21 @@ prerequisite:
 
 <img src="/images/5-advanced/remote-basics-notes.mini.jpeg" alt="Шпаргалка урока: основы удалённого режима" data-zoom-src="/images/5-advanced/remote-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Архитектура: HTTP-сервер (OpenAPI 3.1) + TUI-клиент; плюсы — мульти-клиенты, удалённый доступ, скрипты.
+2. Три режима: `opencode` (TUI), `opencode serve` (API-сервер), `opencode web` (браузер).
+3. Сервер: `opencode serve --port 4096 --hostname 0.0.0.0`; порт по умолчанию 4096.
+4. Конфиг: server.port, server.hostname, server.mdns, server.cors.
+5. Веб: `opencode web` → автооткрытие браузера; доступ localhost:4096.
+6. Удалёнка: attach → подключение; `run --attach` → скрипты.
+7. Прокси: HTTPS_PROXY, HTTP_PROXY, NO_PROXY (обязательно localhost,127.0.0.1).
+8. Самоподписанные серты: NODE_EXTRA_CA_CERTS.
+9. Ловушки: CORS → `--cors`, конфликт портов → `--port`, NO_PROXY обязателен, mDNS → hostname 0.0.0.0.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

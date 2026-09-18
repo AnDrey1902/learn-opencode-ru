@@ -25,6 +25,20 @@ prerequisite:
 
 <img src="/images/5-advanced/04-commands-notes.mini.jpeg" alt="Шпаргалка урока: быстрые команды" data-zoom-src="/images/5-advanced/04-commands-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Расположение: `.opencode/command/` — вложенные каталоги поддерживаются (review.md → /review, git/commit.md → /git/commit).
+2. Два способа: Markdown (рекомендуется, гибко) против JSON (простые команды).
+3. Обязательное поле: template (JSON: поле конфига; Markdown: тело файла).
+4. Опции: description, agent, model, subtask (не засоряет основной диалог).
+5. Параметры: `$1` — первый, `$2` — второй, `$ARGUMENTS` — все параметры.
+6. Shell-вывод: `` `!bash ls -lh $1` `` — результат в диалог.
+7. Переопределение встроенных: /connect, /compact, /details, /exit, /help, /new, /undo, /share, /themes.
+8. Ловушки: команда не появляется — не в command/; параметры не работают — синтаксис; ошибка JSON — нет template.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

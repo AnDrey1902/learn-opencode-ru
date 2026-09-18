@@ -34,3 +34,6 @@ npm-debug.log*
 *.bak7
 *.bak8
 .vercel
+
+# Internal work notes (do not commit)
+PROGRESS.md

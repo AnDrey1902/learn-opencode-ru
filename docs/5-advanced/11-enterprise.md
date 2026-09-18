@@ -26,6 +26,19 @@ prerequisite:
      alt="Шпаргалка урока: 5.11 Возможности Enterprise"
      data-zoom-src="/images/5-advanced/enterprise-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Enterprise против Open Source: ядро — общее; только в enterprise — централизованное управление, SSO, внутренний AI-шлюз, приоритетная поддержка.
+2. Безопасность данных: OpenCode не хранит код/контекст; локальный процесс → API-провайдер.
+3. Пробный период: обязательно отключить шаринг (`"share":"disabled"`).
+4. Деплой: централизованная конфигурация → SSO → внутренний AI-шлюз → self-hosted.
+5. Конфиг: `"enterprise": {"url": "https://your-company.opencode.internal"}`.
+6. Приватный NPM: поддержка .npmrc, JFrog/Nexus; npm login перед запуском.
+7. Ловушки: share по умолчанию включён; npm login обязателен; конфиг через централизованное управление.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

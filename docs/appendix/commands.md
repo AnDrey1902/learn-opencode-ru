@@ -17,6 +17,20 @@ description: Полный справочник всех слэш-команд Op
      alt="Шпаргалка: слэш-команды"
      data-zoom-src="/images/appendix/commands-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Встроенные: `/new`, `/sessions`, `/models`, `/connect`, `/undo`, `/compact`, `/theme`, `/share`.
+2. Ввод `/` → меню; Ctrl+P → палитра команд; сокращений нет (`/theme`, не `/themes`).
+3. `/connect`: выбор провайдера → ввод API Key → автоконфиг (хранится в `~/.local/share/opencode/auth.json`).
+4. `/editor`: внешний редактор через `export EDITOR="code --wait"` в `.bashrc`/`.zshrc`.
+5. `/init`: генерация `.opencode/` с `rules.md` и `command/`.
+6. Свои команды: проектные `.opencode/command/*.md` и глобальные `~/.config/opencode/command/*.md`; параметры `$ARGUMENTS`, `$1`/`$2`..., `` `!command` `` (shell), `@file`.
+7. Сложные команды — JSON-способом в `config.json`.
+8. Ловушки: имена в ед.ч.; `/connect` требует рестарта; свои команды — в `.opencode/command/`.
+
+</details>
+
 ---
 
 ## Список встроенных команд

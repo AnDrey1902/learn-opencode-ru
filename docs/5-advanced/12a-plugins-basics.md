@@ -28,6 +28,18 @@ prerequisite:
      alt="Шпаргалка урока: 5.12a Основы плагинов"
      data-zoom-src="/images/5-advanced/plugins-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Плагин = JS/TS-модуль, расширяющий OpenCode через хуки.
+2. Два способа загрузки: локальные файлы (`.opencode/plugin/`) и npm-пакеты (в массиве `"plugin"`).
+3. Порядок загрузки: глобальная конфигурация → проектная → глобальные плагины → проектные плагины.
+4. Структура: экспорт асинхронной функции с контекстом (project, client, $, directory, worktree, serverUrl).
+5. Хуки: event (прослушивание), tool.execute.before (перехват), client.app.log() (логирование).
+6. Ловушки: плагин не загружен → расширение .js/.ts; зависимость не найдена → package.json; ошибка типов → автоустановка @opencode-ai/plugin.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

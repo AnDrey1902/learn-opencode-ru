@@ -26,6 +26,20 @@ prerequisite:
      alt="Шпаргалка урока: сжатие контекста"
      data-zoom-src="/images/5-advanced/compaction-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Context Window = Input tokens + Output tokens + Cache tokens.
+2. Формула: Context % = (input+output+reasoning) / model.limit.context × 100.
+3. Двухшаговая компрессия: Step 1 — Prune (отсечь старые выводы инструментов, оставить 40K); Step 2 — Summary (LLM-резюме).
+4. Автотриггер: (input+cache_read+output) > (context − min(output_limit, 32000)).
+5. Таблица моделей: Gemini 3 Flash (1048K/~1016K), GPT 5.2 (400K/~368K), Claude Sonnet 4.5 (200K/~168K), DeepSeek Chat (128K/~120K).
+6. Команды: /compact или /summarize; горячая клавиша `<leader>c`.
+7. Конфиг: compaction.auto:false — отключить автотриггер; compaction.prune:false — отключить обрезку.
+8. Ловушки: после компрессии забываются детали → дополнить вручную; контекст всё ещё переполнен → модель с большим окном; Context % некорректен → очистить кэш, перезапустить.
+
+</details>
+
 ---
 
 > Когда диалог становится слишком длинным, OpenCode автоматически сжимает историю сообщений, освобождая место для продолжения.

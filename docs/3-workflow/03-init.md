@@ -28,6 +28,21 @@ prerequisite:
      alt="Шпаргалка урока: инициализация проекта"
      data-zoom-src="/images/3-workflow/init-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Без инициализации AI не знает проект; с ней — автоматически читает AGENTS.md.
+2. Сохраняется: имя проекта, стек, стиль кода, соглашения именования.
+3. Приоритет поиска правил: AGENTS.md (корень) → CLAUDE.md → ~/.config/opencode/AGENTS.md → ~/.claude/CLAUDE.md → $OPENCODE_CONFIG_DIR/AGENTS.md.
+4. Команда /init (или Ctrl+X i): сканирует файлы, определяет build/test/lint, анализирует стиль кода, генерирует ~150 строк AGENTS.md.
+5. Поле instructions в opencode.json подгружает доп. правила (глобы, абсолютные пути, URL, Home).
+6. Порядок загрузки: проект → глобальные → пользовательские → instructions; правила объединяются, не перезаписываются.
+7. В AGENTS.md можно ссылаться на внешние файлы через @docs/...; /init подхватывает правила Cursor/Copilot и не перезаписывает существующий AGENTS.md.
+8. Совет: коммитить AGENTS.md в Git; в monorepo — instructions для подпроектов.
+9. Ловушки: AI игнорирует правила — вы не в каталоге проекта; проверить путь в opencode.json.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -26,6 +26,20 @@ prerequisite:
 
 <img src="/images/5-advanced/06b-keybinds-notes.mini.jpeg" alt="Шпаргалка урока: горячие клавиши" data-zoom-src="/images/5-advanced/06b-keybinds-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Leader-ключ (по умолчанию Ctrl+X) — двухэтапно: сначала Leader, потом клавиша.
+2. Конфигурация: поле `keybinds` (множественное число!), leader через `"ctrl+x"`.
+3. Несколько клавиш через запятую; отключение через `"none"`.
+4. Категории: приложение, интерфейс, сессии, сообщения.
+5. Vim-стиль: leader → space, прокрутка через `ctrl+u/d`.
+6. Совместимость терминалов: Shift+Enter — проблема в Windows Terminal; поддержка в iTerm2/Alacritty/Kitty.
+7. Windows: добавить sendInput action + keybindings.
+8. Ловушки: `keybind` (ед.ч.) → `keybinds` (мн.ч.), null → `"none"`, Shift+Enter ≠ перенос строки, перехват терминала.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

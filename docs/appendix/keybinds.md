@@ -17,6 +17,19 @@ description: Полный справочник всех горячих клав�
      alt="Шпаргалка: горячие клавиши"
      data-zoom-src="/images/appendix/keybinds-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Leader по умолчанию Ctrl+X: нажать → отпустить → второй ключ.
+2. База TUI: Enter — отправить, Shift+Enter — перенос, Tab — смена агента, Escape — стоп, Ctrl+C — очистка.
+3. Leader-команды: n — новая сессия, l — список, m — модели, a — агенты, t — тема, c — compact, u/r — отмена/повтор.
+4. Поле ввода (Emacs-стиль): Ctrl+A — начало строки, Ctrl+E — конец, Ctrl+K — удалить до конца, Ctrl+W — удалить слово.
+5. IDE: Cmd+Esc — панель, Cmd+Shift+Esc — новая сессия.
+6. Свои бинды — в `opencode.json`.
+7. Мнемоника: «Tab — смена агента, Ctrl+C — очистка, Leader + буква — любая функция».
+
+</details>
+
 ---
 
 ## Клавиша Leader

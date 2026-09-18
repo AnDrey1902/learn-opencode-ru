@@ -26,6 +26,20 @@ prerequisite:
 
 <img src="/images/5-advanced/07a-mcp-basics-notes.mini.jpeg" alt="Шпаргалка урока: основы MCP" data-zoom-src="/images/5-advanced/07a-mcp-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. MCP = Model Context Protocol — подключение AI к внешним сервисам (БД, поиск, мониторинг).
+2. Поток: пользователь → OpenCode → AI → MCP-инструменты → MCP-сервер → результат.
+3. Локальный MCP: `"type": "local"`, `command` — массив команд (npx), `environment`, `timeout`.
+4. Удалённый MCP: `"type": "remote"`, `url`, `headers`, `oauth`.
+5. 5 статусов: connected, disabled, failed, needs_auth, needs_cli.
+6. Проверка: `opencode mcp list`.
+7. Быстрый старт: локальный everything, поиск контекста context7, поиск кода gh_grep.
+8. Использование: промпты «use context7 для React hooks», «use gh_grep для JWT».
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -25,6 +25,19 @@ prerequisite:
 
 <img src="/images/5-advanced/03a-skills-basics-notes.mini.jpeg" alt="Шпаргалка урока: основы Skill" data-zoom-src="/images/5-advanced/03a-skills-basics-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Зачем Skill: Claude стартует с нуля — не знает структуру таблиц, нормы команд, бизнес-определения.
+2. Три слоя раскрытия: Layer 1 name+desc (видно всегда) → Layer 2 SKILL.md (при совпадении) → Layer 3 references/ (по необходимости).
+3. Skill против CLAUDE.md: Skill = по необходимости + кросс-проект + код; CLAUDE.md = всегда + текущий проект + Markdown.
+4. Структура: `.opencode/skill/sql-analysis/SKILL.md` + `references/` (finance.md, product.md, examples.md).
+5. Поиск: проектные `.opencode/skill/`, `.claude/skills/`; глобальные `~/.config/opencode/skill/`, `~/.claude/skills/`.
+6. Права: `"permission": {"skill": {"*": "ask", "sql-*": "allow"}}`.
+7. Ловушки: SKILL.md не грузится — регистр; Skill не появляется — нет name/desc; конфликты — одно имя в нескольких местах.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -27,6 +27,19 @@ prerequisite:
 
 <img src="/images/5-advanced/02d-agent-advanced-notes.mini.jpeg" alt="Шпаргалка урока: продвинутые приёмы Agent" data-zoom-src="/images/5-advanced/02d-agent-advanced-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. ACI (Agent-Computer Interface): место для мышления, формат близок к естественному языку, описания как docstring.
+2. Prompt Engineering: роль + рабочий процесс + ограничения + формат вывода + самопроверка.
+3. Параметры: reasoningEffort (low/medium/high), textVerbosity, temperature (0-1), top_p, steps.
+4. Мультимодельная связка: Planner (opus) → Executor (sonnet) → @reviewer (haiku).
+5. Отладка: история сессий, упрощённый тест, проверка прав, уменьшение steps.
+6. Полный JSON: agent → name → description, mode, model, steps, temperature, prompt, permission.
+7. Ловушки: сложный формат → ошибки, нет steps → бесконечный цикл, нечёткие описания → автовыбор, слишком тесные права.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

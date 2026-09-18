@@ -25,6 +25,19 @@ prerequisite:
 
 <img src="/images/5-advanced/02a-agent-quickstart-notes.mini.jpeg" alt="Шпаргалка урока: быстрый старт с Agent" data-zoom-src="/images/5-advanced/02a-agent-quickstart-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Agent — настраиваемый AI-персонаж: идентичность, способности, поведение.
+2. Два типа: Primary (Tab: build/plan) и Subagent (@имя: general/explore).
+3. Встроенные: build (primary-разработка), plan (primary только чтение), general (исследования), explore (разведка), title, summary, compaction.
+4. Приоритет конфигов: `.opencode/agent/*.md` (высокий) → `~/.config/opencode/agent/*.md` (средний) → `opencode.json` (низкий).
+5. Создание: Markdown (`.opencode/agent/xxx.md` с YAML frontmatter) или JSON (`opencode.json`).
+6. Workflow = фиксированные шаги, Agent = автономные решения.
+7. Frontmatter: description, mode (p/s/a), model, temperature, steps, hidden, color (#RRGGBB).
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

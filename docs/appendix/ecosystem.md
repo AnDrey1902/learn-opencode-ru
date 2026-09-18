@@ -22,6 +22,17 @@ description: Плагины, проекты и ресурсы сообществ
      alt="Шпаргалка: экосистема"
      data-zoom-src="/images/appendix/ecosystem-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Ресурсы сообщества: awesome-opencode (список ресурсов), opencode.cafe (агрегатор): вклад → проекты → ресурсы.
+2. Плагины 5 категорий: аутентификация (Helicone, OpenAI Codex, Gemini), разработка (DevContainers, PTY), инструменты (WakaTime, Markdown), уведомления, расширения (Morph, Supermemory).
+3. Интеграции: kimaki (Discord-бот), opencode.nvim (Neovim), portal (мобильный Web UI), OpenChamber (VS Code), OpenCode-Obsidian.
+4. Agents: Agentic (модульные), opencode-agents (workflow/промпты): базовые → конфиг+инструменты → продвинутые.
+5. Путь расширения: плагин → свой Agent → навыки → собственное расширение.
+
+</details>
+
 ---
 
 ## Ресурсы сообщества

@@ -15,6 +15,20 @@ description: Полный справочник инструмента коман
      alt="Шпаргалка: справочник команд CLI"
      data-zoom-src="/images/appendix/cli-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Команды запуска: `opencode` (TUI), `run` (non-interactive), `serve` (headless), `web` (веб-интерфейс), `attach` (подключение к удалённому серверу).
+2. Флаги: `-c`/`--continue`, `-m`/`--model`, `-s`/`--session`, `--attach`.
+3. Управление: `auth`, `models`, `agent`, `mcp`, `session`, `stats`.
+4. Аутентификация: `auth login` → выбор провайдера → ввод API Key.
+5. Экспорт/импорт: `export [sessionID]` (JSON), `import <file>`.
+6. Переменные окружения: `OPENCODE_CONFIG`, `OPENCODE_AUTO_SHARE`, `OPENCODE_DISABLE_AUTOUPDATE`; ключи `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`.
+7. Приёмы: run+attach избегает холодного старта MCP; `session list -n 10`; `stats --models 5`; export+import для шаринга.
+8. Ловушки: `providers` (мн.ч.) vs `provider` (ед.ч.); `--attach` требует `opencode serve`; export без sessionID.
+
+</details>
+
 ---
 
 ## Обзор команд

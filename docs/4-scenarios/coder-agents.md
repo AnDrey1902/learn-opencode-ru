@@ -29,6 +29,19 @@ prerequisite:
      alt="Шпаргалка урока: B5 Собственные Agent для разработки"
      data-zoom-src="/images/4-scenarios/coder-agents-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Матрица: @code-reviewer (ревью), @security-auditor (аудит), @test-writer (тесты), @doc-writer (документация).
+2. Code Reviewer: файл `code-reviewer.md`, mode subagent, tools write/edit/bash = false (только чтение), temperature 0.3.
+3. Security Auditor: SQL-инъекции, XSS, обход аутентификации; temperature 0.2; все tools false.
+4. Test Writer: unit/интеграционные/граничные тесты; temperature 0.4.
+5. Вызов: `@агент @файл описание` — например, `@code-reviewer @src/services/auth.ts`.
+6. Композиция: цепочка (code-reviewer → security-auditor → test-writer), сводка по приоритетам.
+7. Ловушки: агент не отвечает — проверить имя файла; конфиг не работает — папка agent; результаты разные — объединить через команду.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

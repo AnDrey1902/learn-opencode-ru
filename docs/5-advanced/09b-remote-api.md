@@ -27,6 +27,20 @@ prerequisite:
      alt="Шпаргалка урока: 5.9b Справочник HTTP API"
      data-zoom-src="/images/5-advanced/remote-api-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Обзор: 19 категорий REST API, интерактивная дока на localhost:4096/doc.
+2. Session API (главный): создание POST /session, получение GET /session/:id, удаление, форк, шаринг.
+3. Message API: отправка POST /session/:id/message, асинхронная prompt_async, command, shell.
+4. File API: поиск файлов и содержимого, чтение, список каталогов.
+5. Event Stream (SSE): GET /event — server.connected, session.created, message.created; для мониторинга.
+6. TUI Control API: append-prompt, submit-prompt, show-toast, open-sessions — для IDE-плагинов.
+7. 19 категорий: /global, /project, /session, /config, /provider, /file, /tui, /auth, /command, /agent.
+8. Ловушки: CORS → `--cors <origin>`, разрывы SSE → прокси/таймаут, 404 → проверить ID сессии/сообщения.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

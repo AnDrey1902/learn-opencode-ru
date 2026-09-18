@@ -26,6 +26,19 @@ prerequisite:
 
 <img src="/images/5-advanced/02b-agent-patterns-notes.mini.jpeg" alt="Шпаргалка урока: паттерны проектирования Agent" data-zoom-src="/images/5-advanced/02b-agent-patterns-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Три принципа: Keep Simple (один агент) + Transparency (видимые шаги) + ACI Design (описания инструментов).
+2. Дерево решений: фиксированные шаги → Workflow; нужна автономия → ограниченный/полностью автономный Agent.
+3. 5 паттернов Workflow: Prompt Chaining, Routing, Parallelization, Orchestrator-Workers, Evaluator-Optimizer.
+4. Три компонента агента: Planning (CoT, ToT, ReAct) + Memory (кратко/долговременная) + Tool Use (ясные описания).
+5. Кейсы: многоязычная документация (параллельный), код-ревью пайплайн (оркестратор).
+6. Чек-лист дизайна: есть ли проще? правильный паттерн? чёткое описание? лимит steps?
+7. Ловушки: overdesign, нечёткие описания, бесконечные циклы, слишком широкие права, нет прозрачности.
+
+</details>
+
 ---
 
 ## Что вы сможете после урока

@@ -15,6 +15,19 @@ description: Подробный справочник главной конфиг
      alt="Шпаргалка: справочник опций конфигурации"
      data-zoom-src="/images/appendix/config-ref-notes.jpeg" />
 
+<details>
+<summary>📝 Текстовая версия шпаргалки</summary>
+
+1. Три уровня: проектный `./opencode.json`, глобальный `~/.config/opencode/opencode.json`, env `OPENCODE_CONFIG`; приоритет: custom > project > global.
+2. Формат JSON и JSONC (с комментариями).
+3. `model` (основная), `small_model` (быстрые задачи), `default_agent`.
+4. Провайдер: `apiKey` (подстановка `{env:KEY}`), `baseURL`, `timeout`; `provider` — в ед.ч.!
+5. Подстановки: `{env:VARIABLE}` для env-переменных, `{file:path}` для содержимого файла; не хранить API Key в конфиге открытым текстом.
+6. Прочее: `theme`, `permission`, `server`, `tools`, `mcp`, `agent`.
+7. Ловушки: `providers` → `provider`; конфиг не применяется — проверить приоритеты; `theme` на верхнем уровне.
+
+</details>
+
 ---
 
 ## Места и приоритеты файлов конфигурации
